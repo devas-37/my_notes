@@ -1,6 +1,6 @@
 ---
 name: Voltage divider
-status: "null"
+status: hold
 deleted: false
 pinned: false
 tags:

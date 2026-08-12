@@ -1,6 +1,6 @@
 ---
 name: Rezistorlar haqida
-status: "null"
+status: complete
 deleted: false
 pinned: false
 tags:
