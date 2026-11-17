@@ -1,6 +1,6 @@
 # Z80 ASM: binary (bitli) amallar
 
-Binary amallar bayt ichidagi bitlar bilan ishlaydi. Z80 da bayt 8 bit: `7 6 5 4 3 2 1 0`. Bit 0 — eng kichik, bit 7 — eng katta razryad. Masalan, `00001000` — 3-bit yoqilgan, qiymati 8.
+Binary amallar bayta ichidagi bitlar bilan ishlaydi. Z80 da bayt 8 bit: `7 6 5 4 3 2 1 0`. Bit 0 — eng kichik, bit 7 — eng katta razryad. Masalan, `00001000` — 3-bit yoqilgan, qiymati 8.
 
 Misollarda sonlar `h` bilan hexadecimal yozilgan: `0Fh = 00001111`, `80h = 10000000`. Binary literal yozish sintaksisi assemblerga bog‘liq. `;` dan keyingi qism izoh.
 
