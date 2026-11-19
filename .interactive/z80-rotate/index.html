@@ -1,0 +1,20 @@
+<ui-card title="Z80 rotate: o‘zingiz sinab ko‘ring">
+  <ui-stack>
+    <ui-text>Bit tugmasini bosib 0 yoki 1 qiling. Chapdagi bit — b7, o‘ngdagi — b0.</ui-text>
+    <ui-row gap="1" id="bits" aria-label="Registr bitlari"></ui-row>
+    <ui-row gap="2">
+      <ui-button id="carry">CY = 0</ui-button>
+      <ui-button id="reset" variant="secondary">Boshlang‘ich holat</ui-button>
+    </ui-row>
+    <ui-text id="value"></ui-text>
+    <ui-row gap="2">
+      <ui-button id="rlc" variant="primary">RLC ↶</ui-button>
+      <ui-button id="rrc" variant="primary">RRC ↷</ui-button>
+      <ui-button id="rl" variant="secondary">RL ↶ (CY orqali)</ui-button>
+      <ui-button id="rr" variant="secondary">RR ↷ (CY orqali)</ui-button>
+    </ui-row>
+    <ui-text id="result" aria-live="polite">Buyruqni bosing: oldingi va yangi holat shu yerda ko‘rinadi.</ui-text>
+    <ui-text muted size="sm">Faqat 8 bit va CY ko‘rsatiladi. RLC/RRC eski CY ni ishlatmaydi; RL/RR uni registrga kiritadi. RLCA/RRCA/RLA/RRA uchun ham bitlar harakati shu tartibda, boshqa flaglar qoidasi farq qiladi.</ui-text>
+  </ui-stack>
+</ui-card>
+<script src="./main.js"></script>

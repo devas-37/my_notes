@@ -1,0 +1,11 @@
+<ui-card title="Rezistor hisoblagichlari">
+<ui-stack gap="3">
+<ui-text muted>Barcha qarshiliklar Ω da: 10 kΩ uchun 10000 kiriting. Natijalar ideal DC modelga asoslanadi.</ui-text>
+<label>Hisoblash turi <select id="mode"><option value="divider">Kuchlanish bo‘lgichi</option><option value="loaded">Yuklangan bo‘lgich</option><option value="ohm">Om qonuni va quvvat</option><option value="led">LED uchun rezistor</option><option value="network">Ikki rezistor ulanishi</option></select></label>
+<ui-grid id="fields" columns="2" gap="3"></ui-grid>
+<ui-row><ui-button id="reset" variant="secondary">Misol qiymatlari</ui-button></ui-row>
+<pre id="result" role="status" aria-live="polite"></pre>
+<ui-text id="hint" muted></ui-text>
+</ui-stack>
+</ui-card>
+<script src="./main.js"></script>

@@ -1,0 +1,42 @@
+<ui-card title="Z80 — bitli amallar laboratoriyasi">
+  <ui-stack>
+    <ui-text muted size="sm">Bitlarni bosib A va niqobni o‘zgartiring, so‘ng amalni tanlang. Har bir amal joriy qiymatga qo‘llanadi.</ui-text>
+    <ui-title>A registri · bitlar 7 → 0</ui-title>
+    <ui-row id="value-bits" gap="1" role="group" aria-label="A registri bitlari"></ui-row>
+    <ui-text id="value"></ui-text>
+    <ui-title>Niqob · bitlar 7 → 0</ui-title>
+    <ui-row id="mask-bits" gap="1" role="group" aria-label="Niqob bitlari"></ui-row>
+    <ui-text id="mask"></ui-text>
+    <ui-row gap="2">
+      <ui-button id="carry" label="Carry flagini almashtirish">C = 0</ui-button>
+      <ui-button id="zero" label="Zero flagini almashtirish">Z = 0</ui-button>
+    </ui-row>
+    <ui-text muted size="sm">C va Z ni bosib boshlang‘ich flaglarni ham o‘zgartirish mumkin.</ui-text>
+    <ui-divider></ui-divider>
+    <ui-title>Mantiqiy amallar</ui-title>
+    <ui-row id="logic" gap="1" role="group" aria-label="Mantiqiy amallar"></ui-row>
+    <ui-title>Bitta bit · raqamni tanlang</ui-title>
+    <ui-row id="bit-index" gap="1" role="group" aria-label="Bit raqami"></ui-row>
+    <ui-row id="single" gap="1" role="group" aria-label="Bitta bit amallari"></ui-row>
+    <ui-title>Surish va aylantirish</ui-title>
+    <ui-row id="shift" gap="1" role="group" aria-label="Surish amallari"></ui-row>
+    <ui-row id="rotate" gap="1" role="group" aria-label="Aylantirish amallari"></ui-row>
+    <ui-row id="accumulator" gap="1" role="group" aria-label="Akkumulyator aylantirishlari"></ui-row>
+    <ui-divider></ui-divider>
+    <ui-title>Natija</ui-title>
+    <ui-col gap="1" role="status" aria-live="polite" aria-atomic="true">
+      <ui-text id="instruction">Amalni tanlang.</ui-text>
+      <ui-text id="result"></ui-text>
+      <ui-text id="flag-result" size="sm"></ui-text>
+      <ui-text id="explanation" muted size="sm"></ui-text>
+    </ui-col>
+    <ui-title>Tayyor misollar</ui-title>
+    <ui-row id="examples" gap="1"></ui-row>
+    <ui-row gap="2">
+      <ui-button id="undo" variant="secondary" disabled>Bir qadam ortga</ui-button>
+      <ui-button id="reset" variant="secondary">Boshlang‘ich holat</ui-button>
+    </ui-row>
+    <ui-text muted size="xs">Faqat C va Z flaglari modellashtiriladi. BIT qiymatni, SET/RES flaglarni saqlaydi. CPL va RLCA/RRCA/RLA/RRA Z ni saqlaydi. Holat qayta yuklanganda tiklanadi.</ui-text>
+  </ui-stack>
+</ui-card>
+<script src="./main.js"></script>

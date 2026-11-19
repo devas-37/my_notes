@@ -4,6 +4,7 @@ Binary amallar bayt ichidagi bitlar bilan ishlaydi. Z80 da bayt 8 bit: `7 6 5 4 
 
 Misollarda sonlar `h` bilan hexadecimal yozilgan: `0Fh = 00001111`, `80h = 10000000`. Binary literal yozish sintaksisi assemblerga bog‘liq. `;` dan keyingi qism izoh.
 
+
 ## AND, OR, XOR: niqob bilan ishlash
 
 Niqob (mask) qaysi bitlar bilan ishlashni belgilaydi. Bu uch buyruq natijani `A` registriga yozadi.
