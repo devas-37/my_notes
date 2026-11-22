@@ -1,0 +1,142 @@
+<ui-card title="MCU → BJT yoki MOSFET">
+	<ui-stack gap="3">
+		<ui-text
+			>Pastki kalit: yuklama +V bilan kollektor/drain orasida,
+			emitter/source GNDda. MOSFET tanlangan GPIO kuchlanishida yetarlicha
+			ochiladi deb faraz qilamiz.</ui-text
+		>
+		<ui-row gap="2"
+			><ui-button id="v33" variant="primary">GPIO: 3.3 V</ui-button
+			><ui-button id="v5" variant="secondary"
+				>GPIO: 5 V</ui-button
+			></ui-row
+		>
+		<ui-row gap="2"
+			><ui-button id="on" variant="primary">HIGH — yoqish</ui-button
+			><ui-button id="off" variant="secondary">LOW — o‘chirish</ui-button
+			><ui-button id="reset" variant="secondary"
+				>Reset — Hi-Z</ui-button
+			></ui-row
+		>
+		<label for="load"
+			>Yoqilgandagi yuklama toki:
+			<output id="loadvalue" for="load"></output
+		></label>
+		<input
+			id="load"
+			type="range"
+			min="10"
+			max="1000"
+			step="10"
+			value="100"
+		/>
+		<label for="res"
+			>MOSFET RDS(on), tanlangan VGSdagi faraz:
+			<output id="resvalue" for="res"></output
+		></label>
+		<input id="res" type="range" min="10" max="500" step="10" value="50" />
+		<ui-text muted
+			>Bu tok yuklamaning oldindan berilgan ehtiyoji; model tokni yuklama
+			sxemasidan hisoblamaydi. Gate/source va baza/emitter orasida
+			pull-down bor.</ui-text
+		>
+		<ui-divider></ui-divider>
+		<ui-stack gap="2" aria-live="polite">
+			<ui-title id="state"></ui-title>
+			<ui-card title="BJT"
+				><ui-col gap="2"
+					><ui-text id="base"></ui-text><ui-text id="rb"></ui-text
+					><ui-text id="bpower"></ui-text></ui-col
+			></ui-card>
+			<ui-card title="MOSFET"
+				><ui-col gap="2"
+					><ui-text id="gate"></ui-text
+					><ui-text id="mpower"></ui-text></ui-col
+			></ui-card>
+			<ui-text id="message"></ui-text>
+		</ui-stack>
+		<ui-text muted size="sm"
+			>O‘quv hisoblari: BJT uchun majburiy β = 10, VBE = 0.8 V, VCE(sat) =
+			0.2 V; MOSFET uchun P = I²R. RB natijasi pull-down tokini hisobga
+			olmaydi. To‘yinish yoki qizish bo‘yicha kafolat emas. PWM
+			yo‘qotishlari, GPIO qarshiligi va harorat modeli
+			kiritilmagan.</ui-text
+		>
+	</ui-stack></ui-card
+>
+<script>
+	const e = (id) => document.getElementById(id);
+	let voltage = 3.3,
+		mode = "on";
+	function render() {
+		const ma = Number(e("load").value),
+			r = Number(e("res").value) / 1000,
+			i = ma / 1000,
+			ib = i / 10;
+		e("loadvalue").textContent = ma + " mA";
+		e("resvalue").textContent = (r * 1000).toFixed(0) + " mΩ";
+		e("v33").setAttribute("aria-pressed", String(voltage === 3.3));
+		e("v5").setAttribute("aria-pressed", String(voltage === 5));
+		["on", "off", "reset"].forEach((id) =>
+			e(id).setAttribute("aria-pressed", String(mode === id)),
+		);
+		if (mode === "on") {
+			e("state").textContent = "HIGH: yuklama yoqilgan deb hisoblaymiz";
+			e("base").textContent =
+				"Kerakli baza toki ≈ " +
+				(ib * 1000).toFixed(1) +
+				" mA. Bu tok GPIOdan uzluksiz olinadi.";
+			e("rb").textContent =
+				"RB ≈ (VGPIO − 0.8) / IB = " +
+				((voltage - 0.8) / ib).toFixed(0) +
+				" Ω. Amaliy qiymat GPIO va tranzistor datasheetiga bog‘liq.";
+			e("bpower").textContent =
+				"BJTdagi taxminiy yo‘qotish ≈ " +
+				(i * 0.2 * 1000).toFixed(1) +
+				" mW; baza zanjiri yo‘qotishi bundan tashqari.";
+			e("gate").textContent =
+				"VGS ≈ " +
+				voltage +
+				" V. Gate zaryadlangach ideal statik gate toki ≈ 0; o‘tishda tok impulsi bor.";
+			e("mpower").textContent =
+				"MOSFETdagi taxminiy o‘tkazish yo‘qotishi ≈ " +
+				(i * i * r * 1000).toFixed(2) +
+				" mW.";
+			e("message").textContent =
+				"Baza toki sizning MCU GPIO chegarasiga sig‘adimi? MOSFETning RDS(on) qiymati aynan shu VGSda berilganmi? Bu ikki savolni datasheet hal qiladi.";
+		} else {
+			e("state").textContent =
+				mode === "reset"
+					? "Reset / Hi-Z: pull-down o‘chiq holatni saqlaydi"
+					: "LOW: ikkala kalit o‘chiq";
+			e("base").textContent =
+				"Baza emitterga pull-down orqali tortilgan; IB ≈ 0.";
+			e("rb").textContent =
+				"Hi-Z — 0 V chiqarish emas, pinning yuqori qarshilikli holati.";
+			e("bpower").textContent =
+				"Modelda yuklama toki va BJT yo‘qotishi ≈ 0.";
+			e("gate").textContent =
+				"Gate sourcega pull-down orqali tortilgan; VGS ≈ 0.";
+			e("mpower").textContent =
+				"Modelda yuklama toki va MOSFET yo‘qotishi ≈ 0.";
+			e("message").textContent =
+				"Pull-down bo‘lmasa resetdagi holat kafolatlanmaydi. Real o‘chish vaqti hamda induktiv tokning so‘nishi bu modelda ko‘rsatilmagan.";
+		}
+	}
+	e("v33").addEventListener("click", () => {
+		voltage = 3.3;
+		render();
+	});
+	e("v5").addEventListener("click", () => {
+		voltage = 5;
+		render();
+	});
+	["on", "off", "reset"].forEach((id) =>
+		e(id).addEventListener("click", () => {
+			mode = id;
+			render();
+		}),
+	);
+	["load", "res"].forEach((id) => e(id).addEventListener("input", render));
+	render();
+</script>

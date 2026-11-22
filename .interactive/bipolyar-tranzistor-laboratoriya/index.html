@@ -1,0 +1,158 @@
+<ui-card title="BJT laboratoriyasi — NPN va LED">
+	<ui-stack gap="4">
+		<ui-text
+			>VCC = 5 V · LED ≈ 2 V · LED rezistori = 1 kΩ · emitter = GND.
+			Slayderlarni suring yoki tayyor holatlarni tanlang.</ui-text
+		>
+		<ui-card title="1. Baza boshqaruvi">
+			<ui-stack gap="3">
+				<label for="vin"
+					>Boshqaruv kuchlanishi:
+					<output id="vin-value" for="vin">5 V</output></label
+				>
+				<input
+					id="vin"
+					type="range"
+					min="0"
+					max="5"
+					step="0.1"
+					value="5"
+				/>
+				<label for="rb"
+					>Baza rezistori RB:
+					<output id="rb-value" for="rb">10 kΩ</output></label
+				>
+				<input
+					id="rb"
+					type="range"
+					min="1"
+					max="100"
+					step="1"
+					value="10"
+				/>
+				<label for="beta"
+					>Modeldagi β:
+					<output id="beta-value" for="beta">100</output></label
+				>
+				<input
+					id="beta"
+					type="range"
+					min="20"
+					max="200"
+					step="10"
+					value="100"
+				/>
+				<ui-row gap="2">
+					<ui-button id="off" variant="secondary"
+						>Yopiq holat</ui-button
+					>
+					<ui-button id="active" variant="secondary"
+						>Faol holat</ui-button
+					>
+					<ui-button id="sat" variant="primary">To‘yinish</ui-button>
+				</ui-row>
+			</ui-stack>
+		</ui-card>
+		<ui-card title="2. Nima o‘zgardi?">
+			<ui-stack gap="2" aria-live="polite">
+				<ui-title id="state"></ui-title>
+				<ui-text id="ib"></ui-text>
+				<ui-text id="requested"></ui-text>
+				<ui-text id="ic"></ui-text>
+				<label for="light">LEDning taxminiy yorqinligi</label>
+				<progress id="light" max="100" value="0"></progress>
+				<ui-text id="brightness"></ui-text>
+				<ui-text id="explanation"></ui-text>
+			</ui-stack>
+		</ui-card>
+		<ui-text muted size="sm"
+			>O‘quv modeli: IB = max(0, (Vin − 0.7) / RB); IC = min(β·IB, 2.8
+			mA). Yuklama chegarasi: (5 − 2 − 0.2) / 1000 = 2.8 mA. 0.7 V, 0.2 V
+			va LEDdagi 2 V — taxminlar. Haqiqiy o‘tish silliq, β o‘zgaruvchan,
+			yorqinlik esa tokka aniq chiziqli emas. Bu SPICE modeli
+			emas.</ui-text
+		>
+		<ui-divider></ui-divider>
+		<ui-card title="3. O‘zingizni sinab ko‘ring">
+			<ui-stack gap="3">
+				<ui-text
+					>Tranzistor to‘yingan. Baza tokini yana oshirsak, LED toki
+					nima bo‘ladi?</ui-text
+				>
+				<ui-row gap="2">
+					<ui-button id="answer-a" variant="secondary"
+						>β marta oshadi</ui-button
+					>
+					<ui-button id="answer-b" variant="secondary"
+						>Deyarli o‘zgarmaydi</ui-button
+					>
+				</ui-row>
+				<ui-text id="feedback" aria-live="polite"
+					>Javobni tanlang.</ui-text
+				>
+			</ui-stack>
+		</ui-card>
+	</ui-stack>
+</ui-card>
+<script>
+	const el = (id) => document.getElementById(id);
+	const vin = el("vin"),
+		rb = el("rb"),
+		beta = el("beta");
+	function render() {
+		const v = Number(vin.value),
+			r = Number(rb.value),
+			b = Number(beta.value);
+		const ib = Math.max(0, (v - 0.7) / r);
+		const demand = b * ib;
+		const ic = Math.min(demand, 2.8);
+		const percent = (ic / 2.8) * 100;
+		el("vin-value").textContent = v.toFixed(1) + " V";
+		el("rb-value").textContent = r + " kΩ";
+		el("beta-value").textContent = String(b);
+		el("ib").textContent =
+			"Baza toki IB ≈ " + (ib * 1000).toFixed(1) + " µA";
+		el("requested").textContent =
+			"Faol rejim formulasi β·IB ≈ " + demand.toFixed(2) + " mA";
+		el("ic").textContent =
+			"Haqiqiy model chiqishi IC ≈ " + ic.toFixed(2) + " mA";
+		el("light").value = percent;
+		el("brightness").textContent =
+			"Yuklama maksimumining " +
+			percent.toFixed(0) +
+			"% — yorqinlikning shartli ko‘rsatkichi.";
+		if (ib === 0) {
+			el("state").textContent = "○ Yopiq — LED o‘chgan";
+			el("explanation").textContent =
+				"Bu modelda Vin ≤ 0.7 V bo‘lsa baza toki nol. Tranzistor yuklama tokini deyarli o‘tkazmaydi.";
+		} else if (demand < 2.8) {
+			el("state").textContent =
+				"◐ Faol — LED toki baza bilan boshqarilmoqda";
+			el("explanation").textContent =
+				"Bu oraliqda IC ≈ β·IB. Vin yoki β ni oshiring yoxud RB ni kamaytiring: LED toki ko‘payadi.";
+		} else {
+			el("state").textContent = "● To‘yingan — tokni yuklama cheklamoqda";
+			el("explanation").textContent =
+				"β·IB yuklama chegarasiga yetdi. Baza tokini yana oshirish LED tokini sezilarli oshirmaydi: uni 5 V manba, LED va 1 kΩ rezistor belgilaydi.";
+		}
+	}
+	[vin, rb, beta].forEach((input) => input.addEventListener("input", render));
+	function preset(v, r, b) {
+		vin.value = v;
+		rb.value = r;
+		beta.value = b;
+		render();
+	}
+	el("off").addEventListener("click", () => preset(0, 10, 100));
+	el("active").addEventListener("click", () => preset(1, 47, 100));
+	el("sat").addEventListener("click", () => preset(5, 10, 100));
+	el("answer-a").addEventListener("click", () => {
+		el("feedback").textContent =
+			"Qayta o‘ylab ko‘ring: IC ≈ β·IB faqat faol rejim uchun. To‘yinishda tashqi yuklama tokni cheklaydi.";
+	});
+	el("answer-b").addEventListener("click", () => {
+		el("feedback").textContent =
+			"To‘g‘ri! To‘yinishda LED toki taxminan 2.8 mA bo‘lib qoladi. Baza toki esa oshishi mumkin.";
+	});
+	render();
+</script>
