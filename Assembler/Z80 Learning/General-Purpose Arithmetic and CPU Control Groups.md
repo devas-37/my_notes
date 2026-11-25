@@ -28,13 +28,13 @@ Ushbu bo‘limda quyidagi general-purpose arithmetic va CPU control group instru
 - [IM 1](#im-1)
 - [IM 2](#im-2)
 
-Bit sxemalarida har bir qator bitta byte: birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, so‘ng hex code, oxirgi katak esa manbadagi bit matnidir. Manbadagi ayrim bit satrlari hex code bilan mos kelmaydi; bit kataklari shu hex codega mos berildi, asl bit matni ham saqlandi. CY — Carry flag.
+Opcode jadvallarida byte tartibi va bitlar 7 dan 0 gacha ko‘rsatiladi.
 
 # DAA
 
 ### Operation
 
-`@`
+`A ← BCD-adjust(A, N, H, C)`
 
 ### Op Code
 
@@ -44,41 +44,41 @@ Bit sxemalarida har bir qator bitta byte: birinchi katak byte tartib raqami, key
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `1` | `27` | `00011110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `1` | `27` |
 
 ### Description
 
 Ushbu instruction BCD addition va subtraction operationlari uchun Accumulatorni shartli ravishda tuzatadi. Addition (ADD, ADC, INC) yoki subtraction (SUB, SBC, DEC, NEG) uchun bajariladigan operation quyidagi jadvalda ko‘rsatilgan.
 
-Ustunlar tartibi: Operation; DAA dan oldingi C; upper digitdagi hex qiymat (bit 7–4); DAA dan oldingi H; lower digitdagi hex qiymat (bit 3–0); byte ga qo‘shiladigan son; DAA dan keyingi C; manbadagi birlashtirilgan qator matni.
+Jadvaldagi correction qiymatlari HEX formatida berilgan.
 
-|                      |     |       |     |       |      |     |                  |
-| -------------------- | --- | ----- | --- | ----- | ---- | --- | ---------------- |
-| `ADD, ADC, INC`      | `0` | `9–0` | `0` | `0–9` | `00` | `0` | `09–000–9000`    |
-| `ADD, ADC, INC`      | `0` | `0–8` | `0` | `A–F` | `06` | `0` | `00–80A–F060`    |
-| `ADD, ADC, INC`      | `0` | `0–9` | `1` | `0–3` | `06` | `0` | `00–910–3060`    |
-| `ADD, ADC, INC`      | `0` | `A–F` | `0` | `0–9` | `60` | `1` | `ADD0A–F00–9601` |
-| `ADD, ADC, INC`      | `0` | `9–F` | `0` | `A–F` | `66` | `1` | `ADC09–F0A–F661` |
-| `ADD, ADC, INC`      | `0` | `A–F` | `1` | `0–3` | `66` | `1` | `INC0A–F10–3661` |
-| `ADD, ADC, INC`      | `1` | `0–2` | `0` | `0–9` | `60` | `1` | `10–200–9601`    |
-| `ADD, ADC, INC`      | `1` | `0–2` | `0` | `A–F` | `66` | `1` | `10–20A–F661`    |
-| `ADD, ADC, INC`      | `1` | `0–3` | `1` | `0–3` | `66` | `1` | `10–310–3661`    |
-| `SUB, SBC, DEC, NEG` | `0` | `0–9` | `0` | `0–9` | `00` | `0` | `SUB00–900–9000` |
-| `SUB, SBC, DEC, NEG` | `0` | `0–8` | `1` | `6–F` | `FA` | `0` | `SBC00–816–FFA0` |
-| `SUB, SBC, DEC, NEG` | `1` | `7–F` | `0` | `0–9` | `A0` | `1` | `DEC17–F00–9A01` |
-| `SUB, SBC, DEC, NEG` | `1` | `6–7` | `1` | `6–F` | `9A` | `1` | `NEG16–716–F9A1` |
+| Operation | C oldin | Upper digit | H oldin | Lower digit | Correction | C keyin |
+| --- | --- | --- | --- | --- | --- | --- |
+| `ADD, ADC, INC` | `0` | `0–9` | `0` | `0–9` | `00` | `0` |
+| `ADD, ADC, INC` | `0` | `0–8` | `0` | `A–F` | `06` | `0` |
+| `ADD, ADC, INC` | `0` | `0–9` | `1` | `0–3` | `06` | `0` |
+| `ADD, ADC, INC` | `0` | `A–F` | `0` | `0–9` | `60` | `1` |
+| `ADD, ADC, INC` | `0` | `9–F` | `0` | `A–F` | `66` | `1` |
+| `ADD, ADC, INC` | `0` | `A–F` | `1` | `0–3` | `66` | `1` |
+| `ADD, ADC, INC` | `1` | `0–2` | `0` | `0–9` | `60` | `1` |
+| `ADD, ADC, INC` | `1` | `0–2` | `0` | `A–F` | `66` | `1` |
+| `ADD, ADC, INC` | `1` | `0–3` | `1` | `0–3` | `66` | `1` |
+| `SUB, SBC, DEC, NEG` | `0` | `0–9` | `0` | `0–9` | `00` | `0` |
+| `SUB, SBC, DEC, NEG` | `0` | `0–8` | `1` | `6–F` | `FA` | `0` |
+| `SUB, SBC, DEC, NEG` | `1` | `7–F` | `0` | `0–9` | `A0` | `1` |
+| `SUB, SBC, DEC, NEG` | `1` | `6–F` | `1` | `6–F` | `9A` | `1` |
 
 ### Condition Bits Affected
 
-Operationdan keyin Accumulatorning most-significant biti 1 bo‘lsa, S set qilinadi; aks holda reset qilinadi. Operationdan keyin Accumulator 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H uchun yuqoridagi DAA instruction jadvaliga qarang. Operationdan keyin Accumulatorda even parity bo‘lsa, P/V set qilinadi; aks holda reset qilinadi. N o‘zgarmaydi. C uchun yuqoridagi DAA instruction jadvaliga qarang.
+Operationdan keyin Accumulatorning most-significant biti 1 bo‘lsa, S set qilinadi; aks holda reset qilinadi. Operationdan keyin Accumulator 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H oldingi va yangi A qiymatlarining bit 4 qiymatlari farq qilsa set qilinadi. Operationdan keyin Accumulatorda even parity bo‘lsa, P/V set qilinadi; aks holda reset qilinadi. N o‘zgarmaydi. C uchun yuqoridagi DAA instruction jadvaliga qarang.
 
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
@@ -109,15 +109,11 @@ Bu yig‘indi kerakli BCD ko‘rinishini bermaydi. DAA natijani tuzatib, to‘g�
   01000010 = 42
 ```
 
-Manba izohi: Manbada Operation `@` belgisi bilan berilgan; belgi saqlandi.
-
-Manba izohi: DAA jadvalidagi birinchi upper digit oralig‘i `9–0`, oxirgi upper digit oralig‘i esa `6–7` deb berilgan; ikkala qiymat ham manbadagidek saqlandi.
-
 # CPL
 
 ### Operation
 
-`A ← A`
+`A ← NOT A`
 
 ### Op Code
 
@@ -127,9 +123,9 @@ Manba izohi: DAA jadvalidagi birinchi upper digit oralig‘i `9–0`, oxirgi upp
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `1` | `2F` | `00011111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `1` | `2F` |
 
 ### Description
 
@@ -142,14 +138,12 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H set qilinadi. P/V o‘zgarmaydi. N set qilin
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
 Accumulatorda `1011 0100` bo‘lsa, `CPL` bajarilgach, Accumulatorda `01001011` bo‘ladi.
-
-Manba izohi: Manbada Operation `A ← A` ko‘rinishida berilgan. Description va misolda esa one’s complement bajarilishi ko‘rsatilgan.
 
 # NEG
 
@@ -165,14 +159,14 @@ Manba izohi: Manbada Operation `A ← A` ko‘rinishida berilgan. Description va
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `44` | `01000100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `44` |
 
 ### Description
 
-Accumulator tarkibi inkor qilinadi (two’s complement). Bu Accumulator tarkibini noldan ayirish bilan bir xil. Manbada 80h address o‘zgarmasligi aytilgan.
+Accumulator tarkibi inkor qilinadi (two’s complement). Bu Accumulator tarkibini noldan ayirish bilan bir xil. A = 80h bo‘lsa, natija 80h bo‘ladi va overflow yuz beradi.
 
 ### Condition Bits Affected
 
@@ -181,27 +175,23 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 2        | 8 (4, 4) | 2.00            |
+| --- | --- | --- |
+| 2 | 8 (4, 4) | 2.00 |
 
 ### Misol
 
-Accumulatordagi boshlang‘ich ma’lumot va `NEG` bajarilgandan keyingi ma’lumot manbada quyidagi bit satrlari bilan berilgan. Har bir qatorda avval holat, keyin bit 7 dan bit 0 gacha ko‘rsatilgan:
+Accumulatordagi boshlang‘ich ma’lumot va `NEG` bajarilgandan keyingi ma’lumot quyidagi bit satrlari bilan berilgan. Har bir qatorda avval holat, keyin bit 7 dan bit 0 gacha ko‘rsatilgan:
 
-|                        |     |     |     |     |     |     |     |     |
-| ---------------------- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `Bajarilishidan oldin` | `1` | `0` | `1` | `0` | `0` | `0` | `0` | `1` |
-| `Bajarilgandan keyin`  | `0` | `1` | `0` | `0` | `0` | `0` | `1` | `1` |
-
-Manba izohi: Manbada “80h address” deyiladi; Descriptiondagi operation Accumulator tarkibiga tegishli.
-
-Manba izohi: Misoldagi `10100001` va `01000011` bit satrlari manbadagidek saqlandi; ular bir-birining two’s complement qiymati emas.
+| `Bajarilgandan keyin` | `0` | `1` | `0` | `1` | `1` | `1` | `1` | `1` |
 
 # CCF
 
 ### Operation
 
-`CY ← CY`
+`CY ← NOT CY`
 
 ### Op Code
 
@@ -211,9 +201,9 @@ Manba izohi: Misoldagi `10100001` va `01000011` bit satrlari manbadagidek saqlan
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `1` | `3F` | `00111111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `1` | `3F` |
 
 ### Description
 
@@ -226,10 +216,8 @@ S o‘zgarmaydi. Z o‘zgarmaydi. Oldingi carry qiymati H ga ko‘chiriladi. P/V
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
-
-Manba izohi: Manbada Operation `CY ← CY` ko‘rinishida berilgan. Description bo‘yicha Carry flag invert qilinadi.
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 # SCF
 
@@ -245,9 +233,9 @@ Manba izohi: Manbada Operation `CY ← CY` ko‘rinishida berilgan. Description 
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `1` | `0` | `1` | `1` | `1` | `37` | `00111110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `1` | `0` | `1` | `1` | `1` | `37` |
 
 ### Description
 
@@ -260,8 +248,8 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 # NOP
 
@@ -277,9 +265,9 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `00` | `00000000` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `00` |
 
 ### Description
 
@@ -292,8 +280,8 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 # HALT
 
@@ -309,13 +297,13 @@ Hech biri o‘zgarmaydi.
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `76` | `01110110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `76` |
 
 ### Description
 
-HALT instruction keyingi interrupt yoki reset kelguncha CPU ishini to‘xtatib turadi. HALT holatida processor memory refresh logicni saqlash uchun NOP instructionlarini bajaradi.
+HALT instruction qabul qilinadigan interrupt (NMI yoki yoqilgan INT) yoki reset kelguncha CPU ishini to‘xtatib turadi. HALT holatida processor memory refresh logicni saqlash uchun NOP instructionlarini bajaradi.
 
 ### Condition Bits Affected
 
@@ -324,14 +312,14 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 # DI
 
 ### Operation
 
-`IFF ← 0`
+`IFF1 ← 0, IFF2 ← 0`
 
 ### Op Code
 
@@ -341,9 +329,9 @@ Hech biri o‘zgarmaydi.
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `1` | `0` | `0` | `1` | `1` | `F3` | `11111010` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `0` | `0` | `1` | `1` | `F3` |
 
 ### Description
 
@@ -358,8 +346,8 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
@@ -369,7 +357,7 @@ CPU `DI` instructionni bajargach, maskable interrupt keyinchalik `EI` instructio
 
 ### Operation
 
-`IFF ← 1`
+`IFF1 ← 1, IFF2 ← 1`
 
 ### Op Code
 
@@ -379,13 +367,13 @@ CPU `DI` instructionni bajargach, maskable interrupt keyinchalik `EI` instructio
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `1` | `FB` | `11111011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `1` | `FB` |
 
 ### Description
 
-Enable interrupt instruction ikkala interrupt enable flip-flopni (manbada IFFI va IFF2) logic 1 ga o‘rnatib, maskable interruptni tan olishga imkon beradi.
+Enable interrupt instruction ikkala interrupt enable flip-flopni (IFF1 va IFF2) logic 1 ga o‘rnatib, maskable interruptni tan olishga imkon beradi.
 
 Ushbu instruction va undan keyingi instruction bajarilayotgan vaqtda maskable interruptlar o‘chirilgan bo‘ladi.
 
@@ -396,14 +384,12 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
 CPU `EI` va undan keyingi `RETI` instructionlar ketma-ketligini bajarganda, maskable interrupt `RETI` bajarilgach yoqiladi.
-
-Manba izohi: Manbada birinchi flip-flop `IFFI` deb yozilgan; DI bo‘limida u `IFF1` deb berilgan.
 
 # IM 0
 
@@ -419,10 +405,10 @@ Interrupt Mode 0 ni o‘rnatish.
 
 `0`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` | `46` | `01010100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` | `46` |
 
 ### Description
 
@@ -435,8 +421,8 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 2        | 8 (4, 4) | 2.00            |
+| --- | --- | --- |
+| 2 | 8 (4, 4) | 2.00 |
 
 # IM 1
 
@@ -452,10 +438,10 @@ Interrupt Mode 1 ni o‘rnatish.
 
 `1`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `1` | `0` | `1` | `1` | `0` | `56` | `01110100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `1` | `0` | `1` | `1` | `0` | `56` |
 
 ### Description
 
@@ -468,8 +454,8 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 2        | 8 (4, 4) | 2.00            |
+| --- | --- | --- |
+| 2 | 8 (4, 4) | 2.00 |
 
 # IM 2
 
@@ -485,10 +471,10 @@ Interrupt Mode 2 ni o‘rnatish.
 
 `2`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `1` | `1` | `1` | `1` | `0` | `5E` | `01110101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `1` | `1` | `1` | `1` | `0` | `5E` |
 
 ### Description
 
@@ -501,5 +487,5 @@ Hech biri o‘zgarmaydi.
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 2        | 8 (4, 4) | 2.00            |
+| --- | --- | --- |
+| 2 | 8 (4, 4) | 2.00 |

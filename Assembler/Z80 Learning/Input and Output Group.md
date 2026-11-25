@@ -16,7 +16,7 @@ Ushbu bo‘limda quyidagi input va output group instructionlari tavsiflanadi. Ba
 ## Mundarija
 
 - [IN A, (n)](#in-a-n)
-- [IN r (C)](#in-r-c)
+- [IN r, (C)](#in-r-c)
 - [INI](#ini)
 - [INIR](#inir)
 - [IND](#ind)
@@ -28,7 +28,7 @@ Ushbu bo‘limda quyidagi input va output group instructionlari tavsiflanadi. Ba
 - [OUTD](#outd)
 - [OTDR](#otdr)
 
-Opcode jadvallarida birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, so‘ng hex code yoki operand turi, oxirgi katak esa manbadagi bit matnidir. Manbadagi ayrim bit satrlari hex code bilan mos kelmaydi; fixed opcode bitlari shu hex codega mos berildi va asl matn ham saqlandi. n butun 8-bit byte ni egallaydi; n₇…n₀ uning alohida bitlaridir. r₂, r₁, r₀ register code bitlarini bildiradi.
+Opcode jadvallarida byte tartibi va bitlar 7 dan 0 gacha ko‘rsatiladi.
 
 # IN A, (n)
 
@@ -44,10 +44,10 @@ Opcode jadvallarida birinchi katak byte tartib raqami, keyingi sakkiz katak bit 
 
 `A, (n)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `0`  | `1`  | `1`  | `DB`             | `11111001` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `1` | `DB` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 ### Description
 
@@ -59,17 +59,15 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz LT. (µs) |
-| -------- | ------------ | -------------- |
-| 3        | 11 (4, 3, 4) | 2.75           |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 3 | 11 (4, 3, 4) | 2.75 |
 
 ### Misol
 
 Accumulatorda 23h va 01h I/O port addressga mos peripheral deviceda 7Bh byte mavjud bo‘lsin. `IN A, (01h)` bajarilgach, Accumulatorda 7Bh bo‘ladi.
 
-Manba izohi: Manbaning Timing sarlavhasida `4 MHz LT.` yozilgan; shu yozuv saqlandi.
-
-# IN r (C)
+# IN r, (C)
 
 ### Operation
 
@@ -83,10 +81,10 @@ Manba izohi: Manbaning Timing sarlavhasida `4 MHz LT.` yozilgan; shu yozuv saqla
 
 `r, (C)`
 
-|     |     |     |      |      |      |     |     |     |                 |            |
-| --- | --- | --- | ---- | ---- | ---- | --- | --- | --- | --------------- | ---------- |
-| 1   | `1` | `1` | `1`  | `0`  | `1`  | `1` | `0` | `1` | `ED`            | `11001111` |
-| 2   | `0` | `1` | `r₂` | `r₁` | `r₀` | `0` | `0` | `0` | `register code` | `01r000`   |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `r₂` | `r₁` | `r₀` | `0` | `0` | `0` | `register code` |
 
 ### Description
 
@@ -94,16 +92,16 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 Ustunlar tartibi: register; r bit maydoni. Flag qatorida manbadagi opcode izohi ham berilgan.
 
-|        |                                              |
-| ------ | -------------------------------------------- |
-| `Flag` | `110 — Undefined op code; flagni set qiladi` |
-| `B`    | `000`                                        |
-| `C`    | `001`                                        |
-| `D`    | `010`                                        |
-| `E`    | `011`                                        |
-| `H`    | `100`                                        |
-| `L`    | `101`                                        |
-| `A`    | `111`                                        |
+| Register | Code |
+| --- | --- |
+| `Flag` | `110 — undocumented IN (C); data saqlanmaydi, flaglar yangilanadi` |
+| `B` | `000` |
+| `C` | `001` |
+| `D` | `010` |
+| `E` | `011` |
+| `H` | `100` |
+| `L` | `101` |
+| `A` | `111` |
 
 ### Condition Bits Affected
 
@@ -111,9 +109,9 @@ Input data manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Input data
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
-| -------- | ------------ | --------------- |
-| 3        | 12 (4, 4, 4) | 3.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 3 | 12 (4, 4, 4) | 3.00 |
 
 ### Misol
 
@@ -123,7 +121,7 @@ C registerda 07h, B registerda 10h va 07h I/O port addressga mos peripheral devi
 
 ### Operation
 
-`(HL) ← (C), B ← B – 1, HL ← HL + 1`
+`(HL) ← I/O[BC], B ← B − 1, HL ← HL + 1`
 
 ### Op Code
 
@@ -133,10 +131,10 @@ C registerda 07h, B registerda 10h va 07h I/O port addressga mos peripheral devi
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `A2` | `10010010` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `A2` |
 
 ### Description
 
@@ -144,13 +142,13 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 ### Condition Bits Affected
 
-S noma’lum. B – 1 = 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + ((C + 1) AND FFh). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
@@ -160,7 +158,7 @@ C registerda 07h, B registerda 10h, HL register pairda 1000h va 07h I/O port add
 
 ### Operation
 
-`(HL) ← (C), B ← B – 1, HL ← HL +1`
+`repeat {(HL) ← I/O[BC], B ← B − 1, HL ← HL + 1} while (B ≠ 0)`
 
 ### Op Code
 
@@ -170,10 +168,10 @@ C registerda 07h, B registerda 10h, HL register pairda 1000h va 07h I/O port add
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `1` | `0` | `0` | `1` | `0` | `B2` | `10110010` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `1` | `0` | `0` | `1` | `0` | `B2` |
 
 ### Description
 
@@ -181,36 +179,36 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 ### Condition Bits Affected
 
-S noma’lum. Z set qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + ((C + 1) AND FFh). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-B ≠ 0 bo‘lganda:
+B kamaytirilgandan keyin B ≠ 0 bo‘lganda:
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 21 (4, 5, 3, 4, 5) | 5.25            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 21 (4, 5, 3, 4, 5) | 5.25 |
 
-B = 0 bo‘lganda:
+B kamaytirilgandan keyin B = 0 bo‘lganda:
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
 C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. 07h I/O port addressga mos peripheral deviceda quyidagi byte ketma-ketligi mavjud:
 
-|       |
-| ----- |
+| Data byte |
+| --- |
 | `51h` |
 | `A9h` |
 | `03h` |
 
 `INIR` bajarilgach, HL register pairda 1003h, B registerda 0 bo‘ladi. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: memory location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address / Register | Qiymat |
+| --- | --- |
 | `1000h` | `51h` |
 | `1001h` | `A9h` |
 | `1002h` | `03h` |
@@ -219,7 +217,7 @@ C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. 07h I/
 
 ### Operation
 
-`(HL) ← (C), B ← B – 1, HL ← HL – 1`
+`(HL) ← I/O[BC], B ← B − 1, HL ← HL − 1`
 
 ### Op Code
 
@@ -229,10 +227,10 @@ C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. 07h I/
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `AA` | `10010011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `AA` |
 
 ### Description
 
@@ -240,13 +238,13 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 ### Condition Bits Affected
 
-S noma’lum. B – 1 = 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + ((C − 1) AND FFh). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
@@ -256,7 +254,7 @@ C registerda 07h, B registerda 10h, HL register pairda 1000h va 07h I/O port add
 
 ### Operation
 
-`(HL) ← (C), B ← 131, HL ← HL1`
+`repeat {(HL) ← I/O[BC], B ← B − 1, HL ← HL − 1} while (B ≠ 0)`
 
 ### Op Code
 
@@ -266,10 +264,10 @@ C registerda 07h, B registerda 10h, HL register pairda 1000h va 07h I/O port add
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `0` | `BA` | `10110011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `0` | `BA` |
 
 ### Description
 
@@ -277,41 +275,39 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 ### Condition Bits Affected
 
-S noma’lum. Z set qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + ((C − 1) AND FFh). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-B ≠ 0 bo‘lganda:
+B kamaytirilgandan keyin B ≠ 0 bo‘lganda:
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 21 (4, 5, 3, 4, 5) | 5.25            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 21 (4, 5, 3, 4, 5) | 5.25 |
 
-B = 0 bo‘lganda:
+B kamaytirilgandan keyin B = 0 bo‘lganda:
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
 C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. 07h I/O port addressga mos peripheral deviceda quyidagi byte ketma-ketligi mavjud:
 
-|       |
-| ----- |
+| Data byte |
+| --- |
 | `51h` |
 | `A9h` |
 | `03h` |
 
 `INDR` bajarilgach, HL register pairda 0FFDh, B registerda 0 bo‘ladi. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: memory location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address / Register | Qiymat |
+| --- | --- |
 | `0FFEh` | `03h` |
 | `0FFFh` | `A9h` |
 | `1000h` | `51h` |
-
-Manba izohi: Manbada Operation `(HL) ← (C), B ← 131, HL ← HL1` deb berilgan. Description bo‘yicha B va HL birga kamaytiriladi; formula asl yozilishida saqlandi.
 
 # OUT (n), A
 
@@ -327,10 +323,10 @@ Manba izohi: Manbada Operation `(HL) ← (C), B ← 131, HL ← HL1` deb berilga
 
 `(n), A`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `0`  | `0`  | `1`  | `1`  | `D3`             | `11111000` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `0` | `0` | `1` | `1` | `D3` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 ### Description
 
@@ -342,15 +338,13 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
-| -------- | ------------ | --------------- |
-| 3        | 11 (4, 3, 4) | 2.75            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 3 | 11 (4, 3, 4) | 2.75 |
 
 ### Misol
 
-Accumulatorda 23h bo‘lsa, manbada `OUT (01h)` deb berilgan instruction bajarilgach, 23h byte 01h I/O port addressga mos peripheral devicega yoziladi.
-
-Manba izohi: Manba misolidagi `OUT (01h)` yozuvida A operand ko‘rsatilmagan; instruction bo‘limining nomi `OUT (n), A`.
+Accumulatorda 23h bo‘lsa, `OUT (01h), A` instruction bajarilgach, 23h byte 01h I/O port addressga mos peripheral devicega yoziladi.
 
 # OUT (C), r
 
@@ -366,10 +360,10 @@ Manba izohi: Manba misolidagi `OUT (01h)` yozuvida A operand ko‘rsatilmagan; i
 
 `(C), r`
 
-|     |     |     |      |      |      |     |     |     |                 |            |
-| --- | --- | --- | ---- | ---- | ---- | --- | --- | --- | --------------- | ---------- |
-| 1   | `1` | `1` | `1`  | `0`  | `1`  | `1` | `0` | `1` | `ED`            | `11001111` |
-| 2   | `0` | `1` | `r₂` | `r₁` | `r₀` | `0` | `0` | `1` | `register code` | `01r001`   |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `r₂` | `r₁` | `r₀` | `0` | `0` | `1` | `register code` |
 
 ### Description
 
@@ -377,8 +371,8 @@ C register tarkibi 256 ta mumkin bo‘lgan portdan biridagi I/O deviceni tanlash
 
 Ustunlar tartibi: register; r bit maydoni.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -393,9 +387,9 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
-| -------- | ------------ | --------------- |
-| 3        | 12 (4, 4, 4) | 3.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 3 | 12 (4, 4, 4) | 3.00 |
 
 ### Misol
 
@@ -405,7 +399,7 @@ C registerda 01h va D registerda 5Ah bo‘lsa, `OUT (C), D` bajarilgach, 5Ah byt
 
 ### Operation
 
-`(C) ← (HL), B ← B – 1, HL ← HL + 1`
+`B ← B − 1, I/O[BC] ← (HL), HL ← HL + 1`
 
 ### Op Code
 
@@ -415,10 +409,10 @@ C registerda 01h va D registerda 5Ah bo‘lsa, `OUT (C), D` bajarilgach, 5Ah byt
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `A3` | `10011010` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `A3` |
 
 ### Description
 
@@ -426,25 +420,23 @@ HL register pair tarkibi memory locationni tanlash uchun address busga joylashti
 
 ### Condition Bits Affected
 
-S noma’lum. B – 1 = 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + L (HL yangilangandan keyin). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
-C registerda 07h, B registerda 10h bo‘lsin. HL register pairning boshlang‘ich qiymati manbada `100014`, 1000h memory address tarkibi esa `5914` deb berilgan. `OUTI` bajarilgach, B registerda 0Fh, HL register pairda 1001h bo‘ladi va 59h byte 07h I/O port addressga mos peripheral devicega yoziladi.
-
-Manba izohi: Manba misolidagi `100014` va `5914` yozuvlari saqlandi. Misoldagi memory address 1000h va output byte 59h sifatida ko‘rsatilgan.
+C registerda 07h, B registerda 10h bo‘lsin. HL register pairning boshlang‘ich qiymati 1000h, 1000h memory address tarkibi esa 59h. `OUTI` bajarilgach, B registerda 0Fh, HL register pairda 1001h bo‘ladi va 59h byte 07h I/O port addressga mos peripheral devicega yoziladi.
 
 # OTIR
 
 ### Operation
 
-`(C) ← (HL), B ← B – 1, HL ← HL + 1`
+`repeat {B ← B − 1, I/O[BC] ← (HL), HL ← HL + 1} while (B ≠ 0)`
 
 ### Op Code
 
@@ -454,10 +446,10 @@ Manba izohi: Manba misolidagi `100014` va `5914` yozuvlari saqlandi. Misoldagi m
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `1` | `0` | `0` | `1` | `1` | `B3` | `10111010` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `1` | `0` | `0` | `1` | `1` | `B3` |
 
 ### Description
 
@@ -465,36 +457,36 @@ HL register pair tarkibi memory locationni tanlash uchun address busga joylashti
 
 ### Condition Bits Affected
 
-S noma’lum. Z set qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + L (HL yangilangandan keyin). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-B ≠ 0 bo‘lganda:
+B kamaytirilgandan keyin B ≠ 0 bo‘lganda:
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 21 (4, 5, 3, 4, 5) | 5.25            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 21 (4, 5, 3, 4, 5) | 5.25 |
 
-B = 0 bo‘lganda:
+B kamaytirilgandan keyin B = 0 bo‘lganda:
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
 C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: memory location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address / Register | Qiymat |
+| --- | --- |
 | `1000h` | `51h` |
 | `1001h` | `A9h` |
 | `1002h` | `03h` |
 
 `OTIR` bajarilgach, HL register pairda 1003h, B registerda 0 bo‘ladi. 07h I/O port addressga mos peripheral devicega byte lar quyidagi ketma-ketlikda yoziladi:
 
-|       |
-| ----- |
+| Data byte |
+| --- |
 | `51h` |
 | `A9h` |
 | `03h` |
@@ -503,7 +495,7 @@ C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. Memory
 
 ### Operation
 
-`(C) ← (HL), B ← B – 1, HL ← HL – 1`
+`B ← B − 1, I/O[BC] ← (HL), HL ← HL − 1`
 
 ### Op Code
 
@@ -513,10 +505,10 @@ C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. Memory
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `0` | `1` | `0` | `1` | `1` | `AB` | `10011011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `0` | `1` | `0` | `1` | `1` | `AB` |
 
 ### Description
 
@@ -524,25 +516,23 @@ HL register pair tarkibi memory locationni tanlash uchun address busga joylashti
 
 ### Condition Bits Affected
 
-S noma’lum. B – 1 = 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + L (HL yangilangandan keyin). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3. 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
 C registerda 07h, B registerda 10h, HL register pairda 1000h va 1000h memory locationda 59h bo‘lsin. `OUTD` bajarilgach, B registerda 0Fh, HL register pairda 0FFFh bo‘ladi va 59h byte 07h I/O port addressga mos peripheral devicega yoziladi.
 
-Manba izohi: Manbaning T States tarkibida `(4, 5, 3. 4)` yozilgan; nuqta asl holida saqlandi.
-
 # OTDR
 
 ### Operation
 
-`(C) ← (HL), B ← B – 1, HL ← HL – 1`
+`repeat {B ← B − 1, I/O[BC] ← (HL), HL ← HL − 1} while (B ≠ 0)`
 
 ### Op Code
 
@@ -552,10 +542,10 @@ Manba izohi: Manbaning T States tarkibida `(4, 5, 3. 4)` yozilgan; nuqta asl hol
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `BB` | `10111011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `BB` |
 
 ### Description
 
@@ -563,36 +553,36 @@ HL register pair tarkibi memory locationni tanlash uchun address busga joylashti
 
 ### Condition Bits Affected
 
-S noma’lum. Z set qilinadi. H noma’lum. P/V noma’lum. N set qilinadi. C o‘zgarmaydi.
+Klassik Z80 uchun: B kamaytirilgandan keyin S = B ning bit 7 qiymati; Z = (B = 0). N = data ning bit 7 qiymati. k = data + L (HL yangilangandan keyin). H va C = (k > FFh). P/V = even parity((k AND 07h) XOR B). Takrorlanuvchi variantlarda bu qoidalar har bir transferga tegishli.
 
 ### Timing
 
-B ≠ 0 bo‘lganda:
+B kamaytirilgandan keyin B ≠ 0 bo‘lganda:
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 21 (4, 5, 3, 4, 5) | 5.25            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 21 (4, 5, 3, 4, 5) | 5.25 |
 
-B = 0 bo‘lganda:
+B kamaytirilgandan keyin B = 0 bo‘lganda:
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 16 (4, 5, 3, 4) | 4.00            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 16 (4, 5, 3, 4) | 4.00 |
 
 ### Misol
 
 C registerda 07h, B registerda 03h va HL register pairda 1000h bo‘lsin. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: memory location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address / Register | Qiymat |
+| --- | --- |
 | `0FFEh` | `51h` |
 | `0FFFh` | `A9h` |
 | `1000h` | `03h` |
 
 `OTDR` bajarilgach, HL register pairda 0FFDh, B registerda 0 bo‘ladi. 07h I/O port addressga mos peripheral devicega byte lar quyidagi ketma-ketlikda yoziladi:
 
-|       |
-| ----- |
+| Data byte |
+| --- |
 | `03h` |
 | `A9h` |
 | `51h` |

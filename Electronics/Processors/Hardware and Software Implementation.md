@@ -61,7 +61,7 @@ Figure 20’da manzil maydoni hexadecimal yozuvda berilgan. `A10` manzil biti RO
 
 ## Xotira tezligini boshqarish
 
-Ko‘plab qo‘llanishlarda sekin xotiralardan foydalanish xarajatlarni kamaytirishi mumkin. CPU’dagi `WAIT` liniyasi Z80’ning istalgan tezlikdagi xotira bilan ishlashiga imkon beradi. 9-sahifadagi *Memory Read Or Write* bo‘limida yoritilgan xotiraga murojaat qilish vaqti talablari `M1` siklidagi instruction fetch vaqtida eng qat’iy bo‘ladi. Xotiraga murojaat qilishning qolgan barcha sikllarida qo‘shimcha yarim clock cycle mavjud. Shu sababli sekinroq xotiralardan foydalanish uchun ba’zan `M1` sikliga bitta wait state qo‘shish maqsadga muvofiq.
+Ko‘plab qo‘llanishlarda sekin xotiralardan foydalanish xarajatlarni kamaytirishi mumkin. CPU’dagi `WAIT` liniyasi Z80’ga sekin xotira uchun qo‘shimcha wait state’lar kiritish imkonini beradi. WAIT timing talablari va DRAM refresh cheklovlari hisobga olinishi kerak. 9-sahifadagi *Memory Read Or Write* bo‘limida yoritilgan xotiraga murojaat qilish vaqti talablari `M1` siklidagi instruction fetch vaqtida eng qat’iy bo‘ladi. Xotiraga murojaat qilishning qolgan barcha sikllarida qo‘shimcha yarim clock cycle mavjud. Shu sababli sekinroq xotiralardan foydalanish uchun ba’zan `M1` sikliga bitta wait state qo‘shish maqsadga muvofiq.
 
 Figure 21’da bu vazifani bajaradigan sodda sxema keltirilgan. Figure 22’da ko‘rsatilganidek, ushbu sxemani xotiraga har qanday murojaatga bitta wait state qo‘shadigan qilib o‘zgartirish mumkin.
 
@@ -81,13 +81,13 @@ Figure 23’da 18-pin’li 4K dynamic xotiralar yordamida 8 KB dynamic RAM’ni 
 
 Z80 instruction set foydalanuvchiga Z80 CPU’ni boshqarish uchun ko‘plab amallarni taqdim etadi. Asosiy, alternate va index register’lardan arithmetic va logical amallarni bajarish, xotira manzillarini hosil qilish yoki tez-tez ishlatiladigan ma’lumotlarni tezkor saqlash uchun foydalanish mumkin.
 
-Axborotni bevosita bir register’dan boshqasiga, xotiradan xotiraga, xotiradan register’larga yoki register’lardan xotiraga ko‘chirish mumkin. Bundan tashqari, register’lar mazmunini hamda register va xotira mazmunini vaqtinchalik saqlash joyisiz o‘zaro almashtirish mumkin. Xususan, faqat ikkita instruction — `EX` va `EXX` — yordamida asosiy va alternate register’lar mazmunini to‘liq almashtirish mumkin. Register’larni almashtirishning bu usuli turli mantiqiy protseduralarning ishchi register’lar to‘plamlarini ajratish yoki bitta protsedurada mavjud register’lar to‘plamini kengaytirish uchun ishlatiladi.
+Axborotni bevosita bir register’dan boshqasiga, xotiradan xotiraga, xotiradan register’larga yoki register’lardan xotiraga ko‘chirish mumkin. Bundan tashqari, register’lar mazmunini hamda register va xotira mazmunini vaqtinchalik saqlash joyisiz o‘zaro almashtirish mumkin. Xususan, faqat ikkita instruction — `EX AF, AF'` va `EXX` — yordamida AF, BC, DE va HL asosiy va alternate register juftliklari mazmunini almashtirish mumkin. Register’larni almashtirishning bu usuli turli mantiqiy protseduralarning ishchi register’lar to‘plamlarini ajratish yoki bitta protsedurada mavjud register’lar to‘plamini kengaytirish uchun ishlatiladi.
 
 Register juftliklari bilan xotira o‘rtasida ma’lumotlarni saqlash va qayta olishni maxsus Stack Pointer (`SP`) register’idan foydalanadigan `PUSH` va `POP` instruction’lari orqali last-in first-out tartibida boshqarish mumkin. Bu stack register’i ma’lumotlarni qayta ishlash uchun ham, subroutine’larni bog‘lashda manzillarni avtomatik saqlash va qayta olish uchun ham xizmat qiladi. Masalan, subroutine chaqirilganda, `CALL` instruction’idan keyingi manzil `SP` ko‘rsatgan pushdown stack tepasiga joylashtiriladi. Subroutine uni chaqirgan rutinaga qaytganda, stack tepasidagi manzil program counter’ga keyingi instruction manzili sifatida o‘rnatiladi. `PUSH`, `POP`, `CALL` va `RET` instruction’lari bajarilganda, stack pointer stack tepasining joriy joylashuviga mos ravishda avtomatik o‘zgartiriladi. Stack maydoni nazariy jihatdan butun xotira maydonicha bo‘lishi mumkinligi sababli, bu mexanizm pushdown ma’lumotlar stack’lari va subroutine chaqiruvlarini amalda zarur bo‘lgan istalgan chuqurlikda ichma-ich joylashtirish imkonini beradi.
 
-Instruction’larning bajarilish ketma-ketligini arithmetic, logical, shift va compare instruction’lari natijalarini aks ettiradigan oltita flag (`carry`, `zero`, `sign`, `parity/overflow`, `add/subtract`, `half-carry`) yordamida boshqarish mumkin. Flag’ni o‘rnatadigan instruction bajarilgach, shu flag’dan conditional jump yoki return instruction’ini boshqarishda foydalanish mumkin. Bu instruction’lar bitta bit, 8-bit byte yoki 18-bit ma’lumot miqdorlari qayta ishlangandan keyin mantiqiy boshqaruvni ta’minlaydi.
+Instruction’larning bajarilish ketma-ketligini arithmetic, logical, shift va compare instruction’lari natijalarini aks ettiradigan oltita flag (`carry`, `zero`, `sign`, `parity/overflow`, `add/subtract`, `half-carry`) yordamida boshqarish mumkin. Flag’ni o‘rnatadigan instruction bajarilgach, shu flag’dan conditional jump yoki return instruction’ini boshqarishda foydalanish mumkin. Bu instruction’lar bitta bit, 8-bit byte yoki 16-bit ma’lumot miqdorlari qayta ishlangandan keyin mantiqiy boshqaruvni ta’minlaydi.
 
-Accumulator bilan boshqa barcha 8-bit register’lar, xotira joylashuvlari yoki immediate operand’lar o‘rtasidagi Boolean amallar uchun logical amallarning to‘liq to‘plami mavjud: `AND`, `OR`, `XOR` (exclusive-OR), `CPL` (NOR) va `NEG` (two’s complement).
+Accumulator bilan boshqa barcha 8-bit register’lar, xotira joylashuvlari yoki immediate operand’lar o‘rtasidagi Boolean amallar uchun logical amallarning to‘liq to‘plami mavjud: `AND`, `OR`, `XOR` (exclusive-OR), `CPL` (bitwise NOT) va `NEG` (two’s complement). NEG Boolean amal emas, arithmetic negation hisoblanadi.
 
 Bundan tashqari, barcha 8-bit asosiy register’lar mazmuni yoki bevosita xotiraning istalgan joylashuvi ustida ishlaydigan, ikkala yo‘nalishdagi arithmetic va logical shift amallarining to‘liq to‘plami mavjud. Shift natijalarini tekshirish va register/register yoki register/xotira shift amallarini bog‘lash uchun carry flag bu shift instruction’lariga kiritilishi yoki ular tomonidan o‘rnatilishi mumkin.
 
@@ -107,7 +107,7 @@ LDIR              ; Satrni ko‘chirish: HL ko‘rsatgan xotiradan
                   ; BC = 0 bo‘lguncha davom ettirish
 ```
 
-Bu amal uchun 11 byte kerak va har bir ma’lumot byte’i 21 clock cycle’da ko‘chiriladi.
+Bu amal uchun 11 byte kerak va oxirgi byte’dan tashqari har bir byte 21 T State’da, oxirgi byte esa 16 T State’da ko‘chiriladi. LDIR jami 15472 T State, uchta LD bilan birga 15502 T State talab qiladi.
 
 ### 2-misol: ajratuvchigacha ko‘chirish
 
@@ -119,7 +119,7 @@ LD DE, BUFFER     ; Maqsad buffer’ning boshlang‘ich manzili
 LD BC, 132        ; Satrning maksimal uzunligi
 LD A, '$'         ; Satr ajratuvchisining kodi
 LOOP: CP (HL)     ; Xotira mazmunini ajratuvchi bilan solishtirish
-JR Z, END-$       ; Belgilar teng bo‘lsa, END’ga o‘tish
+JR Z, END       ; Belgilar teng bo‘lsa, END’ga o‘tish
 LDI               ; Belgini (HL)dan (DE)ga ko‘chirish;
                   ; HL va DE’ni oshirish, BC’ni kamaytirish
 JP PE, LOOP       ; Yana belgilar bo‘lsa, LOOP’ga o‘tish
@@ -135,17 +135,17 @@ Bu amal uchun 19 byte kerak.
 16 xonali o‘nlik son Figure 24’da ko‘rsatilganidek shift qilinadi. Bu shift BCD ko‘paytirish yoki bo‘lish amalini bajarish uchun qo‘llanadi. 16 xonali o‘nlik son packed BCD formatida ifodalanadi: har bir byte’da ikkita BCD raqami saqlanadi. Amal quyidagicha dasturlanadi:
 
 ```asm
-LD HL, DATA       ; Birinchi byte manzili
-LD B, COUNT       ; Shift soni
+LD HL, DATA       ; Eng kichik razryadli packed BCD byte manzili
+LD B, 8           ; 16 ta BCD digit uchun 8 byte
 XOR A             ; Accumulator’ni tozalash
 ROTAT: RLD        ; ACC’dagi quyi raqamni (HL)dagi
                   ; raqamlar bilan chapga rotate qilish
 INC HL            ; Xotira pointer’ini oldinga surish
-DJNZ ROTAT-$      ; B’ni kamaytirish; B nol bo‘lmasa, ROTAT’ga
+DJNZ ROTAT      ; B’ni kamaytirish; B nol bo‘lmasa, ROTAT’ga
                   ; o‘tish, aks holda keyingi qatorga o‘tish
 ```
 
-Bu amal uchun 11 byte kerak.
+Bu amal uchun 11 byte kerak. Byte’lar little-endian tartibda joylashgan deb olinadi. Yakunda A ning quyi nibble’ida chiqarilgan eng katta BCD digit qoladi.
 
 ![CleanShot 2026-11-25 at 13.32.36.png](<../../assets/e88f1b7a-1cf6-4592-8abf-2633c7a0d08d-CleanShot-2026-11-25-at-13-32-36.png>)
 
@@ -154,21 +154,21 @@ Bu amal uchun 11 byte kerak.
 Ikkita son packed BCD formatida bo‘lib, ularning uzunliklari o‘zaro teng, ammo turli holatlarda o‘zgarishi mumkin. Bir sonni ikkinchisidan ayirish kerak. Natija kamayuvchining joylashuvida saqlanadi. Amal quyidagicha dasturlanadi:
 
 ```asm
-LD HL, ARG1       ; Kamayuvchining manzili
-LD DE, ARG2       ; Ayiriluvchining manzili
+LD DE, ARG1       ; Kamayuvchining manzili
+LD HL, ARG2       ; Ayiriluvchining manzili
 LD B, LENGTH      ; Ikkala argument uzunligi
 AND A             ; Carry flag’ni tozalash
-SUBDEC: LD A, (DE); Ayiriluvchini ACC’ga yuklash
+SUBDEC: LD A, (DE); Kamayuvchini ACC’ga yuklash
 SBC A, (HL)       ; ACC’dan (HL)ni ayirish
 DAA               ; Natijani o‘nlik kodlangan qiymatga moslash
-LD (HL), A        ; Natijani saqlash
+LD (DE), A        ; Natijani ARG1 da saqlash
 INC HL            ; Xotira pointer’larini oldinga surish
 INC DE
-DJNZ SUBDEC–$     ; B’ni kamaytirish; B nol bo‘lmasa, SUBDEC’ga
+DJNZ SUBDEC     ; B’ni kamaytirish; B nol bo‘lmasa, SUBDEC’ga
                   ; o‘tish, aks holda keyingi qatorga o‘tish
 ```
 
-Bu amal uchun 17 byte kerak.
+Bu amal uchun 17 byte kerak. Ikkala operand ham eng kichik razryadli byte’dan boshlab joylashishi, LENGTH 1–255 oralig‘ida bo‘lishi kerak (B = 0 bo‘lsa 256 iteratsiya bajariladi). Yakuniy Carry borrow holatini bildiradi.
 
 ## Dasturlash vazifalariga oid misollar
 
@@ -176,11 +176,11 @@ Bu amal uchun 17 byte kerak.
 
 Table 2’da ko‘rsatilgan misol dastur standart exchange sorting algoritmi yordamida sonlar massivini o‘sish tartibida saralaydi. Sonlar `0` dan `255` gacha bo‘lgan oraliqda bo‘ladi.
 
-# 2-jadval. Bubble Sort algoritmi
+#### 2-jadval. Bubble Sort algoritmi
 
 Bubble Sort — massiv elementlarini o‘zaro taqqoslash va o‘rinlarini almashtirish orqali saralash algoritmi.
 
-## Kirish va chiqish parametrlari
+##### Kirish va chiqish parametrlari
 
 | Parametr | Tavsif |
 |---|---|
@@ -188,7 +188,7 @@ Bubble Sort — massiv elementlarini o‘zaro taqqoslash va o‘rinlarini almash
 | `C` | Saralanadigan elementlar soni (2–255) |
 | Natija | Asl hujjatga ko‘ra, o‘sish tartibida saralangan massiv |
 
-## Registrlarning vazifalari
+##### Registrlarning vazifalari
 
 | Registr | Vazifasi |
 |---|---|
@@ -197,12 +197,12 @@ Bubble Sort — massiv elementlarini o‘zaro taqqoslash va o‘rinlarini almash
 | `C` | Massiv uzunligi |
 | `D` | Taqqoslanayotgan birinchi element |
 | `E` | Taqqoslanayotgan ikkinchi element |
-| `H` | Elementlar almashtirilganligini bildiruvchi flag |
-| `L` | Ishlatilmaydi |
+| `H` | Dastlab HL pointer’ining yuqori byte’i; keyin bit 0 almashtirish flag’i |
+| `L` | Boshlang‘ich HL pointer’ining quyi byte’i; keyin ishlatilmaydi |
 | `IX` | Massivning joriy elementiga ko‘rsatkich |
 | `IY` | Ishlatilmaydi |
 
-## Dastur listingi
+##### Dastur listingi
 
 | Manzil | Mashina kodi | Qator | Label | Instruktsiya | Tavsif |
 |---|---|---:|---|---|---|
@@ -211,11 +211,11 @@ Bubble Sort — massiv elementlarini o‘zaro taqqoslash va o‘rinlarini almash
 | `0005` | `41` | 25 | | `LD B, C` | Hisoblagichni boshlang‘ich qiymatga o‘rnatish |
 | `0006` | `05` | 26 | | `DEC B` | Taqqoslashlar sonini bittaga kamaytirish |
 | `0007` | `DD 2A 26 00` | 27 | | `LD IX, (data)` | Massiv ko‘rsatkichini o‘rnatish |
-| `000B` | `DD 7E 00` | 28 | `next:` | `LD A, (IX)` | Birinchi elementni o‘qish |
-| `000E` | `57` | 29 | | `LD D, A` | Birinchi elementni vaqtincha saqlash |
-| `000F` | `DD 5E 01` | 30 | | `LD E, (IX+1)` | Ikkinchi elementni o‘qish |
-| `0012` | `93` | 31 | | `SUB E` | Birinchi va ikkinchi elementni taqqoslash |
-| `0013` | `30 08` | 32 | | `JR NC, noex` | Birinchi element kichik bo‘lmasa, almashtirishni o‘tkazib yuborish |
+| `000B` | `DD 7E 01` | 28 | `next:` | `LD A, (IX+1)` | Ikkinchi elementni o‘qish |
+| `000E` | `5F` | 29 | | `LD E, A` | Ikkinchi elementni vaqtincha saqlash |
+| `000F` | `DD 56 00` | 30 | | `LD D, (IX)` | Birinchi elementni o‘qish |
+| `0012` | `92` | 31 | | `SUB D` | Birinchi va ikkinchi elementni taqqoslash |
+| `0013` | `30 08` | 32 | | `JR NC, noex` | Ikkinchi element birinchidan katta yoki teng bo‘lsa, almashtirishni o‘tkazib yuborish |
 | `0015` | `DD 73 00` | 33 | | `LD (IX), E` | Ikkinchi elementni birinchi joyga yozish |
 | `0018` | `DD 72 01` | 34 | | `LD (IX+1), D` | Birinchi elementni ikkinchi joyga yozish |
 | `001B` | `CB C4` | 35 | | `SET flag, H` | Almashtirish sodir bo‘lganini belgilash |
@@ -228,7 +228,7 @@ Bubble Sort — massiv elementlarini o‘zaro taqqoslash va o‘rinlarini almash
 | `0026` | | 44 | `data:` | `DEFS 2` | Massiv manzili uchun 2 bayt ajratish |
 | | | 45 | | `END` | Dastur yakuni |
 
-## Assembler kodi
+##### Assembler kodi
 
 ```asm
 sort:
@@ -239,10 +239,10 @@ loop:
     DEC B
     LD IX, (data)
 next:
-    LD A, (IX)
-    LD D, A
-    LD E, (IX+1)
-    SUB E
+    LD A, (IX+1)
+    LD E, A
+    LD D, (IX)
+    SUB D
     JR NC, noex
     LD (IX), E
     LD (IX+1), D
@@ -258,7 +258,7 @@ data: DEFS 2
 END
 ```
 
-## Asl hujjatdagi nomuvofiqliklar
+##### Asl hujjatdagi nomuvofiqliklar
 
 Quyidagi yozuvlar mashina kodlari va manzillar asosida talqin qilindi:
 
@@ -269,23 +269,15 @@ Quyidagi yozuvlar mashina kodlari va manzillar asosida talqin qilindi:
 | `JR PC, noex-$` | `JR NC, noex` |
 | `LD (IX+i), D` | `LD (IX+1), D` |
 
-**Muhim:** asl qo‘llanmada o‘sish tartibida saralash aytilgan, ammo `30 08` (`JR NC`) tufayli dastur ishorasiz baytlarni kamayish tartibida saralaydi.
+**Muhim:** asl listing kamayish tartibida saralagan. Yuqoridagi listing va assembler kodi o‘sish tartibida saralash uchun tuzatildi: ikkinchi elementdan birinchi element ayiriladi. Teng elementlar almashtirilmaydi. Instruction uzunliklari va jump displacement qiymatlari o‘zgarmadi. `data` uchun yoziladigan RAM kerak; subrutina HL, IX, A, B, D, E va flaglarni o‘zgartiradi.
 
-O‘sish tartibida saralash uchun quyidagi o‘zgartirish tavsiya etiladi (asl listingga kirmaydi):
+### 16-bit sonlarni ko‘paytirish
 
-```asm
-SUB E
-JR C, noex
-JR Z, noex
-```
-
-Teng elementlarni almashtirmaslik cheksiz takrorlanishning oldini oladi. O‘zgartirilgan kod qayta assembler qilinishi kerak, chunki manzillar va nisbiy sakrash kodlari o‘zgaradi.
-
-# 3-jadval. Ko‘paytirish dasturi (Multiply Listing)
+#### 3-jadval. Ko‘paytirish dasturi (Multiply Listing)
 
 Ushbu subrutina ishorasiz 16 bitli butun sonlarni siljitish va qo‘shish orqali ko‘paytiradi.
 
-## Kirish va chiqish parametrlari
+##### Kirish va chiqish parametrlari
 
 | Parametr | Tavsif |
 |---|---|
@@ -293,7 +285,7 @@ Ushbu subrutina ishorasiz 16 bitli butun sonlarni siljitish va qo‘shish orqali
 | `HL` | Ko‘paytiriluvchi |
 | `HL` (chiqish) | Ko‘paytirish natijasining quyi 16 biti |
 
-## Registrlarning vazifalari
+##### Registrlarning vazifalari
 
 | Registr | Vazifasi |
 |---|---|
@@ -305,7 +297,7 @@ Ushbu subrutina ishorasiz 16 bitli butun sonlarni siljitish va qo‘shish orqali
 | `C` | Ko‘paytiruvchining yuqori bayti |
 | `A` | Ko‘paytiruvchining quyi bayti |
 
-## Dastur listingi
+##### Dastur listingi
 
 | Manzil | Mashina kodi | Qator | Label | Instruktsiya | Tavsif |
 |---|---|---:|---|---|---|
@@ -326,7 +318,7 @@ Ushbu subrutina ishorasiz 16 bitli butun sonlarni siljitish va qo‘shish orqali
 | `0013` | `C9` | 33 | | `RET` | Subrutinadan qaytish |
 | | | 34 | | `END` | Dastur yakuni |
 
-## Assembler kodi
+##### Assembler kodi
 
 ```asm
 mult:
@@ -352,8 +344,10 @@ noadd:
     END
 ```
 
-## Ishlash prinsipi
+##### Ishlash prinsipi
 
 Har bir iteratsiyada `C:A` juftligidagi ko‘paytiruvchi o‘ngga siljitiladi. Agar chiqarilgan bit 1 bo‘lsa, `DE` dagi ko‘paytiriluvchi `HL` dagi natijaga qo‘shiladi. Keyin `DE` chapga siljitiladi. Jarayon 16 marta takrorlanadi.
 
 
+
+Natija 16 bit bilan cheklangan: overflow bo‘lsa, faqat quyi 16 bit saqlanadi.

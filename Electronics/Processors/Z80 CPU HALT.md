@@ -13,6 +13,197 @@ tags:
 Asosiy protsessor haqida: [[Electronics/Processors/Z80|Zilog Z80]].
 
 ## 1. Texnik tayanch
+## HALT vaqtida CPU ichidagi jarayonlar
+
+HALT instruction’i bajarilganda CPU instruction bajarishni vaqtincha to‘xtatadi, lekin clock signal, M1 cycle va memory refresh ishlashda davom etadi.
+
+### Address bus va data bus
+
+HALT holatida CPU keyingi instruction manzilidan takroriy opcode fetch cycle’larini bajaradi. Xotiradan o‘qilgan opcode e’tiborga olinmaydi va uning o‘rniga ichki NOP bajariladi.
+
+Masalan:
+
+```asm
+ORG 0100h
+
+    EI
+    HALT
+    LD A, 42h
+```
+
+Xotira tarkibi:
+
+| Address | Data | Mazmuni |
+|---|---|---|
+| 0100h | FBh | EI |
+| 0101h | 76h | HALT |
+| 0102h | 3Eh | LD A, n |
+| 0103h | 42h | Immediate operand |
+
+HALT holatida PC `0102h` qiymatida qoladi. CPU `0102h` manzilidan `3Eh` qiymatini takroriy o‘qiydi, ammo `LD A, 42h` instruction’ini bajarmaydi.
+
+```mermaid
+flowchart TD
+    A["HALT bajarildi"] --> B["Opcode fetch: PC"]
+    B --> C["O‘qilgan opcode e’tiborga olinmaydi"]
+    C --> D["Ichki NOP va memory refresh"]
+    D --> E{"Interrupt qabul qilindimi?"}
+    E -->|Yo‘q| B
+    E -->|Ha| F["HALT holatidan chiqish"]
+    F --> G["Interrupt response"]
+```
+
+> [!NOTE]
+> Data bus’ga LED yoki logic analyzer ulangan bo‘lsa, HALT vaqtida keyingi instruction opcode’i ko‘rinishi mumkin. Bu CPU ushbu instruction’ni bajarayotganini anglatmaydi.
+
+Refresh bosqichida address bus’da PC emas, I va R register’lari asosida hosil qilingan refresh address chiqadi. Shu sababli address bus butun HALT davomida bitta o‘zgarmas qiymatda turmaydi.
+
+### Register’larning holati
+
+HALT instruction’i register’larning aksariyatiga ta’sir qilmaydi. Biroq R register’i ishlashda davom etadi.
+
+| Register | HALT vaqtida |
+|---|---|
+| PC | Keyingi instruction manzilida qoladi |
+| A | O‘zgarmaydi |
+| F | O‘zgarmaydi |
+| BC | O‘zgarmaydi |
+| DE | O‘zgarmaydi |
+| HL | O‘zgarmaydi |
+| IX | O‘zgarmaydi |
+| IY | O‘zgarmaydi |
+| SP | O‘zgarmaydi |
+| I | O‘zgarmaydi |
+| R | Quyi 7 biti increment qilinadi |
+
+Ushbu jadval interrupt yoki RESET hali qabul qilinmagan HALT holatiga tegishli.
+
+### R register va memory refresh
+
+R — Memory Refresh Register bo‘lib, uning quyi 7 biti har bir M1 cycle davomida avtomatik increment qilinadi. Yuqori biti, ya’ni bit 7, avtomatik increment jarayonida o‘zgarmaydi.
+
+| Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|---|---|---|---|---|---|---|---|---|
+| R | Saqlanadi | r₆ | r₅ | r₄ | r₃ | r₂ | r₁ | r₀ |
+
+Masalan, R register’ining boshlang‘ich qiymati `7Eh` bo‘lsa:
+
+| M1 cycle | R (HEX) | R (Binary) |
+|---|---|---|
+| Boshlang‘ich | 7E | 01111110 |
+| 1 | 7F | 01111111 |
+| 2 | 00 | 00000000 |
+| 3 | 01 | 00000001 |
+| 4 | 02 | 00000010 |
+
+Agar boshlang‘ich qiymat `FEh` bo‘lsa, bit 7 saqlanadi:
+
+| M1 cycle | R (HEX) | R (Binary) |
+|---|---|---|
+| Boshlang‘ich | FE | 11111110 |
+| 1 | FF | 11111111 |
+| 2 | 80 | 10000000 |
+| 3 | 81 | 10000001 |
+
+Refresh bosqichida `/MREQ` va `/RFSH` signallari aktivlashadi. Bu dynamic RAM tarkibini saqlash uchun zarur bo‘lgan refresh cycle’larini tashkil qilish imkonini beradi.
+
+Static RAM (SRAM) refresh talab qilmaydi, ammo Z80 CPU refresh cycle’larini baribir bajaradi.
+
+### HALT output signali
+
+Z80 CPU’da `/HALT` nomli active LOW output mavjud. Bu signal tashqi qurilmalarga CPU kutish holatida ekanligini bildiradi.
+
+| /HALT | CPU holati |
+|---|---|
+| HIGH | CPU HALT holatida emas |
+| LOW | CPU HALT holatida |
+
+HALT vaqtida clock signal ishlashda davom etadi.
+
+Quyidagi timing diagram soddalashtirilgan bo‘lib, aniq T State chegaralarini ifodalamaydi:
+
+```text
+            HALT                 Interrupt
+              ↓                      ↓
+              │                      │
+/HALT ────────┐                      ┌──────
+              └──────────────────────┘
+
+CLK   ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+      ┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─
+
+              │    HALT holati       │
+```
+
+`/HALT` signalidan quyidagi maqsadlarda foydalanish mumkin:
+
+- CPU holatini LED orqali ko‘rsatish.
+- Logic analyzer yordamida dastur oqimini kuzatish.
+- Debugger yoki hardware monitor yaratish.
+- Tashqi controller yordamida CPU holatini aniqlash.
+
+`/HALT` output hisoblanadi. Unga tashqi qurilmadan HIGH yoki LOW signal berish mumkin emas.
+
+### HALT va interrupt vaqtida Stack
+
+Interrupt qabul qilinganda HALT holati tugaydi.
+
+NMI, IM 1 va IM 2 rejimlarida CPU HALTdan keyingi instruction manzilini stack’ka saqlaydi. IM 0 rejimida esa bu amal tashqi qurilma taqdim etgan instruction’ga bog‘liq.
+
+Masalan, IM 1 rejimida:
+
+```asm
+ORG 0100h
+
+    EI
+    HALT
+    LD A, 42h
+```
+
+Interrupt qabul qilinishidan oldin:
+
+| Register | Qiymat |
+|---|---|
+| PC | 0102h |
+| SP | 9000h |
+
+Interrupt qabul qilingandan keyin:
+
+| Register | Qiymat |
+|---|---|
+| PC | 0038h |
+| SP | 8FFEh |
+
+Stack tarkibi:
+
+| Address | Data | Mazmuni |
+|---|---|---|
+| 8FFFh | 01h | Return address — High byte |
+| 8FFEh | 02h | Return address — Low byte |
+
+Interrupt Service Routine (ISR) `RETI` orqali qaytganda, stack’dan `0102h` manzili olinadi va dastur `LD A, 42h` instruction’idan davom etadi.
+
+> [!IMPORTANT]
+> HALT ishlashi uchun stack talab qilinmaydi. Ammo interrupt qabul qilinganda return address’ni saqlash uchun SP to‘g‘ri sozlangan va tegishli xotira yoziladigan bo‘lishi kerak.
+
+### HALT vaqtida aktiv signallar
+
+| Signal | Holati |
+|---|---|
+| CLK | Ishlashda davom etadi |
+| /HALT | LOW |
+| /M1 | Takroriy M1 cycle’larida aktivlashadi |
+| /MREQ | Memory fetch va refresh vaqtida aktivlashadi |
+| /RD | Opcode fetch vaqtida aktivlashadi |
+| /RFSH | Refresh vaqtida aktivlashadi |
+| /WR | Oddiy HALT cycle’larida aktivlashmaydi |
+| /IORQ | Oddiy HALT cycle’larida aktivlashmaydi |
+
+Interrupt acknowledge, BUSREQ, WAIT va RESET kabi tashqi hodisalar signal holatlariga ta’sir qilishi mumkin.
+
+> [!NOTE]
+> HALT — CPU’ning to‘liq elektr jihatdan to‘xtashi emas. CPU instruction bajarishni kutish holatiga o‘tkazadi, lekin bus cycle’lari va memory refresh davom etadi.
+
 
 | Xususiyat | Mazmuni |
 | --- | --- |

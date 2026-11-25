@@ -32,9 +32,9 @@ Ushbu bo‘limda quyidagi rotate va shift group instructionlari tavsiflanadi. Ba
 - [RLD](#rld)
 - [RRD](#rrd)
 
-Operation ifodalari Descriptiondagi bit ko‘chirishlarini ifodalaydi; o‘ng tomondagi barcha qiymatlar operationdan oldingi holatga tegishli. CY — Carry flag; pastki indeks bit raqamini bildiradi. Opcode jadvallarida birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, so‘ng hex code yoki operand turi, oxirgi katak esa manbadagi bit matnidir. Manbadagi ayrim bit satrlari hex code bilan mos kelmaydi; bit kataklari shu hex codega mos berildi va asl matn ham saqlandi. Indexed instruction byte ketma-ketligi: DD yoki FD, CB, d, opcode. d — butun byte ni egallaydigan two’s-complement displacement. r₂, r₁, r₀ register code bitlarini bildiradi.
+Operation ifodalari Descriptiondagi bit ko‘chirishlarini ifodalaydi; o‘ng tomondagi barcha qiymatlar operationdan oldingi holatga tegishli. CY — Carry flag; pastki indeks bit raqamini bildiradi. Opcode jadvallarida bitlar 7 dan 0 gacha berilgan. Indexed instruction byte ketma-ketligi: DD yoki FD, CB, d, opcode. d — butun byte ni egallaydigan two’s-complement displacement. r₂, r₁, r₀ register code bitlarini bildiradi.
 
-Misol sxemalaridagi bit kataklari manbada berilgan bit raqamlari tartibida — 7, 6, 4, 1, 0, 2, 5, 3 — saqlandi. “Bit raqami” qatori shu tartibni ko‘rsatadi. RRCA misolidagi alohida bo‘laklar ham o‘z ketma-ketligida berilgan. Manbadagi `lY` yozuvi tegishli operand va Timing qiymatlarida saqlandi.
+Misollardagi bitlar 7 dan 0 gacha tartiblangan; natijalar qayta hisoblangan.
 
 # RLCA
 
@@ -50,9 +50,9 @@ Misol sxemalaridagi bit kataklari manbada berilgan bit raqamlari tartibida — 7
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `07` | `00011100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `07` |
 
 ### Description
 
@@ -65,18 +65,17 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
 Accumulatorning boshlang‘ich tarkibi va `RLCA` bajarilgandan keyingi Accumulator hamda Carry flag qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |              |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `A — oldin`  | `1` | `0` | `0` | `0` | `0` | `0` | `0` | `1` | `Berilmagan` |
-| `A — keyin`  | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `1`          |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `A — oldin` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `Berilmagan` |
+| `A — keyin` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `1` |
 
 # RLA
 
@@ -92,9 +91,9 @@ Accumulatorning boshlang‘ich tarkibi va `RLCA` bajarilgandan keyingi Accumulat
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `17` | `00111100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `17` |
 
 ### Description
 
@@ -107,18 +106,17 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
 Accumulator va Carry flagning boshlang‘ich qiymatlari hamda `RLA` bajarilgandan keyingi qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |     |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C` |
-| `A — oldin`  | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` |
-| `A — keyin`  | `1` | `1` | `0` | `0` | `1` | `1` | `1` | `1` | `0` |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `A — oldin` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` |
+| `A — keyin` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `0` |
 
 # RRCA
 
@@ -134,9 +132,9 @@ Accumulator va Carry flagning boshlang‘ich qiymatlari hamda `RLA` bajarilganda
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0F` | `00011101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0F` |
 
 ### Description
 
@@ -149,23 +147,12 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
-Accumulatorning boshlang‘ich ma’lumotlari va `RRCA` bajarilgandan keyingi Accumulator hamda Carry flag sxemalari manbada quyidagi bo‘laklar bilan berilgan:
-
-|                               |                 |
-| ----------------------------- | --------------- |
-| `Oldin — bit matni`           | `000010`        |
-| `Oldin — bit raqamlari matni` | `6410253`       |
-| `Oldin — qo‘shimcha belgilar` | `7, 0, 1`       |
-| `Keyin — bit matni`           | `001010`        |
-| `Keyin — bit raqamlari matni` | `6410253`       |
-| `Keyin — qo‘shimcha belgilar` | `7, 1, 0, 1, C` |
-
-Manba izohi: RRCA misolining bitlari alohida bo‘laklarga ajralgan; ularni taxminan birlashtirish o‘rniga, manbadagi barcha bo‘laklar o‘z tartibida saqlandi.
+Misol (yangi): A = 85h bo‘lsa, `RRCA` dan keyin A = C2h, C = 1.
 
 # RRA
 
@@ -181,9 +168,9 @@ Manba izohi: RRCA misolining bitlari alohida bo‘laklarga ajralgan; ularni taxm
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `1F` | `00111101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `1F` |
 
 ### Description
 
@@ -196,18 +183,17 @@ S o‘zgarmaydi. Z o‘zgarmaydi. H reset qilinadi. P/V o‘zgarmaydi. N reset q
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 1        | 4        | 1.00            |
+| --- | --- | --- |
+| 1 | 4 | 1.00 |
 
 ### Misol
 
 Accumulator va Carry flagning boshlang‘ich qiymatlari hamda `RRA` bajarilgandan keyingi qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |     |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C` |
-| `A — oldin`  | `1` | `0` | `0` | `1` | `1` | `1` | `0` | `0` | `0` |
-| `A — keyin`  | `0` | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `1` |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `A — oldin` | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `0` |
+| `A — keyin` | `0` | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `1` |
 
 # RLC r
 
@@ -223,10 +209,10 @@ Accumulator va Carry flagning boshlang‘ich qiymatlari hamda `RRA` bajarilganda
 
 `r`
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `0` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `00000 r`  |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 ### Description
 
@@ -234,8 +220,8 @@ r register tarkibi chapga bir bit positionga rotate qilinadi. Bit 7 tarkibi Carr
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -251,20 +237,17 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 ### Timing
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
-| -------- | -------- | --------------- |
-| 2        | 8 (4, 4) | 2.00            |
+| --- | --- | --- |
+| 2 | 8 (4, 4) | 2.00 |
 
 ### Misol
 
 r registerning boshlang‘ich tarkibi va `RLC r` bajarilgandan keyingi register hamda Carry flag qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |              |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `r — oldin`  | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `Berilmagan` |
-| `r — keyin`  | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `1`          |
-
-Manba izohi: Manbada RLC r misolining boshlang‘ich va yakuniy bit matni bir xil — `00101000` deb berilgan. Qiymatlar o‘zgartirilmasdan saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `r — oldin` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `Berilmagan` |
+| `r — keyin` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `0` |
 
 # RLC (HL)
 
@@ -280,10 +263,10 @@ Manba izohi: Manbada RLC r misolining boshlang‘ich va yakuniy bit matni bir xi
 
 `(HL)`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `06` | `00010100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `06` |
 
 ### Description
 
@@ -295,19 +278,18 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
-| -------- | --------------- | --------------- |
-| 4        | 15 (4, 4, 4, 3) | 3.75            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 4 | 15 (4, 4, 4, 3) | 3.75 |
 
 ### Misol
 
 HL register pairda 2828h bo‘lsin. 2828h memory locationning boshlang‘ich tarkibi va `RLC (HL)` bajarilgandan keyingi memory location hamda Carry flag qiymatlari:
 
-|                   |     |     |     |     |     |     |     |     |              |
-| ----------------- | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami`      | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `(2828h) — oldin` | `1` | `0` | `0` | `0` | `0` | `0` | `0` | `1` | `Berilmagan` |
-| `(2828h) — keyin` | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `1`          |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `(2828h) — oldin` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `Berilmagan` |
+| `(2828h) — keyin` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `1` |
 
 # RLC (IX+d)
 
@@ -323,12 +305,12 @@ HL register pairda 2828h bo‘lsin. 2828h memory locationning boshlang‘ich tar
 
 `(IX+d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `0`  | `06`             | `00010100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `06` |
 
 ### Description
 
@@ -340,21 +322,18 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| M Cycles | T States              | 4 MHz E.T. (µs) |
-| -------- | --------------------- | --------------- |
-| 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
-Index Register IX da 1000h bo‘lsin. Manbada 1022h memory location quyidagi boshlang‘ich ma’lumotni saqlashi aytilgan. `RLC (IX+2h)` bajarilgach, 1002h memory location va Carry flag quyidagi yakuniy qiymatlarga ega bo‘ladi:
+Index Register IX da 1000h bo‘lsin. Manbada 1002h memory location quyidagi boshlang‘ich ma’lumotni saqlashi aytilgan. `RLC (IX+2h)` bajarilgach, 1002h memory location va Carry flag quyidagi yakuniy qiymatlarga ega bo‘ladi:
 
-|                  |     |     |     |     |     |     |     |     |              |
-| ---------------- | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami`     | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `Memory — oldin` | `1` | `0` | `0` | `0` | `0` | `0` | `0` | `1` | `Berilmagan` |
-| `Memory — keyin` | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `1`          |
-
-Manba izohi: Manbada boshlang‘ich memory location `1022h`, instruction va natijada esa `IX+2h` hamda `1002h` berilgan. Ushbu address nomuvofiqligi saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `Memory — oldin` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `Berilmagan` |
+| `Memory — keyin` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `1` |
 
 # RLC (IY+d)
 
@@ -368,14 +347,14 @@ Manba izohi: Manbada boshlang‘ich memory location `1022h`, instruction va nati
 
 ### Operand
 
-`(lY+d)`
+`(IY+d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `0`  | `06`             | `00010100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `06` |
 
 ### Description
 
@@ -387,19 +366,18 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| M Cycles | T States              | 4 MHz E.T. (µs) |
-| -------- | --------------------- | --------------- |
-| 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 Index Register IY da 1000h bo‘lsin. 1002h memory location quyidagi boshlang‘ich ma’lumotni saqlaydi. `RLC (IY+2h)` bajarilgach, 1002h memory location va Carry flag quyidagi yakuniy qiymatlarga ega bo‘ladi:
 
-|                  |     |     |     |     |     |     |     |     |              |
-| ---------------- | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami`     | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `Memory — oldin` | `1` | `0` | `0` | `0` | `0` | `0` | `0` | `1` | `Berilmagan` |
-| `Memory — keyin` | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `1`          |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `Memory — oldin` | `1` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `Berilmagan` |
+| `Memory — keyin` | `0` | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `1` |
 
 # RL m
 
@@ -415,39 +393,39 @@ Index Register IY da 1000h bo‘lsin. 1002h memory location quyidagi boshlang‘
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### RL r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `0` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `00100 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### RL (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `16` | `00110100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `16` |
 
 #### RL (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `0`  | `16`             | `00110100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `16` |
 
 #### RL (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `0`  | `16`             | `00110100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `16` |
 
 ### Description
 
@@ -455,8 +433,8 @@ m operand tarkibi chapga bir bit positionga rotate qilinadi. Bit 7 tarkibi Carry
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -471,24 +449,21 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| Instruction | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ----------- | -------- | --------------------- | --------------- |
-| `RL r`      | 2        | 8 (4, 4)              | 2.00            |
-| `RL (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `RL (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `RL (IY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `RL r` | 2 | 8 (4, 4) | 2.00 |
+| `RL (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `RL (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `RL (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 D register va Carry flagning boshlang‘ich qiymatlari hamda `RL D` bajarilgandan keyingi qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |     |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C` |
-| `D — oldin`  | `1` | `0` | `0` | `1` | `1` | `1` | `0` | `1` | `0` |
-| `D — keyin`  | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `1` | `1` |
-
-Manba izohi: Manbadagi register maydoni `00100 r*` deb berilgan; bit kataklari shu bo‘limdagi 16 hex codega mos `00010 r₂ r₁ r₀` ko‘rinishida berildi. Asl maydon matni ham saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `D — oldin` | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` |
+| `D — keyin` | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `1` |
 
 # RRC m
 
@@ -504,39 +479,39 @@ Manba izohi: Manbadagi register maydoni `00100 r*` deb berilgan; bit kataklari s
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### RRC r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `0` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `00001 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### RRC (HL)
 
-|     |     |     |     |     |     |     |     |     |      |                 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | --------------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001`      |
-| 2   | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `0E` | `00010101 / OE` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `0E` |
 
 #### RRC (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |                 |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | --------------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101`      |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001`      |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`             |
-| 4   | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `0`  | `0E`             | `00010101 / OE` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `0E` |
 
 #### RRC (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |                 |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | --------------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111`      |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001`      |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`             |
-| 4   | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `0`  | `0E`             | `00010101 / OE` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `0E` |
 
 ### Description
 
@@ -544,8 +519,8 @@ m operand tarkibi o‘ngga bir bit positionga rotate qilinadi. Bit 0 tarkibi Car
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -560,24 +535,21 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| Instruction  | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ------------ | -------- | --------------------- | --------------- |
-| `RRC r`      | 2        | 8 (4, 4)              | 2.00            |
-| `RRC (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `RRC (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `RRC (lY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `RRC r` | 2 | 8 (4, 4) | 2.00 |
+| `RRC (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `RRC (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `RRC (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 A registerning boshlang‘ich tarkibi va `RRC A` bajarilgandan keyingi Register A hamda Carry flag qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |              |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `A — oldin`  | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `Berilmagan` |
-| `A — keyin`  | `0` | `0` | `1` | `0` | `1` | `0` | `0` | `1` | `1`          |
-
-Manba izohi: Manbada uchta hex code `OE` (O harfi bilan) yozilgan. Hex code katagida `0E`, asl qiymat katagida esa `OE` saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `A — oldin` | `0` | `0` | `1` | `1` | `0` | `0` | `0` | `1` | `Berilmagan` |
+| `A — keyin` | `1` | `0` | `0` | `1` | `1` | `0` | `0` | `0` | `1` |
 
 # RR m
 
@@ -593,39 +565,39 @@ Manba izohi: Manbada uchta hex code `OE` (O harfi bilan) yozilgan. Hex code kata
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### RR r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `0` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `00001 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### RR (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `1E` | `00110101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `1E` |
 
 #### RR (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1E`             | `00110101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `1E` |
 
 #### RR (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1E`             | `00110101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `1E` |
 
 ### Description
 
@@ -633,8 +605,8 @@ m operand tarkibi Carry flag orqali o‘ngga bir bit positionga rotate qilinadi.
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -649,24 +621,21 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| Instruction | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ----------- | -------- | --------------------- | --------------- |
-| `RR r`      | 2        | 8 (4, 4)              | 2.00            |
-| `RR (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `RR (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `RR (lY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `RR r` | 2 | 8 (4, 4) | 2.00 |
+| `RR (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `RR (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `RR (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 HL register pairda 4343h bo‘lsin. 4343h memory location va Carry flagning boshlang‘ich qiymatlari hamda `RR (HL)` bajarilgandan keyingi qiymatlari:
 
-|                   |     |     |     |     |     |     |     |     |     |
-| ----------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami`      | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C` |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `(4343h) — oldin` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` |
-| `(4343h) — keyin` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` |
-
-Manba izohi: Manbadagi register maydoni `00001 r*` deb berilgan; bit kataklari shu bo‘limdagi 1E hex codega mos `00011 r₂ r₁ r₀` ko‘rinishida berildi. Asl maydon matni ham saqlandi.
+| `(4343h) — keyin` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `1` |
 
 # SLA m
 
@@ -682,39 +651,39 @@ Manba izohi: Manbadagi register maydoni `00001 r*` deb berilgan; bit kataklari s
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### SLA r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `1` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `00010 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### SLA (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `26` | `00010110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `26` |
 
 #### SLA (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `26`             | `00010110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `26` |
 
 #### SLA (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `26`             | `00010110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `26` |
 
 ### Description
 
@@ -722,8 +691,8 @@ m operand tarkibida chapga bir bit positionga arithmetic shift bajariladi. Bit 7
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -738,24 +707,21 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| Instruction  | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ------------ | -------- | --------------------- | --------------- |
-| `SLA r`      | 2        | 8 (4, 4)              | 2.00            |
-| `SLA (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `SLA (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `SLA (IY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `SLA r` | 2 | 8 (4, 4) | 2.00 |
+| `SLA (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `SLA (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `SLA (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 L registerning boshlang‘ich tarkibi va `SLA L` bajarilgandan keyingi Register L hamda Carry flag qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |              |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `L — oldin`  | `1` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `Berilmagan` |
-| `L — keyin`  | `0` | `1` | `0` | `1` | `0` | `0` | `1` | `0` | `1`          |
-
-Manba izohi: Manbadagi register maydoni `00010 r*` deb berilgan; bit kataklari shu bo‘limdagi 26 hex codega mos `00100 r₂ r₁ r₀` ko‘rinishida berildi. Asl maydon matni ham saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `L — oldin` | `1` | `0` | `1` | `1` | `0` | `0` | `0` | `1` | `Berilmagan` |
+| `L — keyin` | `0` | `1` | `1` | `0` | `0` | `0` | `1` | `0` | `1` |
 
 # SRA m
 
@@ -771,39 +737,39 @@ Manba izohi: Manbadagi register maydoni `00010 r*` deb berilgan; bit kataklari s
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### SRA r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `1` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `00011 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### SRA (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `2E` | `00010111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `2E` |
 
 #### SRA (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `2E`             | `00010111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `2E` |
 
 #### SRA (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `2E`             | `00010111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `2E` |
 
 ### Description
 
@@ -811,8 +777,8 @@ m operand tarkibida o‘ngga bir bit positionga arithmetic shift bajariladi. Bit
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -827,24 +793,21 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 
 ### Timing
 
-| Instruction  | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ------------ | -------- | --------------------- | --------------- |
-| `SRA r`      | 2        | 8 (4, 4)              | 2.00            |
-| `SRA (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `SRA (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `SRA (lY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `SRA r` | 2 | 8 (4, 4) | 2.00 |
+| `SRA (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `SRA (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `SRA (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 Index Register IX da 1000h bo‘lsin. 1003h memory locationning boshlang‘ich tarkibi va `SRA (IX+3h)` bajarilgandan keyingi memory location hamda Carry flag qiymatlari:
 
-|                   |     |     |     |     |     |     |     |     |              |
-| ----------------- | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami`      | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `(1003h) — oldin` | `1` | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `Berilmagan` |
-| `(1003h) — keyin` | `0` | `0` | `1` | `1` | `1` | `0` | `1` | `1` | `0`          |
-
-Manba izohi: Manbadagi register maydoni `00011 r*` deb berilgan; bit kataklari shu bo‘limdagi 2E hex codega mos `00101 r₂ r₁ r₀` ko‘rinishida berildi. Asl maydon matni ham saqlandi.
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `(1003h) — oldin` | `1` | `0` | `1` | `1` | `1` | `0` | `0` | `0` | `Berilmagan` |
+| `(1003h) — keyin` | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `0` | `0` |
 
 # SRL m
 
@@ -860,39 +823,39 @@ Manba izohi: Manbadagi register maydoni `00011 r*` deb berilgan; bit kataklari s
 
 `m`
 
-m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (lY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
+m operand mos RLC instructionlarida ta’riflangan r, (HL), (IX+d) yoki (IY+d) qiymatlardan biri bo‘lishi mumkin. Quyida object codedagi mumkin bo‘lgan op code/operand kombinatsiyalari berilgan.
 
 #### SRL r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0`  | `1`  | `1`  | `CB`            | `11011001` |
-| 2   | `0` | `0` | `1` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `00111 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### SRL (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` | `11011001` |
-| 2   | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `3E` | `00110111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 2 | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `3E` |
 
 #### SRL (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `3E`             | `00110111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `3E` |
 
 #### SRL (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `CB`             | `11011001` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
-| 4   | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `3E`             | `00110111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `CB` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
+| 4 | `0` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `3E` |
 
 ### Description
 
@@ -900,8 +863,8 @@ m operand tarkibi o‘ngga bir bit positionga shift qilinadi. Bit 0 tarkibi Carr
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; object code qiymatlari quyida berilgan.
 
-|     |       |
-| --- | ----- |
+| Register | Code |
+| --- | --- |
 | `B` | `000` |
 | `C` | `001` |
 | `D` | `010` |
@@ -916,22 +879,21 @@ S reset qilinadi. Natija 0 bo‘lsa, Z set qilinadi; aks holda reset qilinadi. H
 
 ### Timing
 
-| Instruction  | M Cycles | T States              | 4 MHz E.T. (µs) |
-| ------------ | -------- | --------------------- | --------------- |
-| `SRL r`      | 2        | 8 (4, 4)              | 2.00            |
-| `SRL (HL)`   | 4        | 15 (4, 4, 4, 3)       | 3.75            |
-| `SRL (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `SRL (lY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| Instruction | M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- | --- |
+| `SRL r` | 2 | 8 (4, 4) | 2.00 |
+| `SRL (HL)` | 4 | 15 (4, 4, 4, 3) | 3.75 |
+| `SRL (IX+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
+| `SRL (IY+d)` | 6 | 23 (4, 4, 3, 5, 4, 3) | 5.75 |
 
 ### Misol
 
 B registerning boshlang‘ich tarkibi va `SRL B` bajarilgandan keyingi Register B hamda Carry flag qiymatlari:
 
-|              |     |     |     |     |     |     |     |     |              |
-| ------------ | --- | --- | --- | --- | --- | --- | --- | --- | ------------ |
-| `Bit raqami` | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` | `C`          |
-| `B — oldin`  | `1` | `0` | `0` | `1` | `1` | `1` | `0` | `1` | `Berilmagan` |
-| `B — keyin`  | `1` | `1` | `0` | `1` | `0` | `0` | `1` | `0` | `1`          |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | C |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `B — oldin` | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `1` | `Berilmagan` |
+| `B — keyin` | `0` | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `1` |
 
 # RLD
 
@@ -947,10 +909,10 @@ B registerning boshlang‘ich tarkibi va `SRL B` bajarilgandan keyingi Register 
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `1` | `0` | `1` | `1` | `1` | `1` | `6F` | `01011111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `1` | `0` | `1` | `1` | `1` | `1` | `6F` |
 
 ### Description
 
@@ -964,21 +926,20 @@ Operationdan keyin Accumulator manfiy bo‘lsa, S set qilinadi; aks holda reset 
 
 ### Timing
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 18 (4, 4, 3, 4, 3) | 4.50            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 18 (4, 4, 3, 4, 3) | 4.50 |
 
 ### Misol
 
 HL register pairda 5000h bo‘lsin. Accumulator va 5000h memory locationning boshlang‘ich tarkibi hamda `RLD` bajarilgandan keyingi tarkibi:
 
-|                       |     |     |     |     |     |     |     |     |
-| --------------------- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami`          | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` |
-| `Accumulator — oldin` | `0` | `1` | `1` | `1` | `0` | `0` | `1` | `1` |
-| `(5000h) — oldin`     | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `0` |
-| `Accumulator — keyin` | `0` | `1` | `1` | `1` | `1` | `0` | `1` | `0` |
-| `(5000h) — keyin`     | `0` | `0` | `1` | `1` | `0` | `0` | `0` | `1` |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `Accumulator — oldin` | `0` | `1` | `1` | `1` | `1` | `0` | `1` | `0` |
+| `(5000h) — oldin` | `0` | `0` | `1` | `1` | `0` | `0` | `0` | `1` |
+| `Accumulator — keyin` | `0` | `1` | `1` | `1` | `0` | `0` | `1` | `1` |
+| `(5000h) — keyin` | `0` | `0` | `0` | `1` | `1` | `0` | `1` | `0` |
 
 # RRD
 
@@ -994,10 +955,10 @@ HL register pairda 5000h bo‘lsin. Accumulator va 5000h memory locationning bos
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `1` | `0` | `0` | `1` | `1` | `1` | `67` | `01011110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `1` | `0` | `0` | `1` | `1` | `1` | `67` |
 
 ### Description
 
@@ -1011,18 +972,17 @@ Operationdan keyin Accumulator manfiy bo‘lsa, S set qilinadi; aks holda reset 
 
 ### Timing
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
-| -------- | ------------------ | --------------- |
-| 5        | 18 (4, 4, 3, 4, 3) | 4.50            |
+| M Cycles | T States | 4 MHz E.T. (µs) |
+| --- | --- | --- |
+| 5 | 18 (4, 4, 3, 4, 3) | 4.50 |
 
 ### Misol
 
 HL register pairda 5000h bo‘lsin. Accumulator va 5000h memory locationning boshlang‘ich tarkibi hamda `RRD` bajarilgandan keyingi tarkibi:
 
-|                       |     |     |     |     |     |     |     |     |
-| --------------------- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `Bit raqami`          | `7` | `6` | `4` | `1` | `0` | `2` | `5` | `3` |
+| Holat | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `Accumulator — oldin` | `1` | `0` | `0` | `0` | `0` | `1` | `0` | `0` |
-| `(5000h) — oldin`     | `0` | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
+| `(5000h) — oldin` | `0` | `0` | `1` | `0` | `0` | `0` | `0` | `0` |
 | `Accumulator — keyin` | `1` | `0` | `0` | `0` | `0` | `0` | `0` | `0` |
-| `(5000h) — keyin`     | `0` | `1` | `0` | `1` | `0` | `0` | `0` | `0` |
+| `(5000h) — keyin` | `0` | `1` | `0` | `0` | `0` | `0` | `1` | `0` |

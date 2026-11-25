@@ -33,17 +33,17 @@ Ushbu bo‘limda quyidagi 16-bit load instructionlar tavsiflanadi. Batafsil ma�
 
 ## Belgilashlar
 
-<table>
-  <tr><td><code>dd</code></td><td>BC, DE, HL yoki SP register pair.</td></tr>
-  <tr><td><code>qq</code></td><td>BC, DE, HL yoki AF register pair.</td></tr>
-  <tr><td><code>nn</code></td><td>16-bit integer yoki memory address; op codedan keyin avval low-order byte, keyin high-order byte keladi.</td></tr>
-  <tr><td><code>n</code></td><td>Butun 8-bit byte ni egallaydi; nn qiymatining ketma-ket ikki byte i sxemada alohida qatorlarda beriladi.</td></tr>
-  <tr><td><code>d₁ d₀</code>, <code>q₁ q₀</code></td><td>Register pairning 2-bit object code qiymati.</td></tr>
-  <tr><td><code>ddh</code>, <code>ddl</code>, <code>qqH</code>, <code>qqL</code></td><td>Register pairning high-order va low-order qismlari.</td></tr>
-  <tr><td><code>IXh</code>, <code>IXI</code>, <code>IYh</code>, <code>IYI</code></td><td>Manbadagi Index Register qismlari belgilari: high-order va low-order; PUSH/POP formulalarida IXH, IXL, IYH, IYL ishlatilgan.</td></tr>
-  <tr><td>Bit sxemalari</td><td>Har bir qator bitta byte; bitlar chapdan o‘ngga bit 7 dan bit 0 gacha, qatorlar esa byte ketma-ketligida berilgan. Birinchi katak — byte tartib raqami.</td></tr>
-  <tr><td><code>4 MHz E.T. (µs)</code></td><td>4 MHz dagi execution time, µs hisobida.</td></tr>
-</table>
+| Belgi | Tavsif |
+| --- | --- |
+| `dd` | BC, DE, HL yoki SP register pair. |
+| `qq` | BC, DE, HL yoki AF register pair. |
+| `nn` | 16-bit integer yoki memory address; op codedan keyin avval low-order byte, keyin high-order byte keladi. |
+| `n` | Butun 8-bit byte ni egallaydi; nn ning low-order byte bitlari n₇…n₀, high-order byte bitlari n₁₅…n₈ sifatida beriladi. |
+| `d₁ d₀`, `q₁ q₀` | Register pairning 2-bit object code qiymati. |
+| `ddh`, `ddl`, `qqH`, `qqL` | Register pairning high-order va low-order qismlari. |
+| `IXH`, `IXL`, `IYH`, `IYL` | Index Registerlarning high-order va low-order byte qismlari. |
+| Bit sxemalari | Har bir qator bitta byte; bitlar chapdan o‘ngga bit 7 dan bit 0 gacha, qatorlar esa byte ketma-ketligida berilgan. Birinchi katak — byte tartib raqami. |
+| `4 MHz E.T. (µs)` | 4 MHz dagi execution time, µs hisobida. |
 
 # LD dd, nn
 
@@ -59,22 +59,22 @@ Ushbu bo‘limda quyidagi 16-bit load instructionlar tavsiflanadi. Batafsil ma�
 
 `dd, nn`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td>register pair code</td></tr>
-  <tr><td>2</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `d₁` | `d₀` | `0` | `0` | `0` | `1` | register pair code |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 3 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
 2-byte integer nn dd register pairga yuklanadi. dd BC, DE, HL yoki SP register pairni bildiradi; object code qiymatlari quyida berilgan. Op codedan keyingi birinchi n operand low-order byte hisoblanadi.
 
-<table>
-  <tr><td><code>BC</code></td><td><code>00</code></td></tr>
-  <tr><td><code>DE</code></td><td><code>01</code></td></tr>
-  <tr><td><code>HL</code></td><td><code>10</code></td></tr>
-  <tr><td><code>SP</code></td><td><code>11</code></td></tr>
-</table>
+| Register pair | Code |
+| --- | --- |
+| `BC` | `00` |
+| `DE` | `01` |
+| `HL` | `10` |
+| `SP` | `11` |
 
 ### Condition Bits Affected
 
@@ -84,13 +84,11 @@ Hech biri o‘zgarmaydi.
 
 | M Cycles | T States     | 4 MHz E.T. (µs) |
 | -------- | ------------ | --------------- |
-| 2        | 10 (4, 3, 3) | 2.50            |
+| 3        | 10 (4, 3, 3) | 2.50            |
 
 ### Misol
 
 `LD HL, 5000h` bajarilgach, HL register pairda 5000h bo‘ladi.
-
-Manba izohi: Manbada M Cycles qiymati 2 deb berilgan; T States tarkibida esa uchta cycle — (4, 3, 3) ko‘rsatilgan.
 
 # LD IX, nn
 
@@ -106,16 +104,16 @@ Manba izohi: Manbada M Cycles qiymati 2 deb berilgan; T States tarkibida esa uch
 
 `IX, nn`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>21</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `0` | `0` | `1` | `21` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
-n integer Index Register IX ga yuklanadi. Op codedan keyingi birinchi n operand low-order byte hisoblanadi.
+nn integer Index Register IX ga yuklanadi. Op codedan keyingi birinchi n operand low-order byte hisoblanadi.
 
 ### Condition Bits Affected
 
@@ -145,12 +143,12 @@ Hech biri o‘zgarmaydi.
 
 `IY, nn`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>21</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `0` | `0` | `1` | `21` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -184,11 +182,11 @@ Hech biri o‘zgarmaydi.
 
 `HL, (nn)`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>2A</code></td></tr>
-  <tr><td>2</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `2A` |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 3 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -222,23 +220,25 @@ Hech biri o‘zgarmaydi.
 
 `dd, (nn)`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>ED</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td>register pair code</td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `d₁` | `d₀` | `1` | `0` | `1` | `1` | register pair code |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
 (nn) address tarkibi dd register pairning low-order qismiga, keyingi yuqori memory address (nn + 1) tarkibi esa dd ning high-order qismiga yuklanadi. dd BC, DE, HL yoki SP register pairni bildiradi; object code qiymatlari quyida berilgan. Op codedan keyingi birinchi n operand (nn) ning low-order byte qiymatidir.
 
-<table>
-  <tr><td><code>BC</code></td><td><code>00</code></td></tr>
-  <tr><td><code>DE</code></td><td><code>01</code></td></tr>
-  <tr><td><code>HL</code></td><td><code>10</code></td></tr>
-  <tr><td><code>SP</code></td><td><code>11</code></td></tr>
-</table>
+| Register pair | Code |
+| --- | --- |
+| `BC` | `00` |
+| `DE` | `01` |
+| `HL` | `10` |
+| `SP` | `11` |
+
+HL uchun ED 6B shakli ham mavjud; odatda assembler qisqaroq 2A shaklini tanlaydi.
 
 ### Condition Bits Affected
 
@@ -258,7 +258,7 @@ Hech biri o‘zgarmaydi.
 
 ### Operation
 
-`IXh ← (nn + 1), IXI ← (nn)`
+`IXH ← (nn + 1), IXL ← (nn)`
 
 ### Op Code
 
@@ -268,12 +268,12 @@ Hech biri o‘zgarmaydi.
 
 `IX, (nn)`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>2A</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `2A` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -297,7 +297,7 @@ Hech biri o‘zgarmaydi.
 
 ### Operation
 
-`IYh ← (nn + 1), IYI ← nn)`
+`IYH ← (nn + 1), IYL ← (nn)`
 
 ### Op Code
 
@@ -307,12 +307,12 @@ Hech biri o‘zgarmaydi.
 
 `IY, (nn)`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>2A</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `0` | `0` | `1` | `0` | `1` | `0` | `1` | `0` | `2A` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -332,8 +332,6 @@ Hech biri o‘zgarmaydi.
 
 6666h addressda 92h va 6667h addressda DAh bo‘lsa, `LD IY, (6666h)` bajarilgach, Index Register IY da DA92h bo‘ladi.
 
-Manba izohi: Manbaning Operation ifodasida ochuvchi qavs tushib qolgan: Description bo‘yicha low-order qism uchun `IYI ← (nn)` nazarda tutilgan.
-
 # LD (nn), HL
 
 ### Operation
@@ -348,11 +346,11 @@ Manba izohi: Manbaning Operation ifodasida ochuvchi qavs tushib qolgan: Descript
 
 `(nn), HL`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>22</code></td></tr>
-  <tr><td>2</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `22` |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 3 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -370,7 +368,7 @@ Hech biri o‘zgarmaydi.
 
 ### Misol
 
-HL register pairda 483Ah bo‘lsa, manbada `LD (B2291 – 1), HL` deb yozilgan instruction bajarilgach, B229h addressda 3Ah, B22Ah addressda esa 48h bo‘ladi. Misolda keltirilgan natijaga mos instruction — `LD (B229h), HL`.
+HL register pairda 483Ah bo‘lsa, `LD (0B229h), HL` bajarilgach, B229h addressda 3Ah, B22Ah addressda esa 48h bo‘ladi.
 
 # LD (nn), dd
 
@@ -386,23 +384,25 @@ HL register pairda 483Ah bo‘lsa, manbada `LD (B2291 – 1), HL` deb yozilgan i
 
 `(nn), dd`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>ED</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td>register pair code</td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `d₁` | `d₀` | `0` | `0` | `1` | `1` | register pair code |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
 dd register pairning low-order byte qiymati (nn) memory addressga, high-order byte qiymati esa (nn + 1) memory addressga yuklanadi. dd BC, DE, HL yoki SP register pairni bildiradi; object code qiymatlari quyida berilgan. Op codedan keyingi birinchi n operand ikki byte li memory addressning low-order byte qiymatidir.
 
-<table>
-  <tr><td><code>BC</code></td><td><code>00</code></td></tr>
-  <tr><td><code>DE</code></td><td><code>01</code></td></tr>
-  <tr><td><code>HL</code></td><td><code>10</code></td></tr>
-  <tr><td><code>SP</code></td><td><code>11</code></td></tr>
-</table>
+| Register pair | Code |
+| --- | --- |
+| `BC` | `00` |
+| `DE` | `01` |
+| `HL` | `10` |
+| `SP` | `11` |
+
+HL uchun ED 63 shakli ham mavjud; odatda assembler qisqaroq 22 shaklini tanlaydi.
 
 ### Condition Bits Affected
 
@@ -422,7 +422,7 @@ BC register pairda 4644h bo‘lsa, `LD (1000h), BC` bajarilgach, 1000h memory lo
 
 ### Operation
 
-`(nn + 1) ← IXh, (nn) ← IXI`
+`(nn + 1) ← IXH, (nn) ← IXL`
 
 ### Op Code
 
@@ -432,12 +432,12 @@ BC register pairda 4644h bo‘lsa, `LD (1000h), BC` bajarilgach, 1000h memory lo
 
 `(nn), IX`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>22</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `22` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -461,7 +461,7 @@ Index Register IX da 5A30h bo‘lsa, `LD (4392h), IX` bajarilgach, 4392h memory 
 
 ### Operation
 
-`(nn + 1) ← IYh, (nn) ← IYI`
+`(nn + 1) ← IYH, (nn) ← IYL`
 
 ### Op Code
 
@@ -471,12 +471,12 @@ Index Register IX da 5A30h bo‘lsa, `LD (4392h), IX` bajarilgach, 4392h memory 
 
 `(nn), IY`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>22</code></td></tr>
-  <tr><td>3</td><td colspan="8"><code>n</code></td><td>low-order byte</td></tr>
-  <tr><td>4</td><td colspan="8"><code>n</code></td><td>high-order byte</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `0` | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `22` |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | low-order byte |
+| 4 | n₁₅ | n₁₄ | n₁₃ | n₁₂ | n₁₁ | n₁₀ | n₉ | n₈ | high-order byte |
 
 ### Description
 
@@ -510,9 +510,9 @@ Index Register IY da 4174h bo‘lsa, `LD (8838h), IY` bajarilgach, 8838h memory 
 
 `SP, HL`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>F9</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `0` | `0` | `1` | `F9` |
 
 ### Description
 
@@ -546,10 +546,10 @@ HL register pairda 442Eh bo‘lsa, `LD SP, HL` bajarilgach, Stack Pointerda ham 
 
 `SP, IX`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>F9</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `1` | `1` | `1` | `0` | `0` | `1` | `F9` |
 
 ### Description
 
@@ -583,10 +583,10 @@ Index Register IX da 98DAh bo‘lsa, `LD SP, IX` bajarilgach, Stack Pointerda ha
 
 `SP, IY`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>F9</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `1` | `1` | `1` | `0` | `0` | `1` | `F9` |
 
 ### Description
 
@@ -610,7 +610,7 @@ Index Register IY da A227h integer bo‘lsa, `LD SP, IY` bajarilgach, Stack Poin
 
 ### Operation
 
-`(SP – 2) ← qqL, (SP – 1) ← qqH`
+`(SP – 2) ← qqL, (SP – 1) ← qqH, SP ← SP − 2`
 
 ### Op Code
 
@@ -620,20 +620,20 @@ Index Register IY da A227h integer bo‘lsa, `LD SP, IY` bajarilgach, Stack Poin
 
 `qq`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>q₁</code></td><td><code>q₀</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>register pair code</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `q₁` | `q₀` | `0` | `1` | `0` | `1` | register pair code |
 
 ### Description
 
 qq register pair tarkibi tashqi memorydagi last-in, first-out (LIFO) stackka joylanadi. Stack Pointer (SP) register pair stackning joriy tepasidagi 16-bit addressni saqlaydi. Instruction avval SP ni birga kamaytiradi va qq register pair ning high-order byte qiymatini SP ko‘rsatgan memory addressga yuklaydi. Keyin SP yana birga kamaytiriladi va low-order byte qiymati SP dagi yangi addressga mos memory locationga yuklanadi. qq operand BC, DE, HL yoki AF register pairni bildiradi; object code qiymatlari quyida berilgan.
 
-<table>
-  <tr><td><code>BC</code></td><td><code>00</code></td></tr>
-  <tr><td><code>DE</code></td><td><code>01</code></td></tr>
-  <tr><td><code>HL</code></td><td><code>10</code></td></tr>
-  <tr><td><code>AF</code></td><td><code>11</code></td></tr>
-</table>
+| Register pair | Code |
+| --- | --- |
+| `BC` | `00` |
+| `DE` | `01` |
+| `HL` | `10` |
+| `AF` | `11` |
 
 ### Condition Bits Affected
 
@@ -653,7 +653,7 @@ AF register pair da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH AF` bajarilga
 
 ### Operation
 
-`(SP – 2) ← IXL, (SP – 1) ← IXH`
+`(SP – 2) ← IXL, (SP – 1) ← IXH, SP ← SP − 2`
 
 ### Op Code
 
@@ -663,10 +663,10 @@ AF register pair da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH AF` bajarilga
 
 `IX`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>E5</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `E5` |
 
 ### Description
 
@@ -690,7 +690,7 @@ Index Register IX da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH IX` bajarilg
 
 ### Operation
 
-`(SP – 2) ← IYL, (SP – 1) ← IYH`
+`(SP – 2) ← IYL, (SP – 1) ← IYH, SP ← SP − 2`
 
 ### Op Code
 
@@ -700,10 +700,10 @@ Index Register IX da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH IX` bajarilg
 
 `IY`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>E5</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `1` | `0` | `0` | `1` | `0` | `1` | `E5` |
 
 ### Description
 
@@ -727,7 +727,7 @@ Index Register IY da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH IY` bajarilg
 
 ### Operation
 
-`qqH ← (SP+1), qqL ← (SP)`
+`qqH ← (SP+1), qqL ← (SP), SP ← SP + 2`
 
 ### Op Code
 
@@ -737,24 +737,24 @@ Index Register IY da 2233h va Stack Pointerda 1007h bo‘lsa, `PUSH IY` bajarilg
 
 `qq`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>q₁</code></td><td><code>q₀</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td>register pair code</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `q₁` | `q₀` | `0` | `0` | `0` | `1` | register pair code |
 
 ### Description
 
 Tashqi memorydagi last-in, first-out (LIFO) stackning tepasidagi ikki byte qq register pair ga olinadi. Stack Pointer (SP) register pair stackning joriy tepasidagi 16-bit addressni saqlaydi. Instruction avval SP ko‘rsatgan memory locationdagi byte ni qq ning low-order qismiga yuklaydi. Keyin SP birga oshiriladi va qo‘shni memory location tarkibi qq ning high-order qismiga yuklanadi. So‘ng SP yana birga oshiriladi. qq operand BC, DE, HL yoki AF register pairni bildiradi; object code qiymatlari quyida berilgan.
 
-<table>
-  <tr><td><code>BC</code></td><td><code>00</code></td></tr>
-  <tr><td><code>DE</code></td><td><code>01</code></td></tr>
-  <tr><td><code>HL</code></td><td><code>10</code></td></tr>
-  <tr><td><code>AF</code></td><td><code>11</code></td></tr>
-</table>
+| Register pair | Code |
+| --- | --- |
+| `BC` | `00` |
+| `DE` | `01` |
+| `HL` | `10` |
+| `AF` | `11` |
 
 ### Condition Bits Affected
 
-Hech biri o‘zgarmaydi.
+BC, DE yoki HL uchun flaglar o‘zgarmaydi. `POP AF` bajarilganda F register stackdan yuklanadi va barcha flag bitlari yuklangan qiymatga mos o‘zgarishi mumkin.
 
 ### Timing
 
@@ -770,7 +770,7 @@ Stack Pointerda 1000h, 1000h memory locationda 55h va 1001h memory locationda 33
 
 ### Operation
 
-`IXH ← (SP+1), IXL ← (SP)`
+`IXH ← (SP+1), IXL ← (SP), SP ← SP + 2`
 
 ### Op Code
 
@@ -780,10 +780,10 @@ Stack Pointerda 1000h, 1000h memory locationda 55h va 1001h memory locationda 33
 
 `IX`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>DD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>E1</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `1` | `1` | `0` | `0` | `0` | `0` | `1` | `E1` |
 
 ### Description
 
@@ -807,7 +807,7 @@ Stack Pointerda 1000h, 1000h memory locationda 55h va 1001h memory locationda 33
 
 ### Operation
 
-`IYH ← (SP – X1), IYL ← (SP)`
+`IYH ← (SP + 1), IYL ← (SP), SP ← SP + 2`
 
 ### Op Code
 
@@ -817,10 +817,10 @@ Stack Pointerda 1000h, 1000h memory locationda 55h va 1001h memory locationda 33
 
 `IY`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>FD</code></td></tr>
-  <tr><td>2</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>E1</code></td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `1` | `1` | `0` | `0` | `0` | `0` | `1` | `E1` |
 
 ### Description
 
@@ -840,4 +840,3 @@ Hech biri o‘zgarmaydi.
 
 Stack Pointerda 1000h, 1000h memory locationda 55h va 1001h memory locationda 33h bo‘lsa, `POP IY` bajarilgach, Index Register IY da 3355h, Stack Pointerda esa 1002h bo‘ladi.
 
-Manba izohi: Manbaning Operation ifodasida `(SP – X1)` yozilgan. Description va misolga ko‘ra, high-order byte uchun `(SP + 1)` nazarda tutilgan.

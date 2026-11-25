@@ -32,7 +32,7 @@ Ushbu bo‘limda quyidagi 8-bit arithmetic group instructionlari tavsiflanadi. B
 - [INC (IY+d)](#inc-iyd)
 - [DEC m](#dec-m)
 
-Bit sxemalarida har bir qator bitta byte: birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, so‘ng hex code yoki operand turi, oxirgi katak esa manbadagi bit matnidir. Manbadagi ayrim bit satrlari hex code bilan mos kelmaydi; bit kataklari shu hex codega mos berildi, asl bit matni ham saqlandi. r₂, r₁, r₀ register code bitlarini bildiradi. n va d butun byte ni egallaydi; n₇…n₀ va d₇…d₀ ularning alohida bitlaridir. d — two’s-complement displacement. CY — Carry Flag (F registerdagi C).
+Bit sxemalarida har bir qator bitta byte: birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, oxirgi katak hex code yoki operand turidir. r₂, r₁, r₀ register code bitlarini bildiradi. n va d butun byte ni egallaydi; n₇…n₀ va d₇…d₀ ularning alohida bitlaridir. d — two’s-complement displacement. CY — Carry Flag (F registerdagi C).
 
 Manbada ayrim joylarda IY o‘rniga `lY` yozilgan; bunday yozuvlar formula va tegishli manba qiymatlarida saqlandi.
 
@@ -50,15 +50,15 @@ Manbada ayrim joylarda IY o‘rniga `lY` yozilgan; bunday yozuvlar formula va te
 
 `A, r`
 
-|     |     |     |     |     |     |      |      |      |                 |          |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | -------- |
-| 1   | `1` | `0` | `0` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `100r00` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 ### Description
 
 r register tarkibi Accumulator tarkibiga qo‘shiladi va natija Accumulatorda saqlanadi. r belgisi A, B, C, D, E, H yoki L registerlarni bildiradi; ularning object code qiymatlari quyidagi jadvalda berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `A` | `111` |
 | `B` | `000` |
@@ -96,10 +96,10 @@ Accumulatorda 44h va Register C da 11h bo‘lsa, `ADD A, C` bajarilgach, Accumul
 
 `A, n`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `0`  | `0`  | `1`  | `1`  | `0`  | `C6`             | `11010100` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `0` | `1` | `1` | `0` | `C6` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 ### Description
 
@@ -133,9 +133,9 @@ Accumulatorda 23h bo‘lsa, `ADD A, 33h` bajarilgach, Accumulatorda 56h bo‘lad
 
 `A, (HL)`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `86` | `10010100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `86` |
 
 ### Description
 
@@ -169,11 +169,11 @@ Accumulatorda A0h, HL register pairda 2323h va 2323h memory locationda 08h bo‘
 
 `A, (IX + d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `0`  | `86`             | `10010100` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `86` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -207,11 +207,11 @@ Accumulatorda 11h, Index Register IX da 1000h va 1005h memory locationda 22h bo�
 
 `A, (IY + d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `0`  | `0`  | `0`  | `1`  | `1`  | `0`  | `86`             | `10010100` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `0` | `0` | `0` | `1` | `1` | `0` | `86` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -249,38 +249,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### ADC A, r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `0` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `10001 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### ADC A, n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `0`  | `1`  | `1`  | `1`  | `0`  | `CE`             | `11010101` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `1` | `1` | `0` | `CE` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### ADC A, (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `8E` | `10010101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `8E` |
 
 #### ADC A, (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11110101` |
-| 2   | `1`  | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `0`  | `8E`             | `10010101` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `8E` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### ADC A, (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `0`  | `0`  | `1`  | `1`  | `1`  | `0`  | `8E`             | `10010101` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `0` | `0` | `1` | `1` | `1` | `0` | `8E` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -288,7 +288,7 @@ s operand va Carry Flag (F registerdagi C) Accumulator tarkibiga qo‘shiladi va
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -310,7 +310,7 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `ADC A, n`      | 2        | 7 (4, 3)           | 1.75            |
 | `ADC A, (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `ADC A, (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `ADC A, (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `ADC A, (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
@@ -334,38 +334,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### SUB r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `0` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `10100 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### SUB n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `0`  | `1`  | `1`  | `0`  | `D6`             | `11110100` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `0` | `1` | `1` | `0` | `D6` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### SUB (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `96` | `10110100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `96` |
 
 #### SUB (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `0`  | `96`             | `10110100` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `96` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### SUB (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `0`  | `1`  | `0`  | `1`  | `1`  | `0`  | `96`             | `10110100` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `0` | `1` | `0` | `1` | `1` | `0` | `96` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -373,7 +373,7 @@ s operand Accumulator tarkibidan ayiriladi va natija Accumulatorda saqlanadi.
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -395,13 +395,11 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `SUB n`      | 2        | 7 (4, 3)           | 1.75            |
 | `SUB (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `SUB (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `SUB (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `SUB (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
 Accumulatorda 29h va D registerda 11h bo‘lsa, `SUB D` bajarilgach, Accumulatorda 18h bo‘ladi.
-
-Manba izohi: Manbadagi register bit maydoni `10100 r*` ko‘rinishida berilgan. Bu shu fayldagi `SUB (HL)` uchun 96 hex code bilan mos kelmaydi; jadvalda ushbu hex codega mos `10010 r₂ r₁ r₀` ko‘rsatilgan.
 
 # SBC A, s
 
@@ -421,38 +419,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### SBC A, r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `0` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `10101 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### SBC A, n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `1`  | `0`  | `DE`             | `11110101` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `1` | `0` | `DE` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### SBC A, (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `9E` | `10110101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `9E` |
 
 #### SBC A, (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `0`  | `9E`             | `10110101` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `9E` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### SBC A, (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `0`  | `1`  | `1`  | `1`  | `1`  | `0`  | `9E`             | `10110101` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `0` | `1` | `1` | `1` | `1` | `0` | `9E` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -460,7 +458,7 @@ s operand va Carry flag (F registerdagi C) Accumulator tarkibidan ayiriladi va n
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -482,13 +480,11 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `SBC A, n`      | 2        | 7 (4, 3)           | 1.75            |
 | `SBC A, (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `SBC A, (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `SBC A, (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `SBC A, (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
 Accumulatorda 16h, carry flag set holatida, HL register pairda 3433h va 3433h addressda 05h bo‘lsa, `SBC A, (HL)` bajarilgach, Accumulatorda 10h bo‘ladi.
-
-Manba izohi: Manbadagi register bit maydoni `10101 r*` ko‘rinishida berilgan; jadvalda shu fayldagi 9E hex codega mos `10011 r₂ r₁ r₀` ko‘rsatilgan.
 
 Manba izohi: Manbada P/V uchun overflow holatida ham, boshqa holatda ham reset yozilgan. Ushbu matn saqlandi.
 
@@ -510,38 +506,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### AND r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `1` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `10010 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `0` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### AND n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `E6`             | `11010110` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `nn`       |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `0` | `1` | `1` | `0` | `E6` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### AND (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `A6` | `10010110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `A6` |
 
 #### AND (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `A6`             | `10010110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `A6` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### AND (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `A6`             | `10010110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `A6` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -549,7 +545,7 @@ s operand ko‘rsatgan byte bilan Accumulatordagi byte o‘rtasida logical AND o
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -571,17 +567,13 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `AND n`      | 2        | 7 (4, 3)           | 1.75            |
 | `AND (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `AND (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `AND (IX+d)` | 5        | 19 (4, 4, 3. 5, 3) | 4.75            |
+| `AND (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
 B registerda 7Bh (0111 1011) va Accumulatorda C3h (1100 0011) bo‘lsa, `AND B` bajarilgach, Accumulatorda 43h (0100 0011) bo‘ladi.
 
-Manba izohi: Manbadagi register bit maydoni `10010 r*` ko‘rinishida berilgan; jadvalda shu fayldagi A6 hex codega mos `10100 r₂ r₁ r₀` ko‘rsatilgan.
-
-Manba izohi: Immediate sxemadagi `nn` matni manbada qo‘shilib qolgan; instruction `AND n` sifatida berilganligi uchun n bitta to‘liq byte qatorida ko‘rsatildi.
-
-Manba izohi: Manbada P/V uchun overflow holatida ham, boshqa holatda ham reset yozilgan. Timing jadvalining oxirgi qatori ham `AND (IX+d)` deb takrorlangan va T States tarkibida `(4, 4, 3. 5, 3)` yozilgan; bu qiymatlar jadvalda saqlandi.
+Manba izohi: Manbada P/V uchun overflow holatida ham, boshqa holatda ham reset yozilgan. Timing jadvalidagi takrorlangan IX qatori IY ga va T States yozuvi to‘g‘ri formatga tuzatildi.
 
 # OR s
 
@@ -601,38 +593,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### OR r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `1` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` | `10110 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `1` | `0` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### OR n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `1`  | `0`  | `F6`             | `11110110` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `F6` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### OR (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `1` | `1` | `0` | `1` | `1` | `0` | `B6` | `10110110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `1` | `0` | `1` | `1` | `0` | `B6` |
 
 #### OR (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `1`  | `1`  | `0`  | `1`  | `1`  | `0`  | `B6`             | `10110110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `1` | `1` | `0` | `1` | `1` | `0` | `B6` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### OR (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `1`  | `1`  | `0`  | `1`  | `1`  | `0`  | `B6`             | `10110110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `1` | `1` | `0` | `1` | `1` | `0` | `B6` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -640,7 +632,7 @@ s operand ko‘rsatgan byte bilan Accumulatordagi byte o‘rtasida logical OR op
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -662,7 +654,7 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `OR n`      | 2        | 7 (4, 3)           | 1.75            |
 | `OR (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `OR (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `OR (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `OR (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
@@ -690,38 +682,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### XOR r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `1` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `10011 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `0` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### XOR n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `EE`             | `11010111` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `EE` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### XOR (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `AE` | `10010111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `AE` |
 
 #### XOR (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `AE`             | `10010111` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `AE` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### XOR (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `AE`             | `10010111` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `1` | `0` | `1` | `1` | `1` | `0` | `AE` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -729,7 +721,7 @@ s operand ko‘rsatgan byte bilan Accumulatordagi byte o‘rtasida logical exclu
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -737,7 +729,7 @@ r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatla
 | `E` | `011` |
 | `H` | `100` |
 | `L` | `101` |
-| `A` | `1l1` |
+| `A` | `111` |
 
 ### Condition Bits Affected
 
@@ -751,15 +743,11 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `XOR n`      | 2        | 7 (4, 3)           | 1.75            |
 | `XOR (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `XOR (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `XOR (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `XOR (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
 Accumulatorda 96h (1001 0110) bo‘lsa, `XOR 5Dh` (5Dh = 0101 1101) bajarilgach, Accumulatorda CBh (1100 1011) bo‘ladi.
-
-Manba izohi: Manbadagi register bit maydoni `10011 r*` ko‘rinishida berilgan; jadvalda shu fayldagi AE hex codega mos `10101 r₂ r₁ r₀` ko‘rsatilgan.
-
-Manba izohi: Register code jadvalida A uchun `1l1` yozilgan; undagi o‘rta belgi kichik l harfidir. Manba qiymati saqlandi.
 
 # CP s
 
@@ -779,38 +767,38 @@ s operand mos ravishda ADD instructionlarida ta’riflangan r, n, (HL), (IX+d) y
 
 #### CP r
 
-|     |     |     |     |     |     |      |      |      |                 |            |
-| --- | --- | --- | --- | --- | --- | ---- | ---- | ---- | --------------- | ---------- |
-| 1   | `1` | `0` | `1` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` | `10111 r*` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `1` | `1` | `r₂` | `r₁` | `r₀` | `register code` |
 
 #### CP n
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `FE`             | `11110111` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `FE` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — butun byte` |
 
 #### CP (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `BE` | `10110111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `BE` |
 
 #### CP (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `1`  | `0`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `BE`             | `10110111` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `1` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `BE` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### CP (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `1`  | `0`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `BE`             | `10110111` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `1` | `0` | `1` | `1` | `1` | `1` | `1` | `0` | `BE` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -818,7 +806,7 @@ s operand tarkibi Accumulator tarkibi bilan taqqoslanadi. Qiymatlar teng bo‘ls
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -840,7 +828,7 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `CP n`      | 2        | 7 (4, 3)           | 1.75            |
 | `CP (HL)`   | 2        | 7 (4, 3)           | 1.75            |
 | `CP (IX+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
-| `CP (lY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
+| `CP (IY+d)` | 5        | 19 (4, 4, 3, 5, 3) | 4.75            |
 
 ### Misol
 
@@ -862,15 +850,15 @@ Manba izohi: Misoldagi `PN` flag nomi manbadagidek saqlandi; Condition Bits Affe
 
 `r`
 
-|     |     |     |      |      |      |     |     |     |                 |          |
-| --- | --- | --- | ---- | ---- | ---- | --- | --- | --- | --------------- | -------- |
-| 1   | `0` | `0` | `r₂` | `r₁` | `r₀` | `1` | `0` | `0` | `register code` | `00r001` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `r₂` | `r₁` | `r₀` | `1` | `0` | `0` | `register code` |
 
 ### Description
 
 r register birga oshiriladi. r A, B, C, D, E, H yoki L registerlardan birini bildiradi; ularning object code qiymatlari quyidagi jadvalda berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `A` | `111` |
 | `B` | `000` |
@@ -908,9 +896,9 @@ D registerda 28h bo‘lsa, `INC D` bajarilgach, D registerda 29h bo‘ladi.
 
 `(HL)`
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `0` | `34` | `00100110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `0` | `34` |
 
 ### Description
 
@@ -944,11 +932,11 @@ HL register pairda 3434h va 3434h addressda 82h bo‘lsa, `INC (HL)` bajarilgach
 
 `(IX+d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `0`  | `0`  | `1`  | `1`  | `0`  | `1`  | `0`  | `0`  | `34`             | `00100110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `0` | `34` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -982,11 +970,11 @@ Index Register IX da 2020h va 2030h memory locationda 34h bo‘lsa, `INC (IX+10h
 
 `(lY+d)`
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `0`  | `0`  | `1`  | `1`  | `0`  | `1`  | `0`  | `0`  | `34`             | `00100110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `0` | `34` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -1024,31 +1012,31 @@ m operand mos ravishda INC instructionlarida ta’riflangan r, (HL), (IX+d) yoki
 
 #### DEC r
 
-|     |     |     |      |      |      |     |     |     |                 |          |
-| --- | --- | --- | ---- | ---- | ---- | --- | --- | --- | --------------- | -------- |
-| 1   | `0` | `0` | `r₂` | `r₁` | `r₀` | `1` | `0` | `1` | `register code` | `00r011` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `r₂` | `r₁` | `r₀` | `1` | `0` | `1` | `register code` |
 
 #### DEC (HL)
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `1` | `35` | `00101110` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `1` | `35` |
 
 #### DEC (IX+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `1`  | `1`  | `1`  | `0`  | `1`  | `DD`             | `11101101` |
-| 2   | `0`  | `0`  | `1`  | `1`  | `0`  | `1`  | `0`  | `1`  | `35`             | `00101110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `1` | `1` | `1` | `0` | `1` | `DD` |
+| 2 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `1` | `35` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 #### DEC (IY+d)
 
-|     |      |      |      |      |      |      |      |      |                  |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---------------- | ---------- |
-| 1   | `1`  | `1`  | `1`  | `1`  | `1`  | `1`  | `0`  | `1`  | `FD`             | `11101111` |
-| 2   | `0`  | `0`  | `1`  | `1`  | `0`  | `1`  | `0`  | `1`  | `35`             | `00101110` |
-| 3   | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` | `d`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `1` | `1` | `1` | `0` | `1` | `FD` |
+| 2 | `0` | `0` | `1` | `1` | `0` | `1` | `0` | `1` | `35` |
+| 3 | `d₇` | `d₆` | `d₅` | `d₄` | `d₃` | `d₂` | `d₁` | `d₀` | `d — butun byte` |
 
 ### Description
 
@@ -1056,7 +1044,7 @@ m operand ko‘rsatgan byte birga kamaytiriladi.
 
 r B, C, D, E, H, L yoki A registerlarni bildiradi; ularning object code qiymatlari quyida berilgan.
 
-|     |       |
+| Register | Register code |
 | --- | ----- |
 | `B` | `000` |
 | `C` | `001` |
@@ -1077,7 +1065,7 @@ Natija manfiy bo‘lsa, S set qilinadi; aks holda reset qilinadi. Natija 0 bo‘
 | `DEC r`      | 1        | 4                     | 1.00            |
 | `DEC (HL)`   | 3        | 11 (4, 4, 3)          | 2.75            |
 | `DEC (IX+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
-| `DEC (lY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
+| `DEC (IY+d)` | 6        | 23 (4, 4, 3, 5, 4, 3) | 5.75            |
 
 ### Misol
 

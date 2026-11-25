@@ -23,13 +23,13 @@ Ushbu bo‘limda quyidagi call va return group instructionlari tavsiflanadi. Bat
 - [RETN](#retn)
 - [RST p](#rst-p)
 
-Opcode jadvallarida birinchi katak byte tartib raqami, keyingi sakkiz katak bit 7 dan bit 0 gacha, so‘ng hex code yoki bit maydoni turi, oxirgi katak esa manbadagi bit matnidir. Manbadagi ayrim bit satrlari hex code bilan mos kelmaydi; fixed opcode bitlari shu hex codega mos berildi va asl matn ham saqlandi. cc₂, cc₁, cc₀ condition code bitlari, t₂, t₁, t₀ esa RST addressini tanlash maydonidir. nn avval low-order n, keyin high-order n byte dan tuziladi; ikkala to‘liq byte jadvalda ko‘rsatilgan. PCH va PCL PC ning high-order va low-order qismlarini bildiradi. Formulalardagi register yozilishining katta-kichik harflari manbadagidek saqlandi.
+Opcode jadvallarida byte tartib raqami, bit 7 dan bit 0 gacha va Hex / Operand ustunlari berilgan. cc₂…cc₀ condition code, t₂…t₀ RST address maydonidir. nn little-endian tartibda: avval low byte, keyin high byte. PCH va PCL PC ning high va low qismlaridir. Operation formulalarida PC instruction fetch tugaganidan keyingi qiymatni bildiradi; stack manzillari dastlabki SP ga nisbatan berilgan.
 
 # CALL nn
 
 ### Operation
 
-`(SP – 1) ← PCH, (SP – 2) ← PCL, PC ← nn`
+`(SP – 1) ← PCH, (SP – 2) ← PCL, SP ← SP – 2, PC ← nn`
 
 ### Op Code
 
@@ -41,11 +41,11 @@ Opcode jadvallarida birinchi katak byte tartib raqami, keyingi sakkiz katak bit 
 
 Assembled object codedagi ikkita n operandning birinchisi ikki byte li memory addressning least-significant byte qiymatidir.
 
-|     |      |      |      |      |      |      |      |      |                       |            |
-| --- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | --------------------- | ---------- |
-| 1   | `1`  | `1`  | `0`  | `0`  | `1`  | `1`  | `0`  | `1`  | `CD`                  | `11001101` |
-| 2   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — low-order byte`  | `n`        |
-| 3   | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — high-order byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `1` | `0` | `1` | `CD` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — low-order byte` |
+| 3 | `n₁₅` | `n₁₄` | `n₁₃` | `n₁₂` | `n₁₁` | `n₁₀` | `n₉` | `n₈` | `n — high-order byte` |
 
 ### Description
 
@@ -59,23 +59,21 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------------ | --------------- |
-| 5        | 17 (4, 3, 4, 3, 3) | 4.25            |
+| 5 | 17 (4, 3, 4, 3, 3) | 4.25 |
 
 ### Misol
 
 Program Counterda 1A47h, Stack Pointerda 3002h bo‘lsin. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address | Tarkib |
+| --- | --- |
 | `1A47h` | `CDh` |
-| `IA48h` | `35h` |
+| `1A48h` | `35h` |
 | `1A49h` | `21h` |
 
-Instruction fetch ketma-ketligi boshlanganda, 3-byte instruction `CD 3521h` CPU ga bajarish uchun fetch qilinadi. Uning mnemonic ekvivalenti — `CALL 2135h`. Bajarilgach, 3001h memory addressda 1Ah, 3000h addressda 4Ah, Stack Pointerda 3000h, Program Counterda esa 2135h bo‘ladi. PC bajariladigan subroutinening birinchi opcode manzilini ko‘rsatadi.
-
-Manba izohi: Manbadagi location jadvalining ikkinchi addressi `IA48h` (I harfi bilan) deb berilgan; asl yozuv saqlandi.
+Instruction fetch ketma-ketligi boshlanganda, 3-byte instruction `CD 35 21` CPU ga bajarish uchun fetch qilinadi. Uning mnemonic ekvivalenti — `CALL 2135h`. Bajarilgach, 3001h memory addressda 1Ah, 3000h addressda 4Ah, Stack Pointerda 3000h, Program Counterda esa 2135h bo‘ladi. PC bajariladigan subroutinening birinchi opcode manzilini ko‘rsatadi.
 
 # CALL cc, nn
 
@@ -83,9 +81,9 @@ Manba izohi: Manbadagi location jadvalining ikkinchi addressi `IA48h` (I harfi b
 
 cc shart rost bo‘lsa:
 
-`(sp – 1) ← PCH`
+`(SP – 1) ← PCH`
 
-`(sp – 2) ← PCL, pc ← nn`
+`(SP – 2) ← PCL, SP ← SP – 2, PC ← nn`
 
 ### Op Code
 
@@ -97,11 +95,11 @@ cc shart rost bo‘lsa:
 
 Assembled object codedagi ikkita n operandning birinchisi ikki byte li memory addressning least-significant byte qiymatidir.
 
-|     |      |      |       |       |       |      |      |      |                       |            |
-| --- | ---- | ---- | ----- | ----- | ----- | ---- | ---- | ---- | --------------------- | ---------- |
-| 1   | `1`  | `1`  | `cc₂` | `cc₁` | `cc₀` | `1`  | `0`  | `0`  | `cc field`            | `11010 cc` |
-| 2   | `n₇` | `n₆` | `n₅`  | `n₄`  | `n₃`  | `n₂` | `n₁` | `n₀` | `n — low-order byte`  | `n`        |
-| 3   | `n₇` | `n₆` | `n₅`  | `n₄`  | `n₃`  | `n₂` | `n₁` | `n₀` | `n — high-order byte` | `n`        |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `cc₂` | `cc₁` | `cc₀` | `1` | `0` | `0` | `cc field` |
+| 2 | `n₇` | `n₆` | `n₅` | `n₄` | `n₃` | `n₂` | `n₁` | `n₀` | `n — low-order byte` |
+| 3 | `n₁₅` | `n₁₄` | `n₁₃` | `n₁₂` | `n₁₁` | `n₁₀` | `n₉` | `n₈` | `n — high-order byte` |
 
 ### Description
 
@@ -111,16 +109,16 @@ Ushbu instruction 3-byte bo‘lgani uchun push bajarilishidan oldin Program Coun
 
 cc shart Flag Register (Register F) dagi condition bitlarga mos sakkiz holatdan biri sifatida belgilanadi. Quyidagi jadval assembled object codedagi tegishli cc bit maydonlarini ham ko‘rsatadi. Ustunlar tartibi: cc; condition; tegishli flag.
 
-|       |                     |       |
-| ----- | ------------------- | ----- |
-| `000` | `Non-Zero (NZ)`     | `Z`   |
-| `001` | `Zero (Z)`          | `Z`   |
-| `010` | `Non Carry (NC)`    | `C`   |
-| `011` | `Carry (C)`         | `Z`   |
-| `100` | `Parity Odd (PO)`   | `P/V` |
-| `101` | `Parity Even (PE)`  | `P/V` |
-| `110` | `Sign Positive (P)` | `S`   |
-| `111` | `Sign Negative (M)` | `S`   |
+| cc | Condition | Flag | Shart |
+| --- | --- | --- | --- |
+| `000` | `Non-Zero (NZ)` | `Z` | Z = 0 |
+| `001` | `Zero (Z)` | `Z` | Z = 1 |
+| `010` | `Non Carry (NC)` | `C` | C = 0 |
+| `011` | `Carry (C)` | `C` | C = 1 |
+| `100` | `Parity Odd (PO)` | `P/V` | P/V = 0 |
+| `101` | `Parity Even (PE)` | `P/V` | P/V = 1 |
+| `110` | `Sign Positive (P)` | `S` | S = 0 |
+| `111` | `Sign Negative (M)` | `S` | S = 1 |
 
 ### Condition Bits Affected
 
@@ -130,37 +128,33 @@ Hech biri o‘zgarmaydi.
 
 cc shart rost bo‘lganda:
 
-| M Cycles | T States           | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------------ | --------------- |
-| 5        | 17 (4, 3, 4, 3, 3) | 4.25            |
+| 5 | 17 (4, 3, 4, 3, 3) | 4.25 |
 
 cc shart yolg‘on bo‘lganda:
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------ | --------------- |
-| 3        | 10 (4, 3, 3) | 2.50            |
+| 3 | 10 (4, 3, 3) | 2.50 |
 
 ### Misol
 
 F registerdagi C Flag reset holatida, Program Counterda 1A47h, Stack Pointerda 3002h bo‘lsin. Memory locationlardagi ma’lumotlar quyidagicha. Ustunlar tartibi: location; tarkib.
 
-|         |       |
-| ------- | ----- |
+| Address | Tarkib |
+| --- | --- |
 | `1A47h` | `D4h` |
-| `1448h` | `35h` |
+| `1A48h` | `35h` |
 | `1A49h` | `21h` |
 
-Instruction fetch ketma-ketligi boshlanganda, 3-byte instruction `D43521h` CPU ga bajarish uchun fetch qilinadi. Uning mnemonic ekvivalenti — `CALL NC, 2135h`. Bajarilgach, 3001h memory addressda 1Ah, 3000h addressda 4Ah, Stack Pointerda 3000h, Program Counterda esa 2135h bo‘ladi. PC bajariladigan subroutinening birinchi opcode manzilini ko‘rsatadi.
-
-Manba izohi: Manbadagi condition jadvalida `011 / Carry (C)` uchun tegishli flag `Z` deb yozilgan; qiymat saqlandi. RET cc jadvalida shu holat uchun C berilgan.
-
-Manba izohi: Memory jadvalidagi ikkinchi address `1448h` deb yozilgan; manba qiymati saqlandi.
+Instruction fetch ketma-ketligi boshlanganda, 3-byte instruction `D4 35 21` CPU ga bajarish uchun fetch qilinadi. Uning mnemonic ekvivalenti — `CALL NC, 2135h`. Bajarilgach, 3001h memory addressda 1Ah, 3000h addressda 4Ah, Stack Pointerda 3000h, Program Counterda esa 2135h bo‘ladi. PC bajariladigan subroutinening birinchi opcode manzilini ko‘rsatadi.
 
 # RET
 
 ### Operation
 
-`pCL ← (sp), pCH ← (sp+1)`
+`PCL ← (SP), PCH ← (SP + 1), SP ← SP + 2`
 
 ### Op Code
 
@@ -170,13 +164,13 @@ Manba izohi: Memory jadvalidagi ikkinchi address `1448h` deb yozilgan; manba qiy
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `0` | `0` | `1` | `0` | `0` | `1` | `C9` | `11001001` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `0` | `0` | `1` | `0` | `0` | `1` | `C9` |
 
 ### Description
 
-Stack Pointer (SP) register pair ko‘rsatgan memory locationdagi byte Program Counter (PC) ning low-order sakkiz bitiga ko‘chiriladi. Keyin SP birga oshiriladi. Manbada keyingi jumlaning o‘rtasi tushib qolgan; davomida instruction PC ko‘rsatgan memory locationdan fetch qilinishi aytilgan. Ushbu instruction odatda CALL instruction orqali kirilgan routine tugagach, asosiy programga qaytish uchun ishlatiladi.
+Stack Pointer (SP) register pair ko‘rsatgan memory locationdagi byte Program Counter (PC) ning low-order sakkiz bitiga ko‘chiriladi. Keyin SP birga oshiriladi. SP ko‘rsatgan yangi memory locationdagi byte PC ning high-order qismiga yuklanadi. SP yana birga oshiriladi. Keyingi instruction PC ko‘rsatgan addressdan fetch qilinadi. Ushbu instruction odatda CALL instruction orqali kirilgan routine tugagach, asosiy programga qaytish uchun ishlatiladi.
 
 ### Condition Bits Affected
 
@@ -184,21 +178,19 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------ | --------------- |
-| 3        | 10 (4, 3, 3) | 2.50            |
+| 3 | 10 (4, 3, 3) | 2.50 |
 
 ### Misol
 
 Program Counterda 3535h, Stack Pointerda 2000h, 2000h memory locationda B5h va 2001h memory locationda 18h bo‘lsin. `RET` bajarilgach, Stack Pointerda 2002h, Program Counterda esa 18B5h bo‘ladi. PC programning keyingi fetch qilinadigan opcode manzilini ko‘rsatadi.
 
-Manba izohi: RET ning Description matni SP oshirilishidan keyin uzilgan. Operation ifodasi ikkala PC byte i tiklanishini, misol esa yakuniy SP qiymati 2002h bo‘lishini ko‘rsatadi.
-
 # RET cc
 
 ### Operation
 
-cc shart rost bo‘lsa, `PCL ← (sp), pCH ← (sp+1)`.
+cc shart rost bo‘lsa, `PCL ← (SP), PCH ← (SP + 1), SP ← SP + 2`.
 
 ### Op Code
 
@@ -208,9 +200,9 @@ cc shart rost bo‘lsa, `PCL ← (sp), pCH ← (sp+1)`.
 
 `cc`
 
-|     |     |     |       |       |       |     |     |     |            |            |
-| --- | --- | --- | ----- | ----- | ----- | --- | --- | --- | ---------- | ---------- |
-| 1   | `1` | `1` | `cc₂` | `cc₁` | `cc₀` | `0` | `0` | `0` | `cc field` | `11000 cc` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `cc₂` | `cc₁` | `cc₀` | `0` | `0` | `0` | `cc field` |
 
 ### Description
 
@@ -218,16 +210,16 @@ cc shart rost bo‘lsa, Stack Pointer (SP) register pair ko‘rsatgan memory loc
 
 cc shart Flag Register (Register F) dagi condition bitlarga mos sakkiz holatdan biri sifatida belgilanadi. Quyidagi jadval assembled object codedagi tegishli cc bit maydonlarini ham ko‘rsatadi. Ustunlar tartibi: cc; condition; tegishli flag.
 
-|       |                     |       |
-| ----- | ------------------- | ----- |
-| `000` | `Non-Zero (NZ)`     | `Z`   |
-| `001` | `Zero (Z)`          | `Z`   |
-| `010` | `Non Carry (NC)`    | `C`   |
-| `011` | `Carry (C)`         | `C`   |
-| `100` | `Parity Odd (PO)`   | `P/V` |
-| `101` | `Parity Even (PE)`  | `P/V` |
-| `110` | `Sign Positive (P)` | `S`   |
-| `111` | `Sign Negative (M)` | `S`   |
+| cc | Condition | Flag | Shart |
+| --- | --- | --- | --- |
+| `000` | `Non-Zero (NZ)` | `Z` | Z = 0 |
+| `001` | `Zero (Z)` | `Z` | Z = 1 |
+| `010` | `Non Carry (NC)` | `C` | C = 0 |
+| `011` | `Carry (C)` | `C` | C = 1 |
+| `100` | `Parity Odd (PO)` | `P/V` | P/V = 0 |
+| `101` | `Parity Even (PE)` | `P/V` | P/V = 1 |
+| `110` | `Sign Positive (P)` | `S` | S = 0 |
+| `111` | `Sign Negative (M)` | `S` | S = 1 |
 
 ### Condition Bits Affected
 
@@ -237,15 +229,15 @@ Hech biri o‘zgarmaydi.
 
 cc shart rost bo‘lganda:
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------ | --------------- |
-| 3        | 11 (5, 3, 3) | 2.75            |
+| 3 | 11 (5, 3, 3) | 2.75 |
 
 cc shart yolg‘on bo‘lganda:
 
 | M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | -------- | --------------- |
-| 1        | 5        | 1.25            |
+| 1 | 5 | 1.25 |
 
 ### Misol
 
@@ -257,6 +249,8 @@ F registerdagi S flag set holatida, Program Counterda 3535h, Stack Pointerda 200
 
 Interruptdan qaytish.
 
+`PCL ← (SP), PCH ← (SP + 1), SP ← SP + 2, IFF1 ← IFF2`
+
 ### Op Code
 
 `RETI`
@@ -265,14 +259,14 @@ Interruptdan qaytish.
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `1` | `4D` | `01001101` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `0` | `1` | `1` | `0` | `1` | `4D` |
 
 ### Description
 
-Ushbu instruction maskable interrupt service routine oxirida Program Counter tarkibini tiklash (RET instructionga o‘xshash tarzda) va I/O devicega interrupt routine tugaganini bildirish uchun ishlatiladi. RETI interruptlarning nestingini ham qo‘llab-quvvatlaydi: higher priority device lower priority service routinega xizmat ko‘rsatishni vaqtincha to‘xtata oladi. Biroq ushbu instruction interrupt routinega kirishda o‘chirilgan interruptlarni yoqmaydi. Joriy service routine tugagach interruptlar tan olinishi uchun RETI dan oldin enable interrupt instruction (EI) bajarilishi kerak.
+Ushbu instruction maskable interrupt service routine oxirida Program Counter tarkibini tiklash (RET instructionga o‘xshash tarzda) va I/O devicega interrupt routine tugaganini bildirish uchun ishlatiladi. RETI interruptlarning nestingini ham qo‘llab-quvvatlaydi: higher priority device lower priority service routinega xizmat ko‘rsatishni vaqtincha to‘xtata oladi. RETI IFF2 qiymatini IFF1 ga ko‘chiradi. Maskable interrupt qabul qilinganda ikkala IFF reset qilinadi, shuning uchun RETI o‘zi odatda interruptlarni qayta yoqmaydi. Joriy service routine tugagach interruptlar tan olinishi uchun RETI dan oldin enable interrupt instruction (EI) bajarilishi kerak.
 
 ### Condition Bits Affected
 
@@ -280,29 +274,29 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | --------------- | --------------- |
-| 4        | 14 (4, 4, 3, 3) | 3.50            |
+| 4 | 14 (4, 4, 3, 3) | 3.50 |
 
 ### Misol
 
 A va B nomli ikkita interrupt yuboruvchi device daisy-chain configurationda ulangan va A ning priority darajasi B nikidan yuqori bo‘lsin. Manbadagi sxemada quyidagi belgilar ko‘rsatilgan; dastlabki ikki qatorda device, IEI va IEO belgilari, oxirgi qatorda esa qo‘shimcha sxema belgilari saqlangan:
 
-|                       |       |       |
-| --------------------- | ----- | ----- |
-| `A`                   | `IEI` | `IEO` |
-| `B`                   | `IEI` | `IEO` |
-| `Qo‘shimcha belgilar` | `+`   | `INT` |
+| Device / belgi | IEI / belgi | IEO / belgi |
+| --- | --- | --- |
+| `A` | `IEI` | `IEO` |
+| `B` | `IEI` | `IEO` |
+| `Qo‘shimcha belgilar` | `+` | `INT` |
 
-B interrupt hosil qiladi va interrupt acknowledge qilinadi. B ning interrupt enable out (IEO) signali Low holatiga o‘tadi; B ga xizmat ko‘rsatilayotgan paytda lower priority devicelar interrupt yubora olmaydi. Keyin A interrupt hosil qilib, B ga xizmat ko‘rsatishni to‘xtatadi. A ning IEO signali Low holatiga o‘tib, higher priority devicega xizmat ko‘rsatilayotganini bildiradi. A routine tugagach, RETI beriladi va A ning IEO signali reset qilinadi; B routine davom etishi mumkin bo‘ladi. B routine tugaganda ikkinchi RETI beriladi va B ning manbada `IE0` deb yozilgan signali reset qilinib High holatiga o‘tadi. Shundan so‘ng lower priority devicelar interrupt yuborish imkoniga ega bo‘ladi.
-
-Manba izohi: Misol oxirida `IE0` (nol bilan) yozilgan; oldingi matn va sxemada `IEO` ishlatilgan. Manba yozuvi saqlandi.
+B interrupt hosil qiladi va interrupt acknowledge qilinadi. B ning interrupt enable out (IEO) signali Low holatiga o‘tadi; B ga xizmat ko‘rsatilayotgan paytda lower priority devicelar interrupt yubora olmaydi. Keyin A interrupt hosil qiladi va maskable interruptlar qayta yoqilgan bo‘lsa, B routine vaqtincha to‘xtatiladi. A ning IEO signali Low holatiga o‘tib, higher priority devicega xizmat ko‘rsatilayotganini bildiradi. A routine tugagach, RETI beriladi va A ning IEO signali reset qilinadi; B routine davom etishi mumkin bo‘ladi. B routine tugaganda ikkinchi RETI beriladi va B ning IEO signali reset qilinib High holatiga o‘tadi. Shundan so‘ng lower priority devicelar interrupt yuborish imkoniga ega bo‘ladi.
 
 # RETN
 
 ### Operation
 
 Nonmaskable interruptdan qaytish.
+
+`PCL ← (SP), PCH ← (SP + 1), SP ← SP + 2, IFF1 ← IFF2`
 
 ### Op Code
 
@@ -312,10 +306,10 @@ Nonmaskable interruptdan qaytish.
 
 Yo‘q.
 
-|     |     |     |     |     |     |     |     |     |      |            |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---- | ---------- |
-| 1   | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` | `11001111` |
-| 2   | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `1` | `45` | `01001100` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `1` | `0` | `1` | `1` | `0` | `1` | `ED` |
+| 2 | `0` | `1` | `0` | `0` | `0` | `1` | `0` | `1` | `45` |
 
 ### Description
 
@@ -327,23 +321,21 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States        | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | --------------- | --------------- |
-| 4        | 14 (4, 4, 3, 3) | 3.50            |
+| 4 | 14 (4, 4, 3, 3) | 3.50 |
 
 ### Misol
 
-Nonmaskable Interrupt (NMI) signali kelganda Stack Pointerda 1000h va Program Counterda 1A45h bo‘lsin. CPU keyingi instructionni e’tiborsiz qoldirib, uning o‘rniga 0066h memory addressga restart qiladi. PC ning joriy 1A45h qiymati tashqi stackning 0FFFh va 0FFEh addresslariga high-order byte birinchi bo‘lib push qilinadi. PC ga 0066h yuklanadi. Ushbu address RETN instruction bilan tugaydigan interrupt service routine boshlanishidir.
+Nonmaskable Interrupt (NMI) signali kelganda Stack Pointerda 1000h va Program Counterda 1A45h bo‘lsin. CPU joriy instructionni tugatgach, 0066h memory addressga restart qiladi. PC ning joriy 1A45h qiymati tashqi stackning 0FFFh va 0FFEh addresslariga high-order byte birinchi bo‘lib push qilinadi. PC ga 0066h yuklanadi. Ushbu address RETN instruction bilan tugaydigan interrupt service routine boshlanishidir.
 
 `RETN` bajarilganda oldingi Program Counter tarkibi tashqi memory stackdan low-order byte birinchi bo‘lib pop qilinadi. Stack Pointer yana 1000h bo‘ladi. Program oqimi to‘xtagan joyidan davom etib, 1A45h addressdan opcode fetch qilinadi.
-
-Manba izohi: Manbada 1A45h ga qaytish bayonidan keyin 0066h ni PC ga yuklash va service routinega kirish haqidagi jumla yana takrorlangan. Keyingi davom matnida RETN dan so‘ng SP = 1000h va fetch address = 1A45h bo‘lishi qayta tasdiqlangan; takrorlar shu misolga birlashtirildi.
 
 # RST p
 
 ### Operation
 
-`(SP – 1) ← PCH, (SP – 2) ← PCL, PCH ← 0, PCL ← P`
+`(SP – 1) ← PCH, (SP – 2) ← PCL, SP ← SP – 2, PC ← p`
 
 ### Op Code
 
@@ -353,26 +345,26 @@ Manba izohi: Manbada 1A45h ga qaytish bayonidan keyin 0066h ni PC ga yuklash va 
 
 `p`
 
-|     |     |     |      |      |      |     |     |     |           |          |
-| --- | --- | --- | ---- | ---- | ---- | --- | --- | --- | --------- | -------- |
-| 1   | `1` | `1` | `t₂` | `t₁` | `t₀` | `1` | `1` | `1` | `t field` | `11t111` |
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `1` | `1` | `t₂` | `t₁` | `t₀` | `1` | `1` | `1` | `t field` |
 
 ### Description
 
-Program Counter (PC) ning joriy tarkibi tashqi memory stackka push qilinadi va p operand belgilagan Page 0 memory location PC ga yuklanadi. Program bajarilishi PC ko‘rsatgan addressdagi opcode dan boshlanadi. Push avval Stack Pointer (SP) tarkibini birga kamaytirib, PC ning high-order byte qiymatini SP ko‘rsatgan memory addressga yuklash orqali bajariladi. So‘ng SP yana birga kamaytiriladi va PC ning low-order byte qiymati SP ko‘rsatgan addressga yuklanadi. Restart instruction quyidagi jadvaldagi sakkiz addressdan biriga jump qilish imkonini beradi. p operand tegishli t maydoni bilan object codega yig‘iladi; manba matnida bu “T state” deb atalgan.
+Program Counter (PC) ning joriy tarkibi tashqi memory stackka push qilinadi va p operand belgilagan Page 0 memory location PC ga yuklanadi. Program bajarilishi PC ko‘rsatgan addressdagi opcode dan boshlanadi. Push avval Stack Pointer (SP) tarkibini birga kamaytirib, PC ning high-order byte qiymatini SP ko‘rsatgan memory addressga yuklash orqali bajariladi. So‘ng SP yana birga kamaytiriladi va PC ning low-order byte qiymati SP ko‘rsatgan addressga yuklanadi. Restart instruction quyidagi jadvaldagi sakkiz addressdan biriga jump qilish imkonini beradi. p operand tegishli t maydoni bilan object codega yig‘iladi; bu timing T State emas, opcode bit maydonidir.
 
 Ustunlar tartibi: p; t.
 
-|       |       |
-| ----- | ----- |
-| `00h` | `000` |
-| `08h` | `001` |
-| `10h` | `010` |
-| `18h` | `011` |
-| `20h` | `100` |
-| `28h` | `101` |
-| `30h` | `110` |
-| `38h` | `111` |
+| p | t | Opcode |
+| --- | --- | --- |
+| `00h` | `000` | `C7h` |
+| `08h` | `001` | `CFh` |
+| `10h` | `010` | `D7h` |
+| `18h` | `011` | `DFh` |
+| `20h` | `100` | `E7h` |
+| `28h` | `101` | `EFh` |
+| `30h` | `110` | `F7h` |
+| `38h` | `111` | `FFh` |
 
 Barcha addresslar memoryning Page 0 qismida joylashgani uchun PC ning high-order byte qismiga 00h yuklanadi. Jadvalning p ustunidan tanlangan qiymat PC ning low-order byte qismiga yuklanadi.
 
@@ -382,12 +374,11 @@ Hech biri o‘zgarmaydi.
 
 ### Timing
 
-| M Cycles | T States     | 4 MHz E.T. (µs) |
+| M Cycles | T States | 4 MHz E.T. (µs) |
 | -------- | ------------ | --------------- |
-| 3        | 11 (5, 3, 3) | 2.75            |
+| 3 | 11 (5, 3, 3) | 2.75 |
 
 ### Misol
 
-Program Counterda 15B3h bo‘lsa, `RST 18h` (manbada object code `1101111`) bajarilgach, PC keyingi fetch qilinadigan opcode manzili sifatida 0018h qiymatiga ega bo‘ladi.
+Program Counterda 15B3h bo‘lsa, `RST 18h` (object code `11011111`, DFh) bajarilgach, PC keyingi fetch qilinadigan opcode manzili sifatida 0018h qiymatiga ega bo‘ladi. Stackka qaytish manzili 15B4h yoziladi va SP ikki birlikka kamayadi.
 
-Manba izohi: Manba misolidagi object code `1101111` yetti bitdan iborat; yozuv asl holida saqlandi.

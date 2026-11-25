@@ -34,18 +34,18 @@ Quyida 8-bit load instructionlarining o‘zbekcha tavsifi keltirilgan. Qisqartma
 
 ## Belgilashlar
 
-<table>
-  <tr><td><code>r</code>, <code>r′</code></td><td>A, B, C, D, E, H yoki L register.</td></tr>
-  <tr><td><code>n</code></td><td>8-bit immediate integer.</td></tr>
-  <tr><td><code>nn</code></td><td>16-bit memory address; avval low-order byte, keyin high-order byte beriladi.</td></tr>
-  <tr><td><code>d</code></td><td>8-bit two’s-complement displacement (−128…+127).</td></tr>
-  <tr><td><code>(HL)</code>, <code>(BC)</code>, <code>(DE)</code>, <code>(nn)</code></td><td>Qavs ichidagi address ko‘rsatgan memory location tarkibi.</td></tr>
-  <tr><td><code>(IX+d)</code>, <code>(IY+d)</code></td><td>Index Register va displacement yig‘indisi ko‘rsatgan memory location tarkibi.</td></tr>
-  <tr><td><code>r₂ r₁ r₀</code>, <code>r′₂ r′₁ r′₀</code></td><td>Registerning 3-bit object code qiymati.</td></tr>
-  <tr><td><code>n₇…n₀</code>, <code>d₇…d₀</code></td><td>n yoki d ning alohida bitlari; jadvalda chapdan o‘ngga bit 7…0 tartibida.</td></tr>
-  <tr><td><code>← n →</code>, <code>← d →</code></td><td>Qiymat butun 8-bit byte bo‘ylab joylashishini bildiradi.</td></tr>
-  <tr><td><code>4 MHz E.T. (µs)</code></td><td>4 MHz dagi execution time; T States ÷ 4.</td></tr>
-</table>
+| Belgi | Tavsif |
+| --- | --- |
+| r, r′ | A, B, C, D, E, H yoki L register. |
+| n | 8-bit immediate integer. |
+| nn | 16-bit memory address; avval low-order byte, keyin high-order byte beriladi. |
+| d | 8-bit two’s-complement displacement (−128…+127). |
+| (HL), (BC), (DE), (nn) | Qavs ichidagi address ko‘rsatgan memory location tarkibi. |
+| (IX+d), (IY+d) | Index Register va displacement yig‘indisi ko‘rsatgan memory location tarkibi. |
+| r₂ r₁ r₀, r′₂ r′₁ r′₀ | Registerning 3-bit object code qiymati. |
+| n₇…n₀, d₇…d₀ | n yoki d ning alohida bitlari; jadvalda chapdan o‘ngga bit 7…0 tartibida. |
+| ← n →, ← d → | Qiymat butun 8-bit byte bo‘ylab joylashishini bildiradi. |
+| 4 MHz E.T. (µs) | 4 MHz dagi execution time; T States ÷ 4. |
 
 # LD r, r'
 
@@ -61,23 +61,23 @@ Quyida 8-bit load instructionlarining o‘zbekcha tavsifi keltirilgan. Qisqartma
 
 `r, r′`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>1</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td><code>r′₂</code></td><td><code>r′₁</code></td><td><code>r′₀</code></td><td>register code</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 1 | r₂ | r₁ | r₀ | r′₂ | r′₁ | r′₀ | register code |
 
 ### Description
 
 Istalgan r′ register tarkibi r registerga yuklanadi. r va r′ A, B, C, D, E, H yoki L registerni bildiradi; ularning object code qiymatlari quyidagi jadvalda berilgan.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -107,24 +107,24 @@ H registerda 8Ah, E registerda 10h bo‘lsa, `LD H, E` bajarilgach ikkala regist
 
 `r, n`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>register code</td></tr>
-  <tr><td>2</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | r₂ | r₁ | r₀ | 1 | 1 | 0 | register code |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → |
 
 ### Description
 
 8-bit integer n istalgan r registerga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi; object code qiymatlari quyida berilgan.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -154,23 +154,23 @@ Hech biri o‘zgarmaydi.
 
 `r, (HL)`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>1</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>register code</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 1 | r₂ | r₁ | r₀ | 1 | 1 | 0 | register code |
 
 ### Description
 
 HL register pair ko‘rsatgan memory locationdagi 8-bit qiymat r registerga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi; object code qiymatlari quyida berilgan.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -200,25 +200,25 @@ HL register pairda 75A1h, 75A1h memory addressda 58h byte bo‘lsa, `LD C, (HL)`
 
 `r, (IX+d)`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>DDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>register code</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | DDh |
+| 2 | 0 | 1 | r₂ | r₁ | r₀ | 1 | 1 | 0 | register code |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
 
 ### Description
 
 Index Register IX tarkibiga two’s-complement displacement d qo‘shilib, memory address hisoblanadi. Shu memory location tarkibi r registerga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -248,25 +248,25 @@ IX registerda 25AFh bo‘lsa, `LD B, (IX+19h)` uchun 25AFh + 19h = 25C8h hisobla
 
 `r, (IY+d)`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>FDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>register code</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | FDh |
+| 2 | 0 | 1 | r₂ | r₁ | r₀ | 1 | 1 | 0 | register code |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
 
 ### Description
 
 Index Register IY tarkibiga two’s-complement displacement d qo‘shilib, memory address hisoblanadi. Shu memory location tarkibi r registerga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -296,23 +296,23 @@ IY registerda 25AFh bo‘lsa, `LD B, (IY+19h)` uchun 25AFh + 19h = 25C8h hisobla
 
 `(HL), r`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td>register code</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 1 | 1 | 1 | 0 | r₂ | r₁ | r₀ | register code |
 
 ### Description
 
 r register tarkibi HL register pair ko‘rsatgan memory locationga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi; object code qiymatlari quyida berilgan.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -342,25 +342,25 @@ HL register pair 2146h memory locationni ko‘rsatsa va B registerda 29h byte bo
 
 `(IX+d), r`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>DDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td>register code</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | DDh |
+| 2 | 0 | 1 | 1 | 1 | 0 | r₂ | r₁ | r₀ | register code |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
 
 ### Description
 
 r register tarkibi Index Register IX tarkibi va two’s-complement displacement d yig‘indisi ko‘rsatgan memory addressga yuklanadi. r A, B, C, D, E, H yoki L registerni bildiradi.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -390,25 +390,25 @@ C registerda 1Ch byte, IX registerda 3100h bo‘lsa, `LD (IX+6h), C` 3100h + 6h 
 
 `(IY+d), r`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>FDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>r₂</code></td><td><code>r₁</code></td><td><code>r₀</code></td><td>register code</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | FDh |
+| 2 | 0 | 1 | 1 | 1 | 0 | r₂ | r₁ | r₀ | register code |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
 
 ### Description
 
 r register tarkibi Index Register IY tarkibi va two’s-complement displacement d yig‘indisi ko‘rsatgan memory addressga yuklanadi. r qiymati quyidagi jadval bo‘yicha kodlanadi.
 
-<table>
-  <tr><td>A</td><td>1</td><td>1</td><td>1</td><td><code>111</code></td></tr>
-  <tr><td>B</td><td>0</td><td>0</td><td>0</td><td><code>000</code></td></tr>
-  <tr><td>C</td><td>0</td><td>0</td><td>1</td><td><code>001</code></td></tr>
-  <tr><td>D</td><td>0</td><td>1</td><td>0</td><td><code>010</code></td></tr>
-  <tr><td>E</td><td>0</td><td>1</td><td>1</td><td><code>011</code></td></tr>
-  <tr><td>H</td><td>1</td><td>0</td><td>0</td><td><code>100</code></td></tr>
-  <tr><td>L</td><td>1</td><td>0</td><td>1</td><td><code>101</code></td></tr>
-</table>
+| Register | 2 | 1 | 0 | Object code |
+| --- | --- | --- | --- | --- |
+| A | 1 | 1 | 1 | 111 |
+| B | 0 | 0 | 0 | 000 |
+| C | 0 | 0 | 1 | 001 |
+| D | 0 | 1 | 0 | 010 |
+| E | 0 | 1 | 1 | 011 |
+| H | 1 | 0 | 0 | 100 |
+| L | 1 | 0 | 1 | 101 |
 
 ### Condition Bits Affected
 
@@ -438,10 +438,10 @@ C registerda 48h byte, IY registerda 2A11h bo‘lsa, `LD (IY+4h), C` 2A11h + 4h 
 
 `(HL), n`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>36h</td></tr>
-  <tr><td>2</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 36h |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → |
 
 ### Description
 
@@ -475,12 +475,12 @@ HL register pairda 4444h bo‘lsa, `LD (HL), 28h` bajarilgach 4444h memory locat
 
 `(IX+d), n`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>DDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>36h</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-  <tr><td>4</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | DDh |
+| 2 | 0 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 36h |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
+| 4 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → |
 
 ### Description
 
@@ -514,12 +514,12 @@ IX registerda 219Ah bo‘lsa, `LD (IX+5h), 5Ah` bajarilgach 219Fh memory address
 
 `(IY+d), n`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>FDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td>36h</td></tr>
-  <tr><td>3</td><td><code>d₇</code></td><td><code>d₆</code></td><td><code>d₅</code></td><td><code>d₄</code></td><td><code>d₃</code></td><td><code>d₂</code></td><td><code>d₁</code></td><td><code>d₀</code></td><td>← d →</td></tr>
-  <tr><td>4</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n →</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | FDh |
+| 2 | 0 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 36h |
+| 3 | d₇ | d₆ | d₅ | d₄ | d₃ | d₂ | d₁ | d₀ | ← d → |
+| 4 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → |
 
 ### Description
 
@@ -553,9 +553,9 @@ IY registerda A940h bo‘lsa, `LD (IY+10h), 97h` bajarilgach A950h memory locati
 
 `A, (BC)`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>0Ah</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0Ah |
 
 ### Description
 
@@ -589,9 +589,9 @@ BC register pairda 4747h, shu memory addressda 12h byte bo‘lsa, `LD A, (BC)` b
 
 `A, (DE)`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>1Ah</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 1Ah |
 
 ### Description
 
@@ -625,11 +625,11 @@ DE register pairda 30A2h, shu memory addressda 22h byte bo‘lsa, `LD A, (DE)` b
 
 `A, (nn)`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>3Ah</td></tr>
-  <tr><td>2</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n → (nn low-order byte)</td></tr>
-  <tr><td>3</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n → (nn high-order byte)</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 1 | 1 | 1 | 0 | 1 | 0 | 3Ah |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → (nn low-order byte) |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → (nn high-order byte) |
 
 ### Description
 
@@ -663,9 +663,9 @@ nn = 8832h va 8832h memory addressda 04h byte bo‘lsa, `LD A, (8832h)` bajarilg
 
 `(BC), A`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>02h</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 02h |
 
 ### Description
 
@@ -699,9 +699,9 @@ Accumulator tarkibi 7Ah, BC register pair tarkibi 1212h bo‘lsa, `LD (BC), A` b
 
 `(DE), A`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>12h</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 12h |
 
 ### Description
 
@@ -735,11 +735,11 @@ DE register pairda 1128h, Accumulatorda A0h byte bo‘lsa, `LD (DE), A` bajarilg
 
 `(nn), A`
 
-<table>
-  <tr><td>1</td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td>32h</td></tr>
-  <tr><td>2</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n → (nn low-order byte)</td></tr>
-  <tr><td>3</td><td><code>n₇</code></td><td><code>n₆</code></td><td><code>n₅</code></td><td><code>n₄</code></td><td><code>n₃</code></td><td><code>n₂</code></td><td><code>n₁</code></td><td><code>n₀</code></td><td>← n → (nn high-order byte)</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 32h |
+| 2 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → (nn low-order byte) |
+| 3 | n₇ | n₆ | n₅ | n₄ | n₃ | n₂ | n₁ | n₀ | ← n → (nn high-order byte) |
 
 ### Description
 
@@ -773,10 +773,10 @@ Accumulatorda D7h byte bo‘lsa, `LD (3141h), A` bajarilgach 3141h memory locati
 
 `A, I`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>EDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td>57h</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | EDh |
+| 2 | 0 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 57h |
 
 ### Description
 
@@ -784,16 +784,16 @@ Interrupt Vector Register I tarkibi Accumulatorga yuklanadi.
 
 ### Condition Bits Affected
 
-<table>
-  <tr><td>S</td><td>I register qiymati manfiy bo‘lsa set, aks holda reset qilinadi.</td></tr>
-  <tr><td>Z</td><td>I register qiymati 0 bo‘lsa set, aks holda reset qilinadi.</td></tr>
-  <tr><td>H</td><td>reset qilinadi.</td></tr>
-  <tr><td>P/V</td><td>IFF2 tarkibi ko‘chiriladi.</td></tr>
-  <tr><td>N</td><td>reset qilinadi.</td></tr>
-  <tr><td>C</td><td>O‘zgarmaydi.</td></tr>
-</table>
+| Flag | Holati |
+| --- | --- |
+| S | A ga yuklangan qiymatning bit 7 qiymati 1 bo‘lsa set, aks holda reset qilinadi. |
+| Z | I register qiymati 0 bo‘lsa set, aks holda reset qilinadi. |
+| H | reset qilinadi. |
+| P/V | IFF2 tarkibi ko‘chiriladi. |
+| N | reset qilinadi. |
+| C | O‘zgarmaydi. |
 
-Instruction bajarilayotganda interrupt yuz bersa, Parity flag qiymati 0 bo‘ladi.
+Ayrim NMOS Z80 variantlarida instruction yakunida maskable interrupt qabul qilinsa, P/V flag IFF2 qiymati 1 bo‘lsa ham reset bo‘lishi mumkin.
 
 ### Timing
 
@@ -815,10 +815,10 @@ Instruction bajarilayotganda interrupt yuz bersa, Parity flag qiymati 0 bo‘lad
 
 `A, R`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>EDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td>5Fh</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | EDh |
+| 2 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 5Fh |
 
 ### Description
 
@@ -826,16 +826,16 @@ Memory Refresh Register R tarkibi Accumulatorga yuklanadi.
 
 ### Condition Bits Affected
 
-<table>
-  <tr><td>S</td><td>R register qiymati manfiy bo‘lsa set, aks holda reset qilinadi.</td></tr>
-  <tr><td>Z</td><td>R register qiymati 0 bo‘lsa set, aks holda reset qilinadi.</td></tr>
-  <tr><td>H</td><td>reset qilinadi.</td></tr>
-  <tr><td>P/V</td><td>IFF2 tarkibi ko‘chiriladi.</td></tr>
-  <tr><td>N</td><td>reset qilinadi.</td></tr>
-  <tr><td>C</td><td>O‘zgarmaydi.</td></tr>
-</table>
+| Flag | Holati |
+| --- | --- |
+| S | A ga yuklangan qiymatning bit 7 qiymati 1 bo‘lsa set, aks holda reset qilinadi. |
+| Z | R register qiymati 0 bo‘lsa set, aks holda reset qilinadi. |
+| H | reset qilinadi. |
+| P/V | IFF2 tarkibi ko‘chiriladi. |
+| N | reset qilinadi. |
+| C | O‘zgarmaydi. |
 
-Instruction bajarilayotganda interrupt yuz bersa, Parity flag qiymati 0 bo‘ladi.
+Ayrim NMOS Z80 variantlarida instruction yakunida maskable interrupt qabul qilinsa, P/V flag IFF2 qiymati 1 bo‘lsa ham reset bo‘lishi mumkin.
 
 ### Timing
 
@@ -857,10 +857,10 @@ Instruction bajarilayotganda interrupt yuz bersa, Parity flag qiymati 0 bo‘lad
 
 `I, A`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>EDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td>47h</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | EDh |
+| 2 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 47h |
 
 ### Description
 
@@ -890,10 +890,10 @@ Hech biri o‘zgarmaydi.
 
 `R, A`
 
-<table>
-  <tr><td>1</td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td><td>EDh</td></tr>
-  <tr><td>2</td><td><code>0</code></td><td><code>1</code></td><td><code>0</code></td><td><code>0</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td><code>1</code></td><td>4Fh</td></tr>
-</table>
+| Byte | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 | Hex / Operand |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | EDh |
+| 2 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 4Fh |
 
 ### Description
 
@@ -913,13 +913,13 @@ Hech biri o‘zgarmaydi.
 
 HTMLdagi sahifa header/footerlari va ko‘rinmas link qatlamlari olib tashlandi. Davom sahifalardagi misollar tegishli instructionga birlashtirildi. Bit sxemalari byte ketma-ketligi bo‘yicha qayta yig‘ildi.
 
-<table>
-  <tr><td>LD r, r′ — Operation</td><td><code>r, ← r′</code> yozuvidagi ortiqcha vergul olib tashlandi.</td></tr>
-  <tr><td>IY bilan ishlaydigan instructionlar</td><td><code>lY</code> → <code>IY</code>; Operation ichidagi <code>D</code> → <code>d</code>.</td></tr>
-  <tr><td>LD (IX+d), r — misol</td><td><code>LID</code> → <code>LD</code>.</td></tr>
-  <tr><td>LD (IY+d), r — misol</td><td>Hex address <code>2A15</code> → <code>2A15h</code>.</td></tr>
-  <tr><td>LD (nn), A — misol</td><td>Buzilgan <code>LD (3141h), AD7h</code> matni <code>LD (3141h), A</code> va natija <code>D7h</code> ko‘rinishida tiklandi.</td></tr>
-  <tr><td>LD A, I — Operation</td><td><code>A ← 1</code> → <code>A ← I</code>.</td></tr>
-  <tr><td>LD r, (IX+d) va LD (IY+d), n — Timing</td><td>Manbadagi 2.50 qiymati 19 T States / 4 MHz = 4.75 µs bo‘yicha tuzatildi.</td></tr>
-  <tr><td>Register jadvali</td><td>Buzilgan <code>Register r, C</code> headeri r va r′ uchun 3-bit register code jadvali ko‘rinishida tiklandi.</td></tr>
-</table>
+| Belgi | Tavsif |
+| --- | --- |
+| LD r, r′ — Operation | r, ← r′ yozuvidagi ortiqcha vergul olib tashlandi. |
+| IY bilan ishlaydigan instructionlar | lY → IY; Operation ichidagi D → d. |
+| LD (IX+d), r — misol | LID → LD. |
+| LD (IY+d), r — misol | Hex address 2A15 → 2A15h. |
+| LD (nn), A — misol | Buzilgan LD (3141h), AD7h matni LD (3141h), A va natija D7h ko‘rinishida tiklandi. |
+| LD A, I — Operation | A ← 1 → A ← I. |
+| LD r, (IX+d) va LD (IY+d), n — Timing | Manbadagi 2.50 qiymati 19 T States / 4 MHz = 4.75 µs bo‘yicha tuzatildi. |
+| Register jadvali | Buzilgan Register r, C headeri r va r′ uchun 3-bit register code jadvali ko‘rinishida tiklandi. |

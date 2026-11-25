@@ -30,11 +30,11 @@ Z80 CPU 158 xil instruction turini, jumladan 8080A CPU ning barcha 78 instructio
 
 ## Instruction Types
 
-Load instructionlari ma’lumotni CPU registerlari orasida yoki registerlar va tashqi xotira orasida ko‘chiradi. Har bir instruction source va destination manzilini belgilaydi. Source o‘zgarmaydi. Masalan, C registeridan B registeriga ma’lumot ko‘chirish mumkin. Load-immediate istalgan CPU registeriga yoki tashqi xotiraga qiymat yuklaydi. Exchange instructionlari ikki register qiymatini almashtiradi.
+Load instructionlari ma’lumotni CPU registerlari orasida yoki registerlar va tashqi xotira orasida ko‘chiradi. Har bir instruction source va destination manzilini belgilaydi. Source o‘zgarmaydi. Masalan, C registeridan B registeriga ma’lumot ko‘chirish mumkin. Load-immediate tegishli umumiy maqsadli registerlarga, register pairlarga yoki (HL), (IX+d), (IY+d) orqali xotiraga qiymat yuklaydi. Exchange instructionlari ikki register qiymatini almashtiradi.
 
 Block Transfer instructionlari bitta instruction yordamida istalgan hajmdagi xotira blokini boshqa manzilga ko‘chiradi. Bu katta ma’lumot satrlarini qayta ishlashda foydali. Block Search istalgan uzunlikdagi tashqi xotira blokidan 8-bit belgini izlaydi. Belgi topilganda yoki blok tugaganda instruction avtomatik yakunlanadi. Ikkala tur ham bajarilish vaqtida interrupt orqali to‘xtatilishi mumkin.
 
-Arithmetic and Logical instructionlari Accumulator, boshqa umumiy maqsadli registerlar yoki tashqi xotiradagi ma’lumotlar ustida ishlaydi. Natija Accumulator ga joylanadi va tegishli flaglar o‘rnatiladi. Masalan, tashqi xotiradagi qiymat Accumulator ga qo‘shiladi. Guruh 16-bit registerlar orasidagi qo‘shish va ayirishni ham o‘z ichiga oladi.
+Arithmetic and Logical instructionlari Accumulator, boshqa umumiy maqsadli registerlar yoki tashqi xotiradagi ma’lumotlar ustida ishlaydi. Ko‘pchilik 8-bit arithmetic amallar natijani Accumulator ga joylaydi; CP faqat flaglarni yangilaydi, INC va DEC esa operandni o‘zgartiradi. Masalan, tashqi xotiradagi qiymat Accumulator ga qo‘shiladi. Guruh 16-bit registerlar orasidagi qo‘shish va ayirishni ham o‘z ichiga oladi.
 
 Rotate and Shift register yoki xotira qiymatini chapga yoki o‘ngga, carry bilan yoki carry siz, arithmetic yoki logical usulda siljitadi. Accumulator dagi bir digit xotiradagi ikki digit bilan aylantirilishi ham mumkin.
 
@@ -42,7 +42,7 @@ Bit Manipulation bitta instruction bilan Accumulator, umumiy maqsadli register y
 
 JUMP, CALL va RETURN dastur qismlari orasida o‘tishni ta’minlaydi. Yangi Program Counter manzilini olishning bir necha usuli mavjud. RESTART maxsus CALL turi bo‘lib, yangi manzil 8-bit opcode tarkibida joylashadi: Page 0 dagi sakkizta manzildan biri tanlanadi. HL, IX yoki IY ni bevosita Program Counter ga yuklash orqali hisoblangan manzilga ham o‘tish mumkin.
 
-Input/Output instructionlari tashqi xotira yoki CPU registerlari bilan I/O qurilmalari orasida ma’lumot uzatadi. Port raqami address bus ning quyi sakkiz bitida beriladi. Port instructionning ikkinchi byte ida yoki C registerida ko‘rsatilishi mumkin. C registeridan foydalanish bir nechta portga umumiy driver routine ishlatish imkonini beradi; ROM dagi routine uchun port opcode tarkibida bo‘lsa, bunday imkoniyat yo‘q. Input instructionlari Flag Register ni avtomatik o‘rnatadi, masalan parity holatini aniqlaydi.
+Input/Output instructionlari tashqi xotira yoki CPU registerlari bilan I/O qurilmalari orasida ma’lumot uzatadi. Port raqami address bus ning quyi sakkiz bitida beriladi. Port instructionning ikkinchi byte ida yoki C registerida ko‘rsatilishi mumkin. C registeridan foydalanish bir nechta portga umumiy driver routine ishlatish imkonini beradi; ROM dagi routine uchun port opcode tarkibida bo‘lsa, bunday imkoniyat yo‘q. IN r, (C) instructionlari flaglarni input qiymatiga qarab yangilaydi; IN A, (n) flaglarni o‘zgartirmaydi.
 
 Z80 bitta instruction bilan 256 byte gacha ma’lumotni I/O port va xotira orasida avtomatik uzata oladi. Ikki register banki bilan birga bu tezkor I/O block transfer imkonini beradi. Masalan, interrupt asosida double-density floppy disk formatlash uchun preamble, address, data va CRC kodlari ta’minlanadi.
 
@@ -84,15 +84,15 @@ Instruction tarkibiga ikki byte (16 bit) manzil kiritiladi. Bu jump manzili yoki
 
 ### Indexed Addressing
 
-Opcode dan keyingi byte displacement bo‘lib, opcode tanlagan index registerga qo‘shiladi va xotira pointerini hosil qiladi. Index register qiymati o‘zgarmaydi. Masalan, `(Index Register + Displacement)` manzilidagi qiymat Accumulator ga yuklanadi. Displacement signed two’s complement son. Index register jadval boshiga ko‘rsatishi sababli jadvallar bilan ishlash osonlashadi. Ikki index register bir nechta jadval bilan ishlash uchun berilgan. Bu relocatable code ni ham qo‘llaydi.
+Indexed instructiondagi displacement byte opcode tanlagan index registerga qo‘shiladi va xotira pointerini hosil qiladi. Index register qiymati o‘zgarmaydi. Masalan, `(Index Register + Displacement)` manzilidagi qiymat Accumulator ga yuklanadi. Displacement signed two’s complement son. Index register jadval boshiga ko‘rsatishi sababli jadvallar bilan ishlash osonlashadi. Ikki index register bir nechta jadval bilan ishlash uchun berilgan. Bu relocatable code ni ham qo‘llaydi.
 
 ![CleanShot 2026-11-25 at 13.50.51.png](<../../assets/5058b5fd-7cbc-4216-aebc-f436224508d5-CleanShot-2026-11-25-at-13-50-51.png>)
 
-Z80 index registerlari IX va IY deb ataladi. Yozilishi: `(IX+d)` yoki `(IY+d)`. `d` opcode dan keyingi displacement; qavslar tashqi xotiraga pointer ekanini bildiradi.
+Z80 index registerlari IX va IY deb ataladi. Yozilishi: `(IX+d)` yoki `(IY+d)`. `d` signed displacement; qavslar tashqi xotiraga pointer ekanini bildiradi.
 
 ### Register Addressing
 
-Ko‘p opcode lar operatsiyada qaysi CPU registeri ishlatilishini belgilovchi bitlarga ega. Manbada Register 6 dan C ga yuklash misoli keltirilgan (Register 6 yozuvi noaniq).
+Ko‘p opcode lar operatsiyada qaysi CPU registeri ishlatilishini belgilovchi bitlarga ega. Masalan, LD C, B instructionida source B va destination C opcode bitlari orqali belgilanadi.
 
 ### Implied Addressing
 
@@ -184,13 +184,13 @@ Table 6 barcha 8-bit load opcode larini va addressing turlarini ko‘rsatadi. So
 | I                    |       |       | ED 47   |         |         |         |         |         |         |      |      |      |         |         |       |           |
 | R                    |       |       | ED 4F   |         |         |         |         |         |         |      |      |      |         |         |       |           |
 
-8-Bit Load Group tavsiflari 70-sahifadan boshlanadi. HL atrofidagi qavslar pointer ni bildiradi. Destination har doim birinchi yoziladi. Z80 assembly o‘qish va saqlash uchun qulay. Ayrim opcode lar ikki byte; manbada instruction uzunliklari 8, 18, 24, 32 bit deb berilgan (18 yozuvi shubhali). Ko‘p arithmetic va logical instructionlar sakkiz bitli bo‘lib, fixed 16-bit instructionlarga nisbatan xotirani tejaydi.
+8-Bit Load Group tavsiflari 70-sahifadan boshlanadi. HL atrofidagi qavslar pointer ni bildiradi. Destination har doim birinchi yoziladi. Z80 assembly o‘qish va saqlash uchun qulay. Ayrim opcode lar ikki byte; instruction uzunliklari 8, 16, 24, 32 bit. Ko‘p arithmetic va logical instructionlar sakkiz bitli bo‘lib, fixed 16-bit instructionlarga nisbatan xotirani tejaydi.
 
-Indexed load odatda uch byte, uchinchi byte `d`. Misol: `LD E, (IX + 8)` (manbada LID yozilgan).
+Indexed load odatda uch byte, uchinchi byte `d`. Misol: `LD E, (IX + 8)`.
 
 ![CleanShot 2026-11-25 at 13.51.51.png](<../../assets/991d24fd-2a4b-4e3c-919b-226864036823-CleanShot-2026-11-25-at-13-51-51.png>)
 
-Extended Addressing ham uch byte: `LD A, (6F32h)` (manbada LID yozilgan). Manzilning quyi byte i birinchi keladi.
+Extended Addressing ham uch byte: `LD A, (6F32h)`. Manzilning quyi byte i birinchi keladi.
 
 ![CleanShot 2026-11-25 at 13.52.13.png](<../../assets/cd453a06-4348-4a0d-b2a6-49a97db7f206-CleanShot-2026-11-25-at-13-52-13.png>)
 
@@ -229,28 +229,26 @@ Table 7 16-bit load operatsiyalarini ko‘rsatadi. Extended Addressing barcha re
 | LD SP, HL   | F9        |
 | LD SP, IX   | DD F9     |
 | LD SP, IY   | FD F9     |
-| PUSH AF     | F6        |
-| PUSH BC     | C6        |
-| PUSH DE     | D6        |
-| PUSH HL     | E6        |
-| PUSH IX     | DD E6     |
-| PUSH IY     | FD E6     |
-| POP AF      | P1        |
+| PUSH AF     | F5 |
+| PUSH BC     | C5 |
+| PUSH DE     | D5 |
+| PUSH HL     | E5 |
+| PUSH IX     | DD E5 |
+| PUSH IY     | FD E5 |
+| POP AF      | F1 |
 | POP BC      | C1        |
 | POP DE      | D1        |
 | POP HL      | E1        |
 | POP IX      | DD E1     |
 | POP IY      | FD E1     |
 
-> Manbadagi Table 7 PUSH opcode lari va POP AF (`P1`) buzilgan ko‘rinishda; jadvalda aynan saqlandi. Quyidagi matnda PUSH AF uchun `F5h` berilgan.
-
-PUSH va POP har bajarilganda SP ni o‘zgartiradi. 16-Bit Load Group tavsiflari 98-sahifadan boshlanadi. Har byte stack ga yozilganda SP decrement, o‘qilganda increment qilinadi. PUSH AF (`F5h`) ketma-ketligi:
+PUSH va POP har bajarilganda SP ni o‘zgartiradi. 16-Bit Load Group tavsiflari 98-sahifadan boshlanadi. Har byte stack ga yozilganda SP decrement, o‘qilganda increment qilinadi. PUSH AF (`F5h`) ketma-ketligining pseudocode ko‘rinishi (LD (SP), F kabi instruction mavjud emas):
 
 ```asm
-; Decrement SP
-LD (SP), A
-; Decrement SP
-LD (SP), F
+DEC SP
+; (SP) ← A
+DEC SP
+; (SP) ← F
 ```
 
 ![CleanShot 2026-11-25 at 13.52.49.png](<../../assets/ed4f9332-89c3-44c1-9907-37905cc939a4-CleanShot-2026-11-25-at-13-52-49.png>)
@@ -276,18 +274,16 @@ Table 8 dagi `08h` Accumulator va flag register pair banklarini, `D9h` esa oltit
 
 ## Block Transfer and Search
 
-HL source, DE destination, BC byte counter. Ular boshlang‘ich qiymatga o‘rnatilgach, LDI HL ko‘rsatgan byte ni DE ko‘rsatgan manzilga ko‘chiradi, HL va DE increment, BC decrement qilinadi. Har transfer orasida boshqa ishlov kerak bo‘lsa foydali. LDIR BC nol bo‘lguncha takrorlaydi. 16-bit registerlar tufayli blok 64 KB gacha bo‘lishi mumkin (manbada 1 KB = 1024 bits deb yozilgan). Bloklar ustma-ust tushishi ham mumkin. LDD va LDDR yuqori manzildan boshlaydi va HL, DE ni decrement qiladi.
+HL source, DE destination, BC byte counter. Ular boshlang‘ich qiymatga o‘rnatilgach, LDI HL ko‘rsatgan byte ni DE ko‘rsatgan manzilga ko‘chiradi, HL va DE increment, BC decrement qilinadi. Har transfer orasida boshqa ishlov kerak bo‘lsa foydali. LDIR BC nol bo‘lguncha takrorlaydi (boshlang‘ich BC = 0 bo‘lsa 65536 byte). 16-bit registerlar tufayli blok 64 KB gacha bo‘lishi mumkin (1 KB = 1024 byte). Bloklar ustma-ust tushishi ham mumkin. LDD va LDDR yuqori manzildan boshlaydi va HL, DE ni decrement qiladi.
 
 **Table 9. Block Transfer Group**
 
 | Instruction | Op Code | Description                                   |
 | ----------- | ------- | --------------------------------------------- |
-| LDI         | ED A0   | (DE) → (HL); Inc HL, DE; Dec BC               |
-| LDIR        | ED B0   | (DE) → (HL); Inc HL, DE; Dec BC; BC = 0 gacha |
-| LDD         | ED A8   | (DE) → (HL); Inc HL, DE; Dec BC               |
-| LDDR        | ED B8   | (DE) → (HL); Dec HL, DE; Dec BC; BC = 0 gacha |
-
-> Table 9 dagi yo‘nalish va LDD increment yozuvi manbaning yuqoridagi tavsifiga zid; asl jadval qiymatlari saqlandi.
+| LDI         | ED A0   | (HL) → (DE); Inc HL, DE; Dec BC               |
+| LDIR        | ED B0   | (HL) → (DE); Inc HL, DE; Dec BC; BC = 0 gacha |
+| LDD         | ED A8   | (HL) → (DE); Dec HL, DE; Dec BC               |
+| LDDR        | ED B8   | (HL) → (DE); Dec HL, DE; Dec BC; BC = 0 gacha |
 
 CPI Accumulator ni HL ko‘rsatgan qiymat bilan taqqoslaydi, natija flagda saqlanadi, HL increment va BC decrement qilinadi. CPIR moslik topilguncha yoki BC nol bo‘lguncha takrorlaydi. CPD va CPDR HL ni decrement qilib, yuqori manzildan qidiradi. Bu instructionlar string manipulation uchun foydali. Batafsil tavsiflar 123-sahifadan boshlanadi.
 
@@ -355,9 +351,7 @@ DAA qo‘shish va ayirishdan keyin BCD qiymatni moslaydi. N flag oxirgi arithmet
 | ADC HL      | ED 4A | ED 5A | ED 6A | ED 7A |       |       |
 | SBC HL      | ED 42 | ED 52 | ED 62 | ED 72 |       |       |
 | INC         | 03    | 13    | 23    | 33    | DD 23 | FD 23 |
-| DEC         | DB    | 1B    | 2B    | 3B    | DD 2B | FD 2B |
-
-> DEC BC uchun manbada DB yozilgan; bu qiymat tekshirilishi kerak.
+| DEC         | 0B    | 1B    | 2B    | 3B    | DD 2B | FD 2B |
 
 ## Rotate and Shift
 
@@ -402,7 +396,7 @@ Register Addressing Accumulator yoki umumiy maqsadli registerlarni tanlaydi. Reg
 
 ## Jump, Call, and Return
 
-Table 15 barcha jump, call va return instructionlarini ko‘rsatadi. Jump Program Counter ga Immediate Extended, Relative yoki Register Indirect orqali 16-bit qiymat yuklaydi. Conditional jump sharti Flag Register ga bog‘liq; bajarilmasa keyingi instruction ishlaydi. Immediate Extended istalgan manzilga o‘tadi, uch byte talab qiladi: avval quyi, keyin yuqori manzil byte i. Misol: `3E32h` manziliga unconditional jump.
+Table 15 barcha jump, call va return instructionlarini ko‘rsatadi. Jump Program Counter ga Extended, Relative yoki Register Indirect orqali 16-bit qiymat yuklaydi. Conditional jump sharti Flag Register ga bog‘liq; bajarilmasa keyingi instruction ishlaydi. Extended Addressing istalgan manzilga o‘tadi, uch byte talab qiladi: avval quyi, keyin yuqori manzil byte i. Misol: `3E32h` manziliga unconditional jump.
 
 ![CleanShot 2026-11-25 at 13.54.22.png](<../../assets/00af3fe4-a353-44db-89a8-d7f1cebc8e90-CleanShot-2026-11-25-at-13-54-22.png>)
 
@@ -414,30 +408,28 @@ CALL jump dan oldin keyingi instruction manzilini stack ga yozadi. Return stack 
 
 | Instruction | Unconditional | C      | NC     | Z      | NZ     | PE     | PO     | M      | P      |
 | ----------- | ------------- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| JP nn       | C3 n n        | D8 n n | D2 n n | CA n n | C2 n n | EA n n | E2 n n | FA n n | F2 n n |
+| JP nn       | C3 n n        | DA n n | D2 n n | CA n n | C2 n n | EA n n | E2 n n | FA n n | F2 n n |
 | JR e        | 18 e–2        | 38 e–2 | 30 e–2 | 28 e–2 | 20 e–2 |        |        |        |        |
 | CALL nn     | CD n n        | DC n n | D4 n n | CC n n | C4 n n | EC n n | E4 n n | FC n n | F4 n n |
 | RET         | C9            | D8     | D0     | C8     | C0     | E8     | E0     | F8     | F0     |
 
 | Instruction | Op Code / Condition |
 | ----------- | ------------------- |
-| JP (HL)     | EB                  |
+| JP (HL)     | E9 |
 | JP (IX)     | DD E9               |
 | JP (IY)     | FD E9               |
 | DJNZ e      | 10 e–2; B ≠ 0       |
 | RETI        | ED 4D               |
 | RETN        | ED 45               |
 
-> Table 15 dagi JP C va JP (HL) opcode lari manbada mos ravishda D8 va EB ko‘rinishida; tekshirish talab qilinadi.
-
-CALL va RETURN subroutine hamda interrupt handling ni soddalashtiradi. RETI va RETN CPU ichida C9h kabi unconditional return hisoblanadi. RETI interrupt routine oxirida ishlatilganda Z80 peripheral chiplar uni taniydi va nested priority interrupt handling ni boshqaradi. Aks holda quyidagi software ketma-ketligi kerak:
+CALL va RETURN subroutine hamda interrupt handling ni soddalashtiradi. RETI va RETN stackdan PC ni tiklaydi va IFF2 qiymatini IFF1 ga ko‘chiradi; oddiy RET esa IFF1 ni o‘zgartirmaydi. RETI interrupt routine oxirida ishlatilganda Z80 peripheral chiplar uni taniydi va nested priority interrupt handling ni boshqaradi. Aks holda quyidagi software ketma-ketligi kerak:
 
 ```asm
-; Disable Interrupt — routine tugashidan oldin interruptni oldini olish
+DI ; Routine tugashidan oldin maskable interruptni o‘chirish
 LD A, n ; Peripheral ga routine tugaganini bildirish
-OUT n, A
-; Enable Interrupt
-; Return
+OUT (n), A
+EI
+RET
 ```
 
 Yetti byte li ketma-ketlik bir byte EI va ikki byte RETI bilan almashtiriladi. Bu interrupt service vaqtini kamaytiradi.
@@ -450,7 +442,7 @@ DJNZ loop boshqaruvi uchun B ni decrement qiladi va B nol bo‘lmasa relative ju
 | ---------- | ---------------------------- | ---------------------------------------- |
 | N, N+1     | LD B, 7                      | B ni 7 ga o‘rnatish                      |
 | N+2 … N+9  | Instructionlar ketma-ketligi | 7 marta takrorlash                       |
-| N+10, N+11 | DJNZ – 8                     | N+12 dan N+2 ga o‘tish (manbadagi yozuv) |
+| N+10, N+11 | DJNZ N+2                     | N+12 dan N+2 ga o‘tish; displacement −10 (F6h) |
 | N+12       | Keyingi instruction          |                                          |
 
 Restart sakkiz manzildan biriga bir byte li CALL bo‘lib, tez-tez ishlatiladigan routine lar uchun xotirani tejaydi. Call and Return tavsiflari 280-sahifadan boshlanadi.
@@ -470,16 +462,16 @@ Restart sakkiz manzildan biriga bir byte li CALL bo‘lib, tez-tez ishlatiladiga
 
 ## Input/Output
 
-Table 18 va 19 input/output instructionlarini ko‘rsatadi. I/O qurilmasi absolute yoki C registeri orqali Register Indirect usulda manzillanadi. Register Indirect usulida I/O va ichki registerlar orasida transfer bajariladi. Sakkiz block transfer instructioni HL ni xotira source (output) yoki destination (input) pointeri, B ni byte counter, C ni port manzili sifatida ishlatadi. B sakkiz bit bo‘lgani uchun 256 byte gacha uzatiladi.
+Table 18 va 19 input/output instructionlarini ko‘rsatadi. I/O qurilmasi absolute yoki C registeri orqali Register Indirect usulda manzillanadi. Register Indirect usulida I/O va ichki registerlar orasida transfer bajariladi. Sakkiz block transfer instructioni HL ni xotira source (output) yoki destination (input) pointeri, B ni byte counter, C ni port manzili sifatida ishlatadi. B sakkiz bit bo‘lgani uchun takrorlanuvchi block I/O instructionlari 256 byte gacha uzatadi (boshlang‘ich B = 0 bo‘lsa 256 byte).
 
-IN A va OUT n, A instructionlarida portning n manzili address bus quyi A7–A0 bitlarida, Accumulator qiymati yuqori bitlarda beriladi. Register Indirect I/O va block I/O da C quyi, B yuqori address bus ga uzatiladi.
+IN A, (n) va OUT (n), A instructionlarida portning n manzili address bus quyi A7–A0 bitlarida, Accumulator qiymati yuqori bitlarda beriladi. Register Indirect I/O da C quyi, B yuqori address bus ga uzatiladi. Block inputda B ning decrementdan oldingi, block outputda esa decrementdan keyingi qiymati yuqori address busga uzatiladi.
 
 **Table 18. Input Group**
 
 | Instruction | Op Code / Description                         |
 | ----------- | --------------------------------------------- |
 | IN A, (n)   | DB n                                          |
-| IN A, (C)   | ED 7B                                         |
+| IN A, (C)   | ED 78 |
 | IN B, (C)   | ED 40                                         |
 | IN C, (C)   | ED 48                                         |
 | IN D, (C)   | ED 50                                         |
@@ -491,9 +483,7 @@ IN A va OUT n, A instructionlarida portning n manzili address bus quyi A7–A0 b
 | IND         | ED AA; Dec HL, Dec B                          |
 | INDR        | ED BA; Dec HL, Dec B; B ≠ 0 bo‘lsa takrorlash |
 
-> IN A, (C) uchun manbada ED 7B berilgan; tekshirish talab qilinadi.
-
-**Table 19. Output Group** (manbada sarlavha 8-Bit Arithmetic and Logic deb berilgan)
+**Table 19. Output Group**
 
 | Instruction | Op Code / Description                     |
 | ----------- | ----------------------------------------- |
@@ -506,7 +496,7 @@ IN A va OUT n, A instructionlarida portning n manzili address bus quyi A7–A0 b
 | OUT (C), H  | ED 61                                     |
 | OUT (C), L  | ED 69                                     |
 | OUTI        | ED A3; Inc HL, Dec B                      |
-| OTIR        | ED B3; Dec B; B ≠ 0 bo‘lsa takrorlash     |
+| OTIR        | ED B3; Inc HL, Dec B; B ≠ 0 bo‘lsa takrorlash     |
 | OUTD        | ED AB; Dec HL, B                          |
 | OTDR        | ED BB; Dec HL, B; B ≠ 0 bo‘lsa takrorlash |
 
@@ -514,7 +504,7 @@ Input and Output Group tavsiflari 294-sahifadan boshlanadi.
 
 ## CPU Control Group
 
-Table 20 umumiy CPU control instructionlarini ko‘rsatadi. HALT keyingi interrupt kelguncha CPU operatsiyasini to‘xtatadi. DI va EI interruptni o‘chiradi va yoqadi. Uch interrupt mode instructioni mavjud. NOP hech qanday amal bajarmaydi.
+Table 20 umumiy CPU control instructionlarini ko‘rsatadi. HALT qabul qilinadigan interrupt yoki RESET kelguncha instruction bajarilishini to‘xtatadi; refresh cycle davom etadi. DI va EI maskable interruptni o‘chiradi va yoqadi. EI dan keyingi instruction tugamaguncha maskable interrupt qabul qilinmaydi. Uch interrupt mode instructioni mavjud. NOP hech qanday amal bajarmaydi.
 
 Mode 0 da interrupt yuborgan qurilma data bus ga instruction joylaydi va CPU uni bajaradi. Mode 1 da CPU avtomatik `RST 0038h` bajaradi, eski Program Counter stack ga yoziladi; tashqi hardware talab qilinmaydi. Mode 2 indirect CALL orqali istalgan xotira manziliga o‘tadi. CPU 16-bit pointer hosil qiladi: yuqori sakkiz bit I registeridan, quyi sakkiz bit interrupt qurilmasidan olinadi. Pointer service routine manzili saqlangan jadvaldagi ketma-ket ikki byte ning birinchisiga ko‘rsatadi. CPU manzilni avtomatik olib CALL bajaradi.
 
@@ -534,4 +524,4 @@ Mode 0 da interrupt yuborgan qurilma data bus ga instruction joylaydi va CPU uni
 
 ## Manba bo‘yicha eslatma
 
-Manba HTML jadval kataklarini birlashtirib yuborgan va ayrim belgilar buzilgan. Table 6, 11 va 14 opcode matritsalari takrorlanuvchi bit pattern asosida qayta tuzildi; ayrim mnemonic va register nomlari ham kontekstdan tiklandi. Bu tiklangan qiymatlar asl HTML bilan byte-for-byte bir xil emas. Shubhali aniq qiymatlar tegishli joylarda belgilandi. Figure 25–41 grafik mazmuni ataylab chiqarilmadi. Asl soyali kataklar haqidagi ma’lumot HTML da saqlanmagan. Bu bo‘lim individual instruction tavsiflari emas, umumiy instruction guruhlari bo‘limidir.
+Manba HTML jadval kataklarini birlashtirib yuborgan va ayrim belgilar buzilgan. Table 6, 11 va 14 opcode matritsalari takrorlanuvchi bit pattern asosida qayta tuzildi; ayrim mnemonic va register nomlari ham kontekstdan tiklandi. Bu tiklangan qiymatlar asl HTML bilan byte-for-byte bir xil emas. Aniqlangan opcode va tavsif xatolari tuzatildi. Mavjud relative asset havolalari saqlandi; rasmlarning ichki mazmuni tekshirilmadi. Asl soyali kataklar haqidagi ma’lumot HTML da saqlanmagan. Bu bo‘lim individual instruction tavsiflari emas, umumiy instruction guruhlari bo‘limidir.
