@@ -33,9 +33,9 @@ Manba: Z80 CPU User Manual, UM008011-0816.
 
 2-rasm. CPU registerlarining tuzilishi.
 
-General-purpose registerlar, Accumulator va Flags uchun Main Register Set hamda Alternate Register Set quyida berilgan. Ustunlar tartibi: vazifasi; Main Register Set; Alternate Register Set; har bir registerning hajmi.
+General-purpose registerlar, Accumulator va Flags uchun Main Register Set hamda Alternate Register Set quyida berilgan.
 
-|                          |     |      |       |
+| Vazifasi | Main Register Set | Alternate Register Set | Hajmi |
 | ------------------------ | --- | ---- | ----- |
 | Accumulator              | `A` | `A'` | 8-bit |
 | Flags                    | `F` | `F'` | 8-bit |
@@ -48,9 +48,9 @@ General-purpose registerlar, Accumulator va Flags uchun Main Register Set hamda 
 
 General-purpose registerlar Main Register Set ichida `BC`, `DE`, `HL`, Alternate Register Set ichida esa `BC'`, `DE'`, `HL'` ko‘rinishidagi 16-bit register pairlarni hosil qiladi.
 
-Special-purpose registerlar quyidagicha. Ustunlar tartibi: vazifasi; register; hajmi.
+Special-purpose registerlar quyidagicha.
 
-|                  |      |        |
+| Vazifasi | Register | Hajmi |
 | ---------------- | ---- | ------ |
 | Index Register   | `IX` | 16-bit |
 | Index Register   | `IY` | 16-bit |

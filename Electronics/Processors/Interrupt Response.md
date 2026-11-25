@@ -46,7 +46,7 @@ Table 1 turli instruction’larning ikkita enable flip-flop’ga ta’sirini umu
 
 Ustunlar tartibi: amal, `IFF1`, `IFF2`, izoh.
 
-|  |  |  |  |
+| Amal | IFF1 | IFF2 | Izoh |
 | --- | --- | --- | --- |
 | CPU reset | 0 | 0 | Maskalanadigan `INT` o‘chiriladi. |
 | `DI` instruction’ini bajarish | 0 | 0 | Maskalanadigan `INT` o‘chiriladi. |
