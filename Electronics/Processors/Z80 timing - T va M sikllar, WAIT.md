@@ -4,8 +4,6 @@ Z80 buyruqni bir yo‘la bajarmaydi: uni aniq ketma-ketlikdagi kichik amallarga 
 
 Ushbu qayd berilgan Zilog qo‘llanmasi parchasining tozalangan o‘zbekcha bayoni va uni tushunishga yordam beradigan qo‘shimcha misollardan iborat.
 
-## 1. Tozalangan mazmun
-
 Z80 protsessori buyruqlarni quyidagi asosiy amallar orqali bajaradi:
 
 - Xotiradan o‘qish yoki xotiraga yozish.

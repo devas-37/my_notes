@@ -1,0 +1,105 @@
+<ui-card title="ATmega8 — signal va PWM sliderlari">
+<ui-stack gap="3">
+<ui-text>Parametrni suring: grafik va hisoblar darhol yangilanadi. Bu ideal matematik model.</ui-text>
+<ui-row gap="2">
+<ui-button id="sin" variant="primary">Sinus</ui-button>
+<ui-button id="tri">Uchburchak</ui-button>
+<ui-button id="saw">Arrasimon</ui-button>
+<ui-button id="pwm">PWM</ui-button>
+</ui-row>
+<ui-stack gap="2">
+<label for="frequency">Chastota — <output id="frequencyValue" for="frequency"></output></label>
+<input id="frequency" type="range" min="0" max="1000" step="1" value="566" aria-label="Chastota, logarifmik shkala">
+<ui-text muted size="sm" id="frequencyHint"></ui-text>
+<label for="amplitude">Analog amplituda — <output id="amplitudeValue" for="amplitude"></output></label>
+<input id="amplitude" type="range" min="0.5" max="4" step="0.1" value="4" aria-label="Analog amplituda Vpp">
+<label for="duty">PWM duty — <output id="dutyValue" for="duty"></output></label>
+<input id="duty" type="range" min="0" max="100" step="1" value="50" aria-label="PWM duty foiz">
+<ui-text muted size="sm" id="modeHint"></ui-text>
+</ui-stack>
+<svg viewBox="0 0 720 250" width="100%" role="img" aria-labelledby="chartTitle chartDesc">
+<title id="chartTitle">Signalning ikki davri</title>
+<desc id="chartDesc">Gorizontal o‘q vaqt, vertikal o‘q kuchlanish.</desc>
+<path d="M 55 20 V 210 H 690 M 55 20 H 690 M 55 115 H 690" fill="none" stroke="currentColor" stroke-opacity="0.2"></path>
+<text x="8" y="25" fill="currentColor">5 V</text>
+<text x="8" y="120" fill="currentColor">2.5</text>
+<text x="8" y="215" fill="currentColor">0 V</text>
+<path id="average" fill="none" stroke="currentColor" stroke-dasharray="6 5" stroke-opacity="0.5"></path>
+<path id="wave" fill="none" stroke="currentColor" stroke-width="2"></path>
+<text x="55" y="238" fill="currentColor">0</text>
+<text id="midTime" x="372" y="238" text-anchor="middle" fill="currentColor"></text>
+<text id="endTime" x="690" y="238" text-anchor="end" fill="currentColor"></text>
+</svg>
+<ui-text id="metrics"></ui-text>
+<ui-text id="details"></ui-text>
+<ui-text id="averageHint" muted size="sm"></ui-text>
+<ui-row><ui-button id="reset" variant="secondary">Boshlang‘ich qiymatlar</ui-button></ui-row>
+<ui-divider></ui-divider>
+<ui-text muted size="sm">PWM: 0–5 V. Analog: markaz 2.5 V. Grafik har doim ikki davrni ko‘rsatadi; chastotani o‘zgartirganda vaqt o‘qi o‘zgaradi. Bu MCUga ulanmaydi va real filtr yoki taymer registrlarini simulyatsiya qilmaydi.</ui-text>
+</ui-stack>
+</ui-card>
+<script>
+(function () {
+const el = id => document.getElementById(id);
+let mode = 'sin';
+const names = { sin: 'Sinus', tri: 'Uchburchak', saw: 'Arrasimon', pwm: 'PWM' };
+const fmt = (n, d) => n.toLocaleString('uz-UZ', {maximumFractionDigits: d});
+const time = s => s >= 0.001 ? fmt(s * 1000, 3) + ' ms' : fmt(s * 1000000, 3) + ' µs';
+function render() {
+ const pwm = mode === 'pwm';
+ const f = Math.pow(10, Number(el('frequency').value) / 1000 * (pwm ? 5 : 3));
+ const a = Number(el('amplitude').value);
+ const d = Number(el('duty').value) / 100;
+ const T = 1 / f;
+ el('frequencyValue').textContent = f >= 1000 ? fmt(f / 1000, 3) + ' kHz' : fmt(f, 2) + ' Hz';
+ el('frequencyHint').textContent = pwm ? 'Logarifmik shkala: 1 Hz–100 kHz. Matematik PWM ko‘rinishi.' : 'Logarifmik shkala: 1–1000 Hz. Haqiqiy filtrda signal shakli va amplituda o‘zgaradi.';
+ el('amplitudeValue').textContent = fmt(a, 1) + ' Vpp';
+ el('dutyValue').textContent = fmt(d * 100, 0) + '%';
+ el('amplitude').disabled = pwm;
+ el('duty').disabled = !pwm;
+ el('modeHint').textContent = pwm ? 'Duty PWMga ta’sir qiladi. Amplituda bu rejimda 5 Vpp; 0% va 100% da chiqish doimiy kuchlanishdir.' : 'Amplituda analog shaklga ta’sir qiladi. Duty boshqaruvi uchun PWMni tanlang.';
+ Object.keys(names).forEach(k => { el(k).variant = k === mode ? 'primary' : 'default'; });
+ function analog(p) {
+  const q = p % 1;
+  if (mode === 'sin') return 2.5 + a / 2 * Math.sin(2 * Math.PI * p);
+  if (mode === 'tri') return 2.5 + a / 2 * (1 - 4 * Math.abs(q - 0.5));
+  return 2.5 + a / 2 * (2 * q - 1);
+ }
+ const x = p => 55 + p / 2 * 635;
+ const y = v => 210 - v / 5 * 190;
+ let path = '';
+ function point(command, p, v) { path += command + x(p).toFixed(2) + ' ' + y(v).toFixed(2) + ' '; }
+ if (pwm) {
+  if (d === 0 || d === 1) { point('M', 0, 5 * d); point('L', 2, 5 * d); }
+  else {
+   point('M', 0, 5);
+   for (let i = 0; i < 2; i++) {
+    if (i > 0) point('L', i, 5);
+    point('L', i + d, 5); point('L', i + d, 0); point('L', i + 1, 0);
+   }
+  }
+ } else if (mode === 'saw') {
+  point('M', 0, 2.5 - a / 2);
+  for (let i = 0; i < 2; i++) {
+   point('L', i + 1, 2.5 + a / 2);
+   point('L', i + 1, 2.5 - a / 2);
+  }
+ } else {
+  for (let i = 0; i <= 600; i++) point(i === 0 ? 'M' : 'L', i / 300, analog(i / 300));
+ }
+ el('wave').setAttribute('d', path);
+ el('average').setAttribute('d', pwm ? 'M 55 ' + y(5*d) + ' H 690' : '');
+ el('midTime').textContent = time(T);
+ el('endTime').textContent = time(2*T);
+ el('metrics').textContent = names[mode] + ' · T = ' + time(T) + (pwm ? ' · Duty = ' + fmt(d*100,0) + '%' : ' · Vmin = ' + fmt(2.5-a/2,2) + ' V · Vmax = ' + fmt(2.5+a/2,2) + ' V');
+ el('details').textContent = pwm ? 'tON = ' + time(d*T) + ' · tOFF = ' + time((1-d)*T) + ' · O‘rtacha kuchlanish = ' + fmt(5*d,2) + ' V' : 'Markaz = 2.5 V · cho‘qqi amplituda = ' + fmt(a/2,2) + ' V';
+ el('averageHint').textContent = pwm ? 'Uzlukli chiziq: ideal o‘rtacha V = 5 × duty / 100. Real filtr chiqishida qoldiq pulsatsiya bo‘ladi. 0%/100% da T — sozlangan davr; chiqishda impulslar yo‘q.' : 'Ideal analog shakl ko‘rsatilgan. Bu PWM tashuvchi impulslarining grafigi emas.';
+}
+Object.keys(names).forEach(k => el(k).addEventListener('click', () => { mode = k; render(); }));
+['frequency','amplitude','duty'].forEach(k => el(k).addEventListener('input', render));
+el('reset').addEventListener('click', () => {
+ mode = 'sin'; el('frequency').value = '566'; el('amplitude').value = '4'; el('duty').value = '50'; render();
+});
+render();
+})();
+</script>

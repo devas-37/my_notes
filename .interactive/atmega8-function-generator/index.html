@@ -1,0 +1,69 @@
+<ui-card title="ATmega8 function generator — signal ko‘rinishi">
+<ui-stack>
+<ui-text muted>Ideal ko‘rinish. Bu MCU emulyatori emas: filtr, PWM qoldig‘i va yuk ta’siri chizilmagan. Grafik doim ikkita davrni ko‘rsatadi.</ui-text>
+<ui-row gap="2" aria-label="Signal shakli">
+<ui-button id="sin" variant="primary" aria-pressed="true">Sinus</ui-button>
+<ui-button id="tri" aria-pressed="false">Uchburchak</ui-button>
+<ui-button id="saw" aria-pressed="false">Arrasimon</ui-button>
+<ui-button id="square" aria-pressed="false">To‘rtburchak</ui-button>
+</ui-row>
+<ui-row gap="2"><ui-text>Chastota:</ui-text><ui-button id="down" label="Chastotani o‘n marta kamaytirish">÷10</ui-button><ui-button id="up" label="Chastotani o‘n marta oshirish">×10</ui-button><ui-button id="f100">100 Hz</ui-button><ui-button id="f500">500 Hz</ui-button><ui-button id="f1000">1 kHz</ui-button></ui-row>
+<ui-row gap="2"><ui-text>Analog amplituda:</ui-text><ui-button id="less" label="Amplitudani kamaytirish">−0.5 Vpp</ui-button><ui-button id="more" label="Amplitudani oshirish">+0.5 Vpp</ui-button></ui-row>
+<ui-text id="values" aria-live="polite"></ui-text>
+<svg viewBox="0 0 640 230" width="100%" role="img" aria-labelledby="wave-title wave-desc">
+<title id="wave-title">Signal grafigi</title><desc id="wave-desc">Gorizontal o‘q vaqt, vertikal o‘q kuchlanish.</desc>
+<path d="M40 15V195H625 M40 105H625" fill="none" stroke="currentColor" opacity="0.35"></path>
+<text x="2" y="22" fill="currentColor">5 V</text><text x="2" y="109" fill="currentColor">2.5</text><text x="2" y="196" fill="currentColor">0 V</text>
+<text x="40" y="219" fill="currentColor">0</text><text id="midtime" x="310" y="219" fill="currentColor"></text><text id="endtime" x="525" y="219" fill="currentColor"></text>
+<path id="wave" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+<ui-text id="details"></ui-text>
+<ui-text id="limits" muted></ui-text>
+</ui-stack>
+</ui-card>
+<script>
+(function(){
+let shape="sin",f=100,amp=4;
+const $=id=>document.getElementById(id);
+const labels={sin:"Sinus",tri:"Uchburchak",saw:"Arrasimon",square:"To‘rtburchak"};
+function render(){
+const digital=shape==="square",max=digital?100000:1000;
+f=Math.min(max,Math.max(1,f));
+for(const key of Object.keys(labels)){$(key).variant=key===shape?"primary":"default";$(key).setAttribute("aria-pressed",String(key===shape));}
+$("down").disabled=f<=1;$("up").disabled=f>=max;
+$("less").disabled=digital||amp<=0.5;$("more").disabled=digital||amp>=4;
+const span=digital?5:amp, offset=2.5;
+$("values").textContent=labels[shape]+" · "+f.toLocaleString("uz-UZ")+" Hz · T = "+(1000/f).toPrecision(4)+" ms · "+span.toFixed(1)+" Vpp · "+(offset-span/2).toFixed(2)+"…"+(offset+span/2).toFixed(2)+" V";
+let d="";
+for(let i=0;i<=1000;i++){
+const t=i/1000*2,p=t-Math.floor(t);
+let s=shape==="sin"?Math.sin(2*Math.PI*p):shape==="tri"?1-4*Math.abs(p-0.5):shape==="saw"?2*p-1:(p<0.5?1:-1);
+let v=offset+span/2*s;
+d+=(i?"L":"M")+(40+585*i/1000).toFixed(2)+" "+(195-v*36).toFixed(2)+" ";
+}
+$("wave").setAttribute("d",d);
+$("wave-desc").textContent=labels[shape]+", "+f+" Hz, "+span+" Vpp. Ikki davr.";
+$("midtime").textContent=(1000/f).toPrecision(3)+" ms";
+$("endtime").textContent=(2000/f).toPrecision(3)+" ms";
+if(digital){
+let best=null;
+for(const n of [1,8,64,256,1024]){
+let o=Math.round(16000000/(2*n*f)-1);
+if(o>=0&&o<=65535){let actual=16000000/(2*n*(o+1));let err=Math.abs(actual-f);if(!best||err<best.err)best={n,o,actual,err};}
+}
+$("details").textContent="PB1 / OC1A, alohida Timer1 CTC rejimi, duty 50%. N = "+best.n+", OCR1A = "+best.o+", hisoblangan haqiqiy f = "+best.actual.toFixed(4)+" Hz.";
+$("limits").textContent="Grafik so‘ralgan chastotada chizilgan. 0–5 V ideal mantiqiy daraja; apparatda yuk va ta’minotga bog‘liq. Bu rejimda analog DDS to‘xtaydi. Analog amplituda tugmalari tatbiq etilmaydi.";
+}else{
+const k=Math.round(f*4294967296/31250);
+$("details").textContent="PWM: 62.5 kHz · namuna tezligi: 31.25 kHz · bir davrga "+(31250/f).toFixed(2)+" namuna · DDS K = "+k+".";
+$("limits").textContent=(f>500?"500 Hz dan yuqorida shakl sifati ko‘proq cheklanadi. ":"")+"Analog chiqish: PB3 / OC2 → filtr → bufer. Haqiqiy amplituda filtrda kamayadi; uchburchak va arrasimon signal burchaklari yumaloqlanadi. 2.5 V DC offset.";
+}}
+for(const key of Object.keys(labels))$(key).addEventListener("click",()=>{shape=key;render();});
+$("down").addEventListener("click",()=>{f/=10;render();});
+$("up").addEventListener("click",()=>{f*=10;render();});
+for(const value of [100,500,1000])$("f"+value).addEventListener("click",()=>{f=value;render();});
+$("less").addEventListener("click",()=>{amp=Math.max(0.5,amp-0.5);render();});
+$("more").addEventListener("click",()=>{amp=Math.min(4,amp+0.5);render();});
+render();
+})();
+</script>
